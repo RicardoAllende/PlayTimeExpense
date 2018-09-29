@@ -1,0 +1,100 @@
+{
+  "name": "mmoney",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
+  "scripts": {
+    "start": "react-native-scripts start",
+    "eject": "react-native-scripts eject",
+    "android": "react-native-scripts android",
+    "ios": "react-native-scripts ios",
+    "test": "jest && eslint .",
+    "test:watch": "jest --watch",
+    "test:updateSnapshot": "jest --updateSnapshot",
+    "test:coverage": "jest --coverage",
+    "test:coverage:watch": "jest --coverage --watch",
+    "lint:fix": "eslint --fix src",
+    "precommit": "yarn test",
+    "postinstall": "rndebugger-open",
+    "server": "json-server --watch api/db.json --routes api/apiRoutes.json --port 3004"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "setupFiles": [
+      "./config/jest/setup.js"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-native|expo|expo-core|expo-constants|react-native-svg|react-native-branch|native-base-shoutem-theme|react-native-easy-grid|react-native-drawer|react-native-vector-icons|react-native-keyboard-aware-scroll-view|react-native-swiper|react-navigation|native-base|@expo|react-native-scrollable-tab-view|react-native-simple-modal|react-native-iphone-x-helper)/)"
+    ],
+    "testPathIgnorePatterns": [
+      "node_modules/",
+      "assets/",
+      "config/",
+      "src/theme",
+      "styles.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "node_modules/",
+      "src/theme",
+      "styles.js"
+    ]
+  },
+  "devDependencies": {
+    "babel-eslint": "8.2.6",
+    "babel-jest": "23.6.0",
+    "babel-preset-expo": "4.0.0",
+    "babel-preset-react-native": "4.0.1",
+    "enzyme": "3.6.0",
+    "enzyme-adapter-react-16": "1.5.0",
+    "enzyme-to-json": "3.3.4",
+    "eslint": "5.5.0",
+    "eslint-config-prettier": "3.0.1",
+    "eslint-plugin-import": "2.14.0",
+    "eslint-plugin-jsx-a11y": "6.1.1",
+    "eslint-plugin-prettier": "2.6.2",
+    "eslint-plugin-react": "7.11.1",
+    "eslint-plugin-react-native": "3.3.0",
+    "husky": "0.14.3",
+    "jest": "23.6.0",
+    "jest-cli": "23.6.0",
+    "jest-expo": "28.0.0",
+    "json-server": "0.14.0",
+    "lint-staged": "7.2.2",
+    "prettier": "1.14.2",
+    "react-addons-test-utils": "15.6.2",
+    "react-dom": "16.4.1",
+    "react-native-debugger-open": "0.3.17",
+    "react-native-scripts": "1.14.0",
+    "react-test-context-provider": "2.2.0",
+    "react-test-renderer": "16.5.0",
+    "redux-mock-store": "1.5.3"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "6.3.1",
+    "axios": "0.18.0",
+    "axios-mock-adapter": "1.15.0",
+    "color": "3.0.0",
+    "expo": "28.0.0",
+    "lodash": "4.17.10",
+    "moment": "2.22.2",
+    "native-base": "2.7.2",
+    "prop-types": "15.6.2",
+    "react": "16.4.2",
+    "react-native": "0.55.4",
+    "react-native-calendars": "1.20.0",
+    "react-native-carousel-view": "0.5.1",
+    "react-native-datepicker": "1.7.2",
+    "react-native-easy-grid": "0.2.0",
+    "react-native-snap-carousel": "3.7.2",
+    "react-navigation": "2.12.1",
+    "react-redux": "5.0.7",
+    "redux": "4.0.0",
+    "redux-devtools-extension": "2.13.5",
+    "redux-form": "7.4.2",
+    "redux-thunk": "2.3.0",
+    "victory-native": "30.3.0"
+  }
+}

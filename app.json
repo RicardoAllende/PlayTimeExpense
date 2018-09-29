@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "MyExpense",
+    "description": "an awesome expense manager app",
+    "slug": "myexpense",
+    "version": "1.0.0",
+    "privacy": "unlisted",
+    "sdkVersion": "28.0.0",
+    "platforms": ["ios", "android"],
+    "orientation": "portrait",
+    "primaryColor": "#FF3366",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "backgroundColor": "#ffffff",
+      "resizeMode": "cover"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "packagerOpts": {
+      "assetExts": [
+        "ttf"
+      ]
+    },
+    "ios": {
+      "bundleIdentifier": "io.market.nativebase.craftman.myexpense"
+    },
+    "android": {
+      "package": "io.market.nativebase.craftman.myexpense"
+    },
+    "androidStatusBar": {
+      "translucent": true
+    }
+  }
+}

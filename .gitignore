@@ -1,0 +1,41 @@
+
+
+# OS X
+.DS_Store
+
+# Node
+node_modules
+*.log
+.nvm
+/bots/node_modules/
+
+# BUCK
+buck-out/
+\.buckd/
+*.keystore
+!my-release-key.keystore
+
+# Watchman
+.watchmanconfig
+
+# Android/IntelliJ
+build/
+.idea
+.gradle
+local.properties
+*.iml
+
+# Bundle artifact
+*.jsbundle
+
+# Jest
+coverage
+
+# Env
+.env
+
+# VSCODE
+.vscode
+
+#EXPO
+.expo
