@@ -51,6 +51,7 @@ class Walkthrough extends Component {
   }
 
   render() {
+    console.log(this.props.navigation.state.params.userData)
     return (
       <Container>
         <StatusBar

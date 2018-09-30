@@ -1,8 +1,10 @@
-import api from '@utils/api';
+// import api from '@utils/api';
 
 export const LOGIN_STARTED = 'LOGIN_STARTED';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
+
+import {api} from './../../../api/playTimeApi'
 
 const initialState = {
   loginStarted: false,
@@ -46,16 +48,48 @@ export default function(state = initialState, action) {
  * Action creators
  */
 export function doLogin(username, password, onLoginSuccess) {
+  credentials = JSON.stringify({
+      email: username,
+      password: password
+  })
   return dispatch => {
     dispatch({ type: LOGIN_STARTED });
-    return api
-      .get('/auth', { username: username, password: password })
-      .then(response => {
-        dispatch({ type: LOGIN_SUCCESS, response: response.data });
-        onLoginSuccess();
+    console.warn(api.auth)
+    return fetch(api.auth, { 
+          method: 'POST', 
+          headers: {
+          // "Authorization": 'Bearer ' + bearerToken ,
+              Accept: 'application/json',
+              "Content-Type": "application/json"
+          }, 
+          body: credentials
       })
-      .catch(() => {
+      .then((response) => response.json() )
+      .then((jsonResponse) => {
+          console.log(jsonResponse)
+          if(jsonResponse.response.status == 'ok'){
+            dispatch({ type: LOGIN_SUCCESS, response: jsonResponse.data.profile_data });
+            onLoginSuccess(jsonResponse.data);
+          }
+        }
+      ).catch((error) => {
         dispatch({ type: LOGIN_ERROR });
-      });
-  };
+        console.error(error);
+      })
+    }    
 }
+
+// export function doLogin(username, password, onLoginSuccess) {
+//   return dispatch => {
+//     dispatch({ type: LOGIN_STARTED });
+//     return api
+//       .get('/auth', { username: username, password: password })
+//       .then(response => {
+//         dispatch({ type: LOGIN_SUCCESS, response: response.data });
+//         onLoginSuccess();
+//       })
+//       .catch(() => {
+//         dispatch({ type: LOGIN_ERROR });
+//       });
+//   };
+// }

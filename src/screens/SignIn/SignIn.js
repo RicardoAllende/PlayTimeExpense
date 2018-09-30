@@ -17,11 +17,16 @@ import {
 import LoginInput from '@components/LoginInput';
 import Notification from '@components/Notification';
 
+import {api} from './../../../api/playTimeApi'
+
+const bearerToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjYwM2ExYzE4NzE0OTFjNzA5OTM2MWMyZGY1NTgzYWRmMTBiZDE0Yzk3YTNiNTdkYjdjY2M3ZmM4NmRjYjAxY2U5NDg0ZDk4MjlmYjhhN2FlIn0.eyJhdWQiOiIxIiwianRpIjoiNjAzYTFjMTg3MTQ5MWM3MDk5MzYxYzJkZjU1ODNhZGYxMGJkMTRjOTdhM2I1N2RiN2NjYzdmYzg2ZGNiMDFjZTk0ODRkOTgyOWZiOGE3YWUiLCJpYXQiOjE1MzgzMjY0NjAsIm5iZiI6MTUzODMyNjQ2MCwiZXhwIjoxNTY5ODYyNDYwLCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.QzXpwRyJHRgpvjSivc6T7D9i1XRWSIms80lZlVlsapOzFlwt234qXy75raMzNvJKq4cEnKM_mvEkwRyC9fruP-BEwSAjelvEsPjpq2qBNPUaA_0h9RbLmidynjmNtYNn_m18vz7uF-NQ-XF53jM1FO9o5_eUMUKjZsAM8pP3ztf1UM9PVtMKhltLAv6tbq0_8wWjtCEvZanuEhfA9HlHOB7_08DSsA74qJ4mwFrUy-zRhf0VISE_T-R6WAPNuBRXv5aDvLWMWbcYwi083XgWuH1p36oAwls37Vt3-dG5lVUR1yrwdvF5TEdg1JVysfnXibYbzMCisRGoVNbfd95aGgzHWhyoFg0lOGnfZKc0fxyb3JP6wG8PW1cVFnabVO8pPVoPKwcf5NGl7P9dprGhJ7Tj1L3oioC71DChWrudXlm4Kp4Yu2S6P9ZsjL02ozQxh7pxCleDdGlvRmz2SCVAmQMX3mqpUEG1zN9EFJg8qnY__JRg5IgrYxixb1cTe2RUmKmQEF0BTHhItJbffTsem5EfKh1XgwrHp8WL5dlBSoIDvf7uBqFsrsUGtmLUdfC4SrMEGM2AZSdBHxDB1VwU5GUUabOaTWBLvHxtkNrBCqD-PrLAwmkeMf1owPmHyKfel6LNW1TtjkK-gD2E7bvEyxyYa2N7Wm1ZvjYciqFXZNQ";
+
 import {
   required,
   alphaNumeric,
   minLength7,
   maxLength15,
+  email
 } from '@utils/validation';
 
 import { doLogin } from './behaviors';
@@ -31,6 +36,11 @@ import styles from './styles';
 const FORM_NAME = 'signin';
 
 class SignIn extends Component {
+
+  constructor(props){
+    super(props)
+  }
+
   static propTypes = {
     loginStarted: PropTypes.bool,
     loginSuccess: PropTypes.bool,
@@ -47,15 +57,49 @@ class SignIn extends Component {
   };
 
   handleSubmit = values => {
-    this.props.doLogin(values.username, values.password, () => {
+    // console.log("El nombre de usuario es: " + values.username," || mientras que la contraseña es: " + values.password)
+    // this.redirectToApp(values);
+    // return;
+    this.props.doLogin(values.username, values.password, (userData) => {
       this.props.navigation.dispatch(
         StackActions.reset({
           index: 0,
-          actions: [NavigationActions.navigate({ routeName: 'Walkthrough' })],
+          actions: [NavigationActions.navigate({ routeName: 'Walkthrough', params: { userData } })],
         })
       );
     });
   };
+
+  redirectToApp = (values) => {
+    credentials = JSON.stringify({
+        email: values.username,
+        password: values.password
+    })
+    fetch(api.auth, { 
+        method: 'POST', 
+        headers: {
+        // "Authorization": 'Bearer ' + bearerToken ,
+            Accept: 'application/json',
+            "Content-Type": "application/json"
+        }, 
+        body: credentials
+    })
+    .then((response) => response.json())
+    .then((response) => this.setState( { result: response }, 
+        () => {
+          console.log(this.state.result)
+            // jsonResult = this.state.result
+            // // console.log(jsonResult)
+            // if(jsonResult.response.status == 'ok'){
+            //     this.props.iniciarSesion(true, jsonResult.data.access_token, jsonResult.data.settings)
+            // }else{
+            //     this.props.iniciarSesion(false, '', [])
+            // }
+        })
+    ).catch((error) => {
+        console.error(error);
+    })
+  }
 
   render() {
     const { navigation, handleSubmit, loginStarted, loginError } = this.props;
@@ -93,7 +137,7 @@ class SignIn extends Component {
                   type="username"
                   placeholder="Username"
                   icon="ios-person-outline"
-                  validate={[required, alphaNumeric, maxLength15]}
+                  validate={[required, email]}
                 />
                 <Field
                   name="password"
@@ -102,7 +146,7 @@ class SignIn extends Component {
                   placeholder="Password"
                   icon="ios-lock-outline"
                   secureTextEntry={true}
-                  validate={[required, alphaNumeric, minLength7, maxLength15]}
+                  validate={[required]}
                 />
                 <Button
                   small
