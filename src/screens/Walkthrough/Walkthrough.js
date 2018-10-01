@@ -40,19 +40,19 @@ class Walkthrough extends Component {
           <Text numberOfLines={4} style={styles.slide.subtitle}>
             {item.description}
           </Text>
-          {index < 2 ? (
+          {index < this.state.coursesLength ? (
             <Button
               transparent
               onPress={() => this.carousel.snapToNext()}
               style={styles.slide.btnWrapper}>
-              <Text style={styles.slide.btnText}>Next</Text>
+              <Text style={styles.slide.btnText}>Siguiente</Text>
             </Button>
           ) : (
             <Button
               transparent
               onPress={() => this.carousel.snapToPrev()}
               style={styles.slide.btnWrapper}>
-              <Text style={styles.slide.btnText}>Previous</Text>
+              <Text style={styles.slide.btnText}>Anterior</Text>
             </Button>
           )}
         </View>
@@ -77,9 +77,10 @@ class Walkthrough extends Component {
           .then((response) => response.json())
           .then((response) => {
                 // console.log(response)
-                  this.setState( { courses: response.data.courses, ready: true}, () => {
+                  this.setState( { courses: response.data.courses, coursesLength: response.data.courses.length - 1, ready: true}, () => {
                   // this.setState({loaded: true});
-                  jsonResult = this.state.courses
+                  // console.warn(this.state.coursesLength);
+                //   jsonResult = this.state.courses
                   // console.log(jsonResult)
               }) 
             }
@@ -96,7 +97,7 @@ class Walkthrough extends Component {
   }
 
   render() {
-    // console.log(this.props.navigation.state.params.userData)
+    console.log(this.props.navigation.state.params.userData)
     if(this.state.ready){
       return (
         <Container>
@@ -125,8 +126,12 @@ class Walkthrough extends Component {
                 primary
                 block
                 style={styles.skipBtn}
-                onPress={() => this.props.navigation.navigate('Drawer')}>
-                <Text> Get Started </Text>
+                // onPress={() => this.props.navigation.navigate('Drawer')}>
+                // <Text> Get Started </Text>
+                onPress={() => this.props.navigation.navigate('Quizz', {
+                  pararams: this.props.navigation.state.params.userData
+                })}>
+                <Text> Modo Aleatorio </Text>
               </Button>
             </Footer>
           </ImageBackground>

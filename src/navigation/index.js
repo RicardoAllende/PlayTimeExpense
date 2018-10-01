@@ -14,6 +14,7 @@ import ExpensesCalendar from '@screens/ExpensesCalendar';
 import Settings from '@screens/Settings';
 import Search from '@screens/Search';
 import Profile from '@screens/Profile';
+import Quizz from '@screens/Courses/Quizz'
 
 const Drawer = createDrawerNavigator(
   {
@@ -25,6 +26,7 @@ const Drawer = createDrawerNavigator(
     Settings: { screen: Settings },
     Profile: { screen: Profile },
     SignIn: { screen: SignIn },
+    Quizz: { screen: Quizz },
   },
   {
     initialRouteName: 'Expenses',
@@ -42,6 +44,7 @@ const AppNavigation = createStackNavigator(
     NewExpense: { screen: NewExpense },
     NewCategory: { screen: NewCategory },
     Drawer: { screen: Drawer },
+    Quizz: { screen: Quizz },
   },
   {
     index: 0,
