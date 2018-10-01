@@ -18,7 +18,7 @@ export default {
       paddingBottom: 50,
       paddingLeft: 20,
       paddingRight: 20,
-      height: '95%',
+      height: '85%', // default 95
     },
     illustration: {
       height: 120,

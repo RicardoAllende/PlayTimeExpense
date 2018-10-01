@@ -54,7 +54,6 @@ export function doLogin(username, password, onLoginSuccess) {
   })
   return dispatch => {
     dispatch({ type: LOGIN_STARTED });
-    console.warn(api.auth)
     return fetch(api.auth, { 
           method: 'POST', 
           headers: {
@@ -66,7 +65,7 @@ export function doLogin(username, password, onLoginSuccess) {
       })
       .then((response) => response.json() )
       .then((jsonResponse) => {
-          console.log(jsonResponse)
+          // console.log(jsonResponse)
           if(jsonResponse.response.status == 'ok'){
             dispatch({ type: LOGIN_SUCCESS, response: jsonResponse.data.profile_data });
             onLoginSuccess(jsonResponse.data);

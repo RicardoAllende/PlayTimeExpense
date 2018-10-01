@@ -1,4 +1,4 @@
-const url = "http://192.168.1.65:8000/api/v1/"
+const url = "http://192.168.0.103:8000/api/v1/"
 
 const app_url = url + "app/"
 
