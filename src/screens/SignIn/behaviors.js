@@ -67,7 +67,7 @@ export function doLogin(username, password, onLoginSuccess) {
       .then((jsonResponse) => {
           // console.log(jsonResponse)
           if(jsonResponse.response.status == 'ok'){
-            dispatch({ type: LOGIN_SUCCESS, response: jsonResponse.data.profile_data });
+            dispatch({ type: LOGIN_SUCCESS, response: jsonResponse.data });
             onLoginSuccess(jsonResponse.data);
           }
         }

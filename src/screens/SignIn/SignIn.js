@@ -122,7 +122,7 @@ class SignIn extends Component {
                 />
                 {loginError && (
                   <Notification
-                    message="Invalid username or password!"
+                    message="Verifique email o contraseña"
                     buttonText="Retry"
                     duration={5000}
                     position="top"
@@ -135,7 +135,7 @@ class SignIn extends Component {
                   name="username"
                   component={LoginInput}
                   type="username"
-                  placeholder="Username"
+                  placeholder="Nombre de usuario"
                   icon="ios-person-outline"
                   validate={[required, email]}
                 />
@@ -143,7 +143,7 @@ class SignIn extends Component {
                   name="password"
                   component={LoginInput}
                   type="password"
-                  placeholder="Password"
+                  placeholder="Contraseña"
                   icon="ios-lock-outline"
                   secureTextEntry={true}
                   validate={[required]}
@@ -153,7 +153,7 @@ class SignIn extends Component {
                   transparent
                   style={{ alignSelf: 'flex-end' }}
                   onPress={() => navigation.navigate('ResetPassword')}>
-                  <Text style={styles.resetPwdBtn}>Forgot Password</Text>
+                  <Text style={styles.resetPwdBtn}>¿Olvidaste tu contraseña?</Text>
                 </Button>
               </Form>
             </View>
@@ -166,16 +166,16 @@ class SignIn extends Component {
                 block
                 full
                 onPress={handleSubmit(this.handleSubmit)}>
-                {loginStarted ? <Spinner color="#fff" /> : <Text>Sign In</Text>}
+                {loginStarted ? <Spinner color="#fff" /> : <Text>Ingresar</Text>}
               </Button>
               <Button
                 transparent
                 full
                 onPress={() => navigation.navigate('SignUp')}>
                 <Text style={styles.signup.linkText}>
-                  Don’t have an account?
+                  ¿Aún no tiene cuenta?
                 </Text>
-                <Text style={styles.signup.linkBtn}>Sign Up</Text>
+                <Text style={styles.signup.linkBtn}>Registro</Text>
               </Button>
             </View>
           </Footer>

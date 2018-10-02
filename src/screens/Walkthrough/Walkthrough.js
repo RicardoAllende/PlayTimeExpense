@@ -40,25 +40,38 @@ class Walkthrough extends Component {
           <Text numberOfLines={4} style={styles.slide.subtitle}>
             {item.description}
           </Text>
-          {index < this.state.coursesLength ? (
-            <Button
-              transparent
-              onPress={() => this.carousel.snapToNext()}
-              style={styles.slide.btnWrapper}>
-              <Text style={styles.slide.btnText}>Siguiente</Text>
-            </Button>
-          ) : (
-            <Button
-              transparent
-              onPress={() => this.carousel.snapToPrev()}
-              style={styles.slide.btnWrapper}>
-              <Text style={styles.slide.btnText}>Anterior</Text>
-            </Button>
-          )}
+          <Button
+            transparent
+            onPress={() => this._goToCourse(item.id)}
+            style={styles.slide.btnWrapper}>
+            <Text style={styles.slide.btnText}>Dashboard</Text>
+          </Button>
         </View>
       </Card>
     );
   }
+
+  _goToCourse = (courseId) => {
+    this.props.navigation.navigate('Quizz', {
+      courseId: courseId
+    })
+  }
+  
+  // {index < this.state.coursesLength ? (
+  //   <Button
+  //     transparent
+  //     onPress={() => this.carousel.snapToNext()}
+  //     style={styles.slide.btnWrapper}>
+  //     <Text style={styles.slide.btnText}>Siguiente</Text>
+  //   </Button>
+  // ) : (
+  //   <Button
+  //     transparent
+  //     onPress={() => this.carousel.snapToPrev()}
+  //     style={styles.slide.btnWrapper}>
+  //     <Text style={styles.slide.btnText}>Anterior</Text>
+  //   </Button>
+  // )}
 
   loadQuestions = () => {
       // console.warn("Loading questions");
@@ -97,7 +110,7 @@ class Walkthrough extends Component {
   }
 
   render() {
-    console.log(this.props.navigation.state.params.userData)
+    // console.log(this.props.navigation.state.params.userData)
     if(this.state.ready){
       return (
         <Container>
@@ -126,11 +139,12 @@ class Walkthrough extends Component {
                 primary
                 block
                 style={styles.skipBtn}
-                // onPress={() => this.props.navigation.navigate('Drawer')}>
-                // <Text> Get Started </Text>
-                onPress={() => this.props.navigation.navigate('Quizz', {
-                  pararams: this.props.navigation.state.params.userData
-                })}>
+                onPress={() => this.props.navigation.navigate('Drawer')}
+                // onPress={() => this.props.navigation.navigate('Quizz', {
+                //   courseId: -1
+                // })}
+                >
+                {/* <Text> Get Started </Text> */}
                 <Text> Modo Aleatorio </Text>
               </Button>
             </Footer>

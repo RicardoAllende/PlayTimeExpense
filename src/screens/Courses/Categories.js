@@ -69,14 +69,14 @@ class Categories extends Component {
             {!categoriesLoading &&
               categories.length === 0 && (
                 <View style={styles.emptyContainer}>
-                  <Text style={styles.emptyMsg}>No categories found</Text>
+                  <Text style={styles.emptyMsg}>No se encontraron categorías</Text>
                 </View>
               )}
             {!categoriesLoading &&
               categories.length > 0 && (
                 <FlatList
                   horizontal={false}
-                //   numColumns={2}
+                  numColumns={2}
                   data={categories}
                   renderItem={({ ...props }) => (
                     <Category navigation={navigation} {...props} />
@@ -100,6 +100,33 @@ class Categories extends Component {
   }
 }
 
+
+/*
+{categoriesLoading && (
+              <View style={styles.emptyContainer}>
+                <Spinner color={theme.brandPrimary} />
+              </View>
+            )}
+            {!categoriesLoading &&
+              categories.length === 0 && (
+                <View style={styles.emptyContainer}>
+                  <Text style={styles.emptyMsg}>No categories found</Text>
+                </View>
+              )}
+            {!categoriesLoading &&
+              categories.length > 0 && (
+                <FlatList
+                  horizontal={false}
+                  numColumns={2}
+                  data={categories}
+                  renderItem={({ ...props }) => (
+                    <Category navigation={navigation} {...props} />
+                  )}
+                  keyExtractor={category => category.id}
+                  initialNumToRender={5}
+                />
+              )}
+*/
 const mapStateToProps = state => ({
   categories: categoriesSelectors.getCategories(state),
   categoriesLoading: categoriesSelectors.getCategoriesLoadingState(state),
