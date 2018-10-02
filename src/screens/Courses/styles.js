@@ -24,12 +24,15 @@ export default {
     alignSelf: 'center',
   },
   categoryBox: {
+    padding: 5,
     justifyContent: 'center',
-    height: deviceHeight / 4,
-    width: deviceWidth / 2,
+    // height: deviceHeight / 4,
+    // width: deviceWidth / 2,
     backgroundColor: '#FFF',
     borderBottomWidth: 1,
     borderRightWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
     borderColor: '#ddd',
   },
   categoryIcon: {
@@ -38,8 +41,9 @@ export default {
     color: '#c9c9c9',
   },
   categoryTitle: {
-    fontSize: 22,
+    fontSize: 18,
     alignSelf: 'center',
+    justifyContent: 'center',
     color: '#1D1D26',
     paddingBottom: 15,
   },
@@ -50,8 +54,12 @@ export default {
   },
   categoryLine: {
     borderBottomWidth: 3,
-    paddingTop: 10,
+    paddingTop: 3,
     width: 25,
     alignSelf: 'center',
   },
+  flatList: {
+    flex: 1,
+    padding: 20,
+  }
 };

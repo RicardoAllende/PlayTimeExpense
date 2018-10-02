@@ -6,6 +6,7 @@ import { Text, Icon, View } from 'native-base';
 
 import styles from './styles';
 import { formatAmount } from '@utils/formatters';
+import * as Animatable from 'react-native-animatable';
 
 import categoryColors from '@theme/categoryColors';
 
@@ -30,19 +31,19 @@ export class Category extends React.Component {
     return (
       <TouchableOpacity
         activeOpacity={0.7}
-        onPress={() => navigation.navigate('Expenses')}>
-        <View style={styles.categoryBox}>
-          <Icon name={category.iconName} style={styles.categoryIcon} />
+        onPress={() => console.log('Se presionó el elemnto con el id ', category.id, 'De la pregunta', category.name)}>
+        <Animatable.View style={styles.categoryBox} animation="bounceInLeft" iterationCount={1} direction="alternate">
+          {/* <Icon name={category.iconName} style={styles.categoryIcon} /> */}
           <Text style={styles.categoryTitle}>{category.name}</Text>
-          <Text style={styles.categoryAmount}>
+          {/* <Text style={styles.categoryAmount}>
             {' '}
             {formatAmount(category.amount)}
-          </Text>
+          </Text> */}
           <View
             style={styles.categoryLine}
             borderColor={categoryColors[index % categoryColors.length]}
           />
-        </View>
+        </Animatable.View>
       </TouchableOpacity>
     );
   }
