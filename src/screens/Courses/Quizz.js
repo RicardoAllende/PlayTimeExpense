@@ -38,6 +38,7 @@ class Categories extends Component {
             categories: [],
             corrects: 0,
             answers: 0,
+            questions: [],
             currentQuestion: 0,
             seconds: defaultTime,
             options: [],
@@ -45,13 +46,13 @@ class Categories extends Component {
         }
     }
 
-  static propTypes = {
-    navigation: PropTypes.any,
-    getCategories: PropTypes.func.isRequired,
-    categoriesLoading: PropTypes.bool.isRequired,
-    categoriesError: PropTypes.bool.isRequired,
-    categories: PropTypes.array,
-  };
+//   static propTypes = {
+//     navigation: PropTypes.any,
+//     getCategories: PropTypes.func.isRequired,
+//     categoriesLoading: PropTypes.bool.isRequired,
+//     categoriesError: PropTypes.bool.isRequired,
+//     categories: PropTypes.array,
+//   };
 
   static defaultProps = {
     categoriesLoading: false,
@@ -71,7 +72,7 @@ class Categories extends Component {
 
     _renderOption = (element) => {
         const { navigation } = this.props;
-        console.log(element)
+        console.log("Rendering option")
         index = element.index
         category = element.item
         // category = element.item
@@ -99,11 +100,29 @@ class Categories extends Component {
         return (<View style = {{height: 10,width: '100%',}} />)
     }
 
+    showAlert(){
+        Alert.alert(
+            '¿Desea terminar intento?',
+            '¿Desea terminar el intento actual?',
+            [
+            {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ],
+            { cancelable: false }
+        )
+    }
+
+    init = false
+
     render() {
         const  navigation = this.props.navigation;
         // console.log(categories)
         if(!this.state.ready){
-            this.loadData();
+            if(!this.init){
+                this.init = true;   
+                this.loadData();
+            }
             // return (<Text>
             //         Cargando preguntas
             //     </Text>);
@@ -116,7 +135,7 @@ class Categories extends Component {
             <AppHeader
                 hasTabs
                 navigation={navigation}
-                title="¿Cuál es el lugar más frío de la tierra?"
+                title={ this.state.ready ? this.state.questions[this.state.currentQuestion].id + this.state.questions[this.state.currentQuestion].name : "-" }
                 subTitle="_"
             />
             <Content
@@ -141,9 +160,9 @@ class Categories extends Component {
                     //   numColumns={2}
                     data={ this.state.questions[this.state.currentQuestion].options }
                     renderItem={({ ...props }) => (
-                        <Category navigation={navigation} {...props} />
+                        <Category showAlert={this.showAlert} navigation={navigation} {...props} />
                     )}
-                    keyExtractor={category => category.id}
+                    keyExtractor={category => "question" + category.id}
                     initialNumToRender={5}
                     style={styles.flatList}
                     ItemSeparatorComponent={this.itemSeparatorComponent}
@@ -186,7 +205,7 @@ class Categories extends Component {
                     newQuestion = this.state.questions[currentIndex]
                     this.setState({
                         index : currentIndex,
-                        currentQuestion: newQuestion,
+                        currentQuestion: currentQuestion,
                     })
                 }
             // }
@@ -279,6 +298,7 @@ class Categories extends Component {
     }
 
     loadData = () => {
+        console.log("Loading questions");
         url = api.getQuestions(this.props.navigation.state.params.courseId);
         fetch(url, { 
             method: 'GET', 
@@ -290,7 +310,7 @@ class Categories extends Component {
         })
         .then((response) => response.json())
         .then((response) => {
-            console.log(response)
+            // console.log(response)
             this.setState( {
                 questions: response.data.questions, maxIndex: response.data.questions.length, 
                 currentQuestion: 0, options: response.data.questions[0].options , ready: true}, 
@@ -307,45 +327,6 @@ const mapStateToProps = state => ({
   categoriesLoading: categoriesSelectors.getCategoriesLoadingState(state),
   categoriesError: categoriesSelectors.getCategoriesErrorState(state),
 });
-
-const categorias = [
-    {
-      id: '1',
-      name: '¿Cuál es el lugar más frío de la tierra?',
-      iconName: 'ios-school-outline',
-      percent: 75,
-      amount: 375,
-    },
-    {
-      id: '2',
-      name: '¿Cuál es el río más largo del mundo?',
-      iconName: 'ios-paper-outline',
-      percent: 50,
-      amount: 250,
-    },
-    {
-      id: '3',
-      name: '¿Dónde se originaron los juegos olímpicos?',
-      iconName: 'ios-restaurant-outline',
-      amount: 175,
-      percent: 25,
-    },
-    {
-      id: '4',
-      name: '¿Cuándo acabó la II Guerra Mundial?',
-      iconName: 'ios-game-controller-b-outline',
-      percent: 23,
-      amount: 145,
-    },
-    {
-      id: '10',
-      name: 'Transport',
-      iconName: 'ios-car-outline',
-      percent: 22,
-      amount: 150,
-    },
-  ];
-  
 
 export default connect(
   mapStateToProps,
