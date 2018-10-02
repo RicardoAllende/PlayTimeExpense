@@ -3,6 +3,8 @@ const url = "http://192.168.0.111:8000/api/v1/"
 const app_url = url + "app/"
 
 export const api = {
+    url: url,
+    app_url: app_url,
     auth: url + 'auth',
     getCourses: app_url + 'courses',
     sendAnswers: app_url + 'questions', //post

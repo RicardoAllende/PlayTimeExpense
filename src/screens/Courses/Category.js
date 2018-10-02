@@ -13,7 +13,7 @@ import categoryColors from '@theme/categoryColors';
 export class Category extends React.Component {
   static propTypes = {
     item: PropTypes.shape({
-      category: PropTypes.string,
+      option: PropTypes.string,
       percent: PropTypes.number,
       amount: PropTypes.number,
     }).isRequired,
@@ -23,7 +23,7 @@ export class Category extends React.Component {
 
   render() {
     const {
-      item: { ...category },
+      item: { ...option },
       navigation,
       index,
     } = this.props;
@@ -31,13 +31,13 @@ export class Category extends React.Component {
     return (
       <TouchableOpacity
         activeOpacity={0.7}
-        onPress={() => console.log('Se presionó el elemnto con el id ', category.id, 'De la pregunta', category.name)}>
+        onPress={() => console.log('Se presionó el elemnto con el id ', option.id, 'De la pregunta', option.name)}>
         <Animatable.View style={styles.categoryBox} animation="bounceInLeft" iterationCount={1} direction="alternate">
-          {/* <Icon name={category.iconName} style={styles.categoryIcon} /> */}
-          <Text style={styles.categoryTitle}>{category.name}</Text>
+          {/* <Icon name={option.iconName} style={styles.categoryIcon} /> */}
+          <Text style={styles.categoryTitle}>{option.name}</Text>
           {/* <Text style={styles.categoryAmount}>
             {' '}
-            {formatAmount(category.amount)}
+            {formatAmount(option.amount)}
           </Text> */}
           <View
             style={styles.categoryLine}

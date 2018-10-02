@@ -69,6 +69,8 @@ export function doLogin(username, password, onLoginSuccess) {
           if(jsonResponse.response.status == 'ok'){
             dispatch({ type: LOGIN_SUCCESS, response: jsonResponse.data });
             onLoginSuccess(jsonResponse.data);
+          }else{
+            dispatch({ type: LOGIN_ERROR });
           }
         }
       ).catch((error) => {
@@ -77,18 +79,3 @@ export function doLogin(username, password, onLoginSuccess) {
       })
     }    
 }
-
-// export function doLogin(username, password, onLoginSuccess) {
-//   return dispatch => {
-//     dispatch({ type: LOGIN_STARTED });
-//     return api
-//       .get('/auth', { username: username, password: password })
-//       .then(response => {
-//         dispatch({ type: LOGIN_SUCCESS, response: response.data });
-//         onLoginSuccess();
-//       })
-//       .catch(() => {
-//         dispatch({ type: LOGIN_ERROR });
-//       });
-//   };
-// }

@@ -53,6 +53,7 @@ class Walkthrough extends Component {
 
   _goToCourse = (courseId) => {
     this.props.navigation.navigate('Quizz', {
+      accessToken: this.props.navigation.state.params.userData.access_token,
       courseId: courseId
     })
   }
