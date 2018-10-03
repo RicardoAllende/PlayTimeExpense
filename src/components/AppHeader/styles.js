@@ -10,6 +10,9 @@ export default {
     height: 32,
     resizeMode: 'contain',
   },
+  timerStyle: {
+
+  },
   avatar: {
     width: 40,
     height: 40,

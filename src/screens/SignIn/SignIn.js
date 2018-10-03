@@ -123,7 +123,7 @@ class SignIn extends Component {
                 {loginError && (
                   <Notification
                     message="Verifique email o contraseña"
-                    buttonText="Retry"
+                    buttonText="Intentar de nuevo"
                     duration={5000}
                     position="top"
                     type="danger"

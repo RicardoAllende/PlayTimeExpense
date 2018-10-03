@@ -66,11 +66,15 @@ export function doLogin(username, password, onLoginSuccess) {
       .then((response) => response.json() )
       .then((jsonResponse) => {
           // console.log(jsonResponse)
-          if(jsonResponse.response.status == 'ok'){
-            dispatch({ type: LOGIN_SUCCESS, response: jsonResponse.data });
-            onLoginSuccess(jsonResponse.data);
-          }else{
-            dispatch({ type: LOGIN_ERROR });
+          try {
+            if(jsonResponse.response.status == 'ok'){
+              dispatch({ type: LOGIN_SUCCESS, response: jsonResponse.data });
+              onLoginSuccess(jsonResponse.data);
+            }else{
+              dispatch({ type: LOGIN_ERROR });
+            }
+          } catch (error) {
+            dispatch({type:  LOGIN_ERROR});
           }
         }
       ).catch((error) => {

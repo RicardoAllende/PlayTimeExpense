@@ -19,28 +19,66 @@ import SearchHeader from './SearchHeader';
 const logo = require('@assets/images/header-logo.png');
 const avatar = require('@assets/images/avatar1.png');
 import styles from './styles';
+import CountdownCircle from 'react-native-countdown-circle'
 
 class AppHeader extends PureComponent {
-  state = {
-    displaySearchBar: false,
-  };
+
+  constructor(props){
+    super(props)
+    this.state = {
+      displaySearchBar: false,
+    };
+  }
 
   render() {
+    // let logoInNav = this.props.timer ? timer : 
+    let navLogo;
+    if(this.props.timer){ // Timer exists
+      // console.log('Rendereando contador')
+      if(this.props.timerVisibility){
+        navLogo = <CountdownCircle
+          seconds={this.props.seconds}
+          radius={25}
+          borderWidth={8}
+          color="#ff003f"
+          bgColor="#fff"
+          // updateText={
+          //   (elapsedSecs, totalSecs) => {
+          //     seconds = totalSecs - elapsedSecs;
+          //     this.props.setCurrentSecond(seconds)
+          //     return (totalSecs - elapsedSecs).toString()
+          //   }
+          // }
+          textStyle={{ fontSize: 20 }}
+          onTimeElapsed={this.props._onTimeElapsed}
+        />
+      }
+    }else{
+      if(this.props.displayLogo){
+        navLogo = <TouchableOpacity
+          onPress={() => {
+            this.props.navigation.navigate('Expenses');
+          }}>
+          <Image source={logo} style={styles.logo} />
+        </TouchableOpacity>
+      }
+    }
     return (
       <View style={this.props.style}>
         <Header transparent hasTabs>
           <Left style={{ flex: 1 }}>
             <HeaderDrawerButton navigation={this.props.navigation} />
           </Left>
-          <Body style={{ flex: 1 }}>
-            {this.props.displayLogo && (
+          <Body style={{ flex: 1, alignItems: 'center' }}>
+            { navLogo }
+            {/* {this.props.displayLogo && (
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate('Expenses');
                 }}>
                 <Image source={logo} style={styles.logo} />
               </TouchableOpacity>
-            )}
+            )} */}
           </Body>
           <Right style={{ flex: 1 }}>
             {this.props.displayAvatar && (

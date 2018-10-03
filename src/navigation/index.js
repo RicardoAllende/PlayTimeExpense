@@ -44,7 +44,7 @@ const AppNavigation = createStackNavigator(
     NewExpense: { screen: NewExpense },
     NewCategory: { screen: NewCategory },
     Drawer: { screen: Drawer },
-    Quizz: { screen: Quizz },
+    // Quizz: { screen: Quizz },
   },
   {
     index: 0,

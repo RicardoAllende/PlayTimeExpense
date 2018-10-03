@@ -44,7 +44,7 @@ class Walkthrough extends Component {
             transparent
             onPress={() => this._goToCourse(item.id)}
             style={styles.slide.btnWrapper}>
-            <Text style={styles.slide.btnText}>Dashboard</Text>
+            <Text style={styles.slide.btnText}>Jugar</Text>
           </Button>
         </View>
       </Card>
@@ -104,13 +104,18 @@ class Walkthrough extends Component {
       // }
   }
 
-  componentDidMount(){
-    if( ! this.state.ready ){
-      this.loadQuestions()
-    }
-  }
+  // componentDidMount(){
+  //   if( ! this.state.ready ){
+  //   }
+  // }
+
+  loadingQuestions = true;
 
   render() {
+    if(this.loadingQuestions){
+      this.loadQuestions()
+      this.loadingQuestions = false;
+    }
     // console.log(this.props.navigation.state.params.userData)
     if(this.state.ready){
       return (

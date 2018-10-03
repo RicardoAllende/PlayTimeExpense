@@ -41,7 +41,7 @@ export default {
     color: '#c9c9c9',
   },
   categoryTitle: {
-    fontSize: 18,
+    fontSize: 15,
     alignSelf: 'center',
     justifyContent: 'center',
     color: '#1D1D26',

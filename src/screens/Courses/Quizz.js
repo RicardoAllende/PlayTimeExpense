@@ -15,7 +15,7 @@ import { connect } from 'react-redux';
 import { formatAmount } from '@utils/formatters';
 
 import AppHeader from '@components/AppHeader';
-import Category from './Category';
+import Option from './Option';
 import categoryColors from '@theme/categoryColors';
 
 import * as actions from './behaviors';
@@ -26,6 +26,7 @@ import theme from '@theme/variables/myexpense';
 
 const url = "http://192.168.0.111:8000/categories"
 const defaultTime = 10;
+const num_questions_per_medal = 12
 
 import {api} from './../../../api/playTimeApi'
 
@@ -39,20 +40,25 @@ class Categories extends Component {
             corrects: 0,
             answers: 0,
             questions: [],
-            currentQuestion: 0,
+            currentQuestion: false,
             seconds: defaultTime,
             options: [],
-            skippedQuestions: []
+            skippedQuestions: [],
+            timerVisibility: true,
+            currentSecond: defaultTime,
+            secondsInCountdown: defaultTime,
+            currentIndex: 0
         }
     }
 
-//   static propTypes = {
-//     navigation: PropTypes.any,
-//     getCategories: PropTypes.func.isRequired,
-//     categoriesLoading: PropTypes.bool.isRequired,
-//     categoriesError: PropTypes.bool.isRequired,
-//     categories: PropTypes.array,
-//   };
+  static propTypes = {
+    navigation: PropTypes.any,
+    getCategories: PropTypes.func.isRequired,
+    categoriesLoading: PropTypes.bool.isRequired,
+    categoriesError: PropTypes.bool.isRequired,
+    categories: PropTypes.array,
+  };
+
 
   static defaultProps = {
     categoriesLoading: false,
@@ -100,7 +106,7 @@ class Categories extends Component {
         return (<View style = {{height: 10,width: '100%',}} />)
     }
 
-    showAlert(){
+    showAlert = () => {
         Alert.alert(
             '¿Desea terminar intento?',
             '¿Desea terminar el intento actual?',
@@ -113,19 +119,68 @@ class Categories extends Component {
         )
     }
 
+    _onTimeElapsed = () => {
+        console.log("Se terminó el tiempo onTimeElapsed")
+        // this.setState({ timerVisibility: false });
+        // this.showAlert()
+    }
+
     init = false
 
+    _askToEndQuizz = () => {
+        // console.log("Función para finalizar el curso")
+        // this._pauseTimer();
+        Alert.alert(
+            '¿Desea terminar intento?',
+            '¿Desea terminar el intento actual?',
+            [
+            // {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+            {text: 'Continuar', onPress: () => this._continueQuizz, style: 'cancel'},
+            {text: 'Sí, terminar', onPress: () => this._goToResults },
+            ],
+            { cancelable: false }
+        )
+    }
+
+    _pauseTimer = () => {
+        this.setState({ timerVisibility: false });
+    }
+
+    _continueTimer = () => {
+        this.setState({ seconds: this.state.seconds, timerVisibility: true })
+    }
+
+    _goToResults = () => {
+        console.log("Yendo a los resultados del curso")
+        Alert.alert(
+            'Terminando el curso',
+            'Usted está terminando el curso',
+            [
+            {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ],
+            { cancelable: false }
+        )
+    }
+
+    _continueQuizz = () => {
+        console.log("Se eligió continuar con el curso");
+        this._continueTimer()
+    }
+
+    setCurrentSecond = (seconds) => 
+    {
+        this.setState({
+            seconds: seconds
+        }, () => console.log('El número de segundos actual es:', this.state.seconds))
+    }
+
     render() {
-        const  navigation = this.props.navigation;
-        // console.log(categories)
-        if(!this.state.ready){
-            if(!this.init){
-                this.init = true;   
-                this.loadData();
-            }
-            // return (<Text>
-            //         Cargando preguntas
-            //     </Text>);
+        const navigation = this.props.navigation;
+        if(!this.init){
+            this.init = true;   
+            this.loadData();
         }
         return (
         <Container>
@@ -134,8 +189,13 @@ class Categories extends Component {
             style={styles.background}>
             <AppHeader
                 hasTabs
+                timer={true}
+                timerVisibility={this.state.timerVisibility}
+                seconds={this.state.seconds}
+                _onTimeElapsed={this._onTimeElapsed}
+                setCurrentSecond={this.setCurrentSecond}
                 navigation={navigation}
-                title={ this.state.ready ? this.state.questions[this.state.currentQuestion].id + this.state.questions[this.state.currentQuestion].name : "-" }
+                title={ this.state.ready ? this.state.currentQuestion.name : "-" }
                 subTitle="_"
             />
             <Content
@@ -147,20 +207,12 @@ class Categories extends Component {
                     <Spinner color={theme.brandPrimary} />
                 </View>
                 )}
-                {/* {this.state.ready &&
-                this.state.questions.length === 0 && (
-                    <View style={styles.emptyContainer}>
-                    <Text style={styles.emptyMsg}>No categories found</Text>
-                    </View>
-                )} */}
                 {this.state.ready &&
                 this.state.questions.length > 0 && (
                     <FlatList
-                    //   horizontal={false}
-                    //   numColumns={2}
-                    data={ this.state.questions[this.state.currentQuestion].options }
+                    data={ this.state.currentQuestion.options }
                     renderItem={({ ...props }) => (
-                        <Category showAlert={this.showAlert} navigation={navigation} {...props} />
+                        <Option showAlert={this.showAlert} gradeAnswer={this.gradeAnswer} questionId={this.state.currentQuestion.id} navigation={navigation} {...props} />
                     )}
                     keyExtractor={category => "question" + category.id}
                     initialNumToRender={5}
@@ -174,16 +226,7 @@ class Categories extends Component {
                 containerStyle={{}}
                 style={{ backgroundColor: theme.brandPrimary }}
                 position="bottomRight"
-                onPress={() => Alert.alert(
-                    '¿Desea terminar intento?',
-                    '¿Desea terminar el intento actual?',
-                    [
-                    {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-                    {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                    {text: 'OK', onPress: () => console.log('OK Pressed')},
-                    ],
-                    { cancelable: false }
-                ) }>
+                onPress={ this._askToEndQuizz }>
                 <Icon type="Ionicons" name="exit" />
             </Fab>
             </ImageBackground>
@@ -194,18 +237,20 @@ class Categories extends Component {
     handleNextAnswer = () => {
         // this.setState({ seconds: defaultTime }, () => {
         //         console.log('Segundos establecidos', this.state.seconds)
-                currentIndex = this.state.currentQuestion
+            
+                currentIndex = this.state.index
                 currentIndex++
                 if(currentIndex == this.state.maxIndex){
                     ToastAndroid.show("Ya no hay más preguntas", ToastAndroid.SHORT)
                     console.warn('Ya no existen más preguntas')
-                    // this.redirectToResults()
+                    // this.goToResults()
                 }else{
                     // ToastAndroid.show("Cambio a siguiente pregunta", ToastAndroid.SHORT)
                     newQuestion = this.state.questions[currentIndex]
                     this.setState({
                         index : currentIndex,
-                        currentQuestion: currentQuestion,
+                        currentQuestion: newQuestion,
+                        seconds: defaultTime,
                     })
                 }
             // }
@@ -213,12 +258,12 @@ class Categories extends Component {
     }
 
     _deliverMedalQuestions = () => {
-        uri = apiSetMedalQuestions(this.props.courseId);
+        uri = api.setMedalQuestions(this.props.courseId);
         // console.warn(uri);po
         fetch(uri, {
                 method: 'POST',
                 headers: {
-                    "Authorization": 'Bearer ' + this.props.bearerToken,
+                    "Authorization": 'Bearer ' + this.props.navigation.state.params.accessToken,
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 },
@@ -247,12 +292,12 @@ class Categories extends Component {
         var data = JSON.stringify({
                 question_id: questionId,
                 option_id: optionId,
-                session: this.props.sessionToken
+                session: this.state.session,
             })
-        fetch(apiSendAnswers, {
+        fetch(api.sendAnswers, {
             method: 'POST',
             headers: {
-                "Authorization": 'Bearer ' + this.props.bearerToken,
+                "Authorization": 'Bearer ' + this.props.navigation.state.params.accessToken,
                 Accept: 'application/json',
                 'Content-Type': 'application/json'
             },
@@ -260,8 +305,11 @@ class Categories extends Component {
         }).then(
             // Enviando retroalimentación
             response => {
+                return response.json();
                 console.log("Retro")
             }
+        ).then(
+            jsonResponse => console.log(jsonResponse)
         ).catch(error => {
             console.log("error")
         });
@@ -269,7 +317,7 @@ class Categories extends Component {
         if(is_correct){
             correctas = this.state.corrects;
             correctas ++;
-            if(correctas == this.props.settings.num_questions_per_medal){
+            if(correctas == num_questions_per_medal){
                 this._deliverMedalQuestions(this.props.courseId)
                 correctas = 0;
             }
@@ -281,7 +329,7 @@ class Categories extends Component {
                 '¡Acertaste!',
                 'Respuesta correcta',
                 [
-                    {text: 'Terminar', onPress: () => this.redirectToResults() , style: 'cancel'},
+                    {text: 'Terminar', onPress: () => this._goToResults() , style: 'cancel'},
                     {text: 'Siguiente', onPress: () => this.handleNextAnswer(), style: 'default' },
                 ]
             )
@@ -290,7 +338,7 @@ class Categories extends Component {
                 this.state.currentQuestion.feedback,
                 '¿Deseas continuar?',
                 [
-                    {text: 'Terminar', onPress: () => this.redirectToResults() , style: 'cancel'},
+                    {text: 'Terminar', onPress: () => this._goToResults() , style: 'cancel'},
                     {text: 'Siguiente', onPress: () => this.handleNextAnswer(), style: 'default' },
                 ]
             )
@@ -312,8 +360,8 @@ class Categories extends Component {
         .then((response) => {
             // console.log(response)
             this.setState( {
-                questions: response.data.questions, maxIndex: response.data.questions.length, 
-                currentQuestion: 0, options: response.data.questions[0].options , ready: true}, 
+                questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length, 
+                currentQuestion: response.data.questions[0], options: response.data.questions[0].options , ready: true}, 
                 ()=>console.log('')
             )
         }

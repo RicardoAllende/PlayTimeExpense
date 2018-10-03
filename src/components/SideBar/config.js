@@ -1,41 +1,46 @@
 export const routes = [
+  // {
+  //   title: 'My Expenses',
+  //   route: 'Expenses',
+  //   icon: 'ios-cash-outline',
+  // },
   {
     title: 'My Expenses',
     route: 'Expenses',
     icon: 'ios-cash-outline',
   },
   {
-    title: 'Categories',
+    title: 'Categorías',
     route: 'Categories',
     icon: 'ios-apps-outline',
   },
   {
-    title: 'Expenses Calendar',
+    title: 'Calendario',
     route: 'ExpensesCalendar',
     icon: 'ios-calendar-outline',
   },
   {
-    title: 'Expenses Analytics',
+    title: 'Gráficas',
     route: 'ExpensesCharts',
     icon: 'ios-stats-outline',
   },
   {
-    title: 'Search & Export',
+    title: 'Búsqueda y exportación',
     route: 'Search',
     icon: 'ios-search-outline',
   },
   {
-    title: 'Profile',
+    title: 'Mi perfil',
     route: 'Profile',
     icon: 'ios-person-outline',
   },
   {
-    title: 'Settings',
+    title: 'Ajustes',
     route: 'Settings',
     icon: 'ios-options-outline',
   },
   {
-    title: 'Log Out',
+    title: 'Salir',
     route: 'SignIn',
     icon: 'ios-power',
   },
