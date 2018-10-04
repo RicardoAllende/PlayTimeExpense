@@ -18,6 +18,7 @@ import LoginInput from '@components/LoginInput';
 import Notification from '@components/Notification';
 
 import {api} from './../../../api/playTimeApi'
+import { AsyncStorage } from "react-native"
 
 const bearerToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjYwM2ExYzE4NzE0OTFjNzA5OTM2MWMyZGY1NTgzYWRmMTBiZDE0Yzk3YTNiNTdkYjdjY2M3ZmM4NmRjYjAxY2U5NDg0ZDk4MjlmYjhhN2FlIn0.eyJhdWQiOiIxIiwianRpIjoiNjAzYTFjMTg3MTQ5MWM3MDk5MzYxYzJkZjU1ODNhZGYxMGJkMTRjOTdhM2I1N2RiN2NjYzdmYzg2ZGNiMDFjZTk0ODRkOTgyOWZiOGE3YWUiLCJpYXQiOjE1MzgzMjY0NjAsIm5iZiI6MTUzODMyNjQ2MCwiZXhwIjoxNTY5ODYyNDYwLCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.QzXpwRyJHRgpvjSivc6T7D9i1XRWSIms80lZlVlsapOzFlwt234qXy75raMzNvJKq4cEnKM_mvEkwRyC9fruP-BEwSAjelvEsPjpq2qBNPUaA_0h9RbLmidynjmNtYNn_m18vz7uF-NQ-XF53jM1FO9o5_eUMUKjZsAM8pP3ztf1UM9PVtMKhltLAv6tbq0_8wWjtCEvZanuEhfA9HlHOB7_08DSsA74qJ4mwFrUy-zRhf0VISE_T-R6WAPNuBRXv5aDvLWMWbcYwi083XgWuH1p36oAwls37Vt3-dG5lVUR1yrwdvF5TEdg1JVysfnXibYbzMCisRGoVNbfd95aGgzHWhyoFg0lOGnfZKc0fxyb3JP6wG8PW1cVFnabVO8pPVoPKwcf5NGl7P9dprGhJ7Tj1L3oioC71DChWrudXlm4Kp4Yu2S6P9ZsjL02ozQxh7pxCleDdGlvRmz2SCVAmQMX3mqpUEG1zN9EFJg8qnY__JRg5IgrYxixb1cTe2RUmKmQEF0BTHhItJbffTsem5EfKh1XgwrHp8WL5dlBSoIDvf7uBqFsrsUGtmLUdfC4SrMEGM2AZSdBHxDB1VwU5GUUabOaTWBLvHxtkNrBCqD-PrLAwmkeMf1owPmHyKfel6LNW1TtjkK-gD2E7bvEyxyYa2N7Wm1ZvjYciqFXZNQ";
 
@@ -101,7 +102,51 @@ class SignIn extends Component {
     })
   }
 
+  checkSession = async() => {
+    console.log('Mostrando elementos')
+    try {
+      value = await AsyncStorage.getItem('bearerToken')
+      if(value !== null){
+        fetch(api.checkUser, { 
+            method: 'GET', 
+            headers: {
+            // "Authorization": 'Bearer ' + bearerToken ,
+                Accept: 'application/json',
+                "Content-Type": "application/json"
+            }, 
+            // body: credentials
+        })
+        .then((response) => response.json())
+        .then((jsonResponse) => {
+          if(json.response.status == 'ok'){
+            
+          }
+        }
+        ).catch((error) => {
+            console.error(error);
+        })
+        alert(bearerToken)
+        // console.warn('Bearer Token encontrado');
+      }else{
+        alert('No se encontró variable')
+        // console.warn('No se encontró bearer token');
+      }
+    } catch (error) {
+      console.warn('Error al intentar obtener respuesta');
+    }
+  }
+
+  saveBearerToken = () => {
+    AsyncStorage.setItem('bearerToken', bearerToken);
+    alert('Se guardó variable en async');
+  }
+
+  removeBearerToken = () => {
+    AsyncStorage.removeItem('bearerToken');
+  }
+
   render() {
+    // this.checkSession()
     const { navigation, handleSubmit, loginStarted, loginError } = this.props;
     return (
       <Container>
@@ -152,7 +197,9 @@ class SignIn extends Component {
                   small
                   transparent
                   style={{ alignSelf: 'flex-end' }}
-                  onPress={() => navigation.navigate('ResetPassword')}>
+                  // onPress={() => navigation.navigate('ResetPassword')}
+                  onPress={this.checkSession}
+                  >
                   <Text style={styles.resetPwdBtn}>¿Olvidaste tu contraseña?</Text>
                 </Button>
               </Form>
@@ -171,9 +218,11 @@ class SignIn extends Component {
               <Button
                 transparent
                 full
-                onPress={() => navigation.navigate('SignUp')}>
+                // onPress={() => navigation.navigate('SignUp')}
+                onPress={this.saveBearerToken}
+                >
                 <Text style={styles.signup.linkText}>
-                  ¿Aún no tiene cuenta?
+                  Guardar bearer token
                 </Text>
                 <Text style={styles.signup.linkBtn}>Registro</Text>
               </Button>

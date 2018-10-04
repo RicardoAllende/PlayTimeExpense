@@ -6,6 +6,7 @@ export const api = {
     url: url,
     app_url: app_url,
     auth: url + 'auth',
+    checkUser: url + 'check-user-by-token',
     getCourses: app_url + 'courses',
     sendAnswers: app_url + 'questions', //post
     getQuestions: (course_id) => { 

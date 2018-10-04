@@ -5,7 +5,7 @@ export const routes = [
   //   icon: 'ios-cash-outline',
   // },
   {
-    title: 'My Expenses',
+    title: 'Mis cursos',
     route: 'Expenses',
     icon: 'ios-cash-outline',
   },
