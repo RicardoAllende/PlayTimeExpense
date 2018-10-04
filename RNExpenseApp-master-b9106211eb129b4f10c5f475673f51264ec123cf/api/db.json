@@ -1,0 +1,204 @@
+{
+  "auth": {
+    "username": "@johnDoe",
+    "firstname": "John",
+    "lastName": "Doe",
+    "email": "john.doe@mail.com",
+    "mobile": "+33 345 678 901",
+    "phone": "+33 123 456 789"
+  },
+  "password": {
+    "status": "01"
+  },
+  "categories": [
+    {
+      "id": "1",
+      "name": "School",
+      "iconName": "ios-school-outline",
+      "percent": 70,
+      "amount": 375
+    },
+    {
+      "id": "2",
+      "name": "Bills",
+      "iconName": "ios-paper-outline",
+      "percent": 50,
+      "amount": 250
+    },
+    {
+      "id": "3",
+      "name": "Eating Out",
+      "iconName": "ios-restaurant-outline",
+      "amount": 175,
+      "percent": 25
+    },
+    {
+      "id": "4",
+      "name": "Entertainment",
+      "iconName": "ios-game-controller-b-outline",
+      "percent": 23,
+      "amount": 145
+    },
+    {
+      "id": "10",
+      "name": "Transport",
+      "iconName": "ios-car-outline",
+      "percent": 22,
+      "amount": 150
+    },
+    {
+      "id": "5",
+      "name": "Shopping",
+      "iconName": "ios-basket",
+      "percent": 12,
+      "amount": 110
+    },
+    {
+      "id": "6",
+      "name": "General",
+      "iconName": "ios-cash-outline",
+      "percent": 10,
+      "amount": 100
+    },
+    {
+      "id": "7",
+      "name": "Holiday",
+      "iconName": "plane",
+      "percent": 8,
+      "amount": 100
+    },
+    {
+      "id": "8",
+      "name": "Health",
+      "iconName": "heart",
+      "percent": 5,
+      "amount": 80
+    },
+    {
+      "id": "9",
+      "name": "Clothes",
+      "iconName": "ios-shirt-outline",
+      "percent": 5,
+      "amount": 50
+    }
+  ],
+  "expenses": [
+    {
+      "id": "13",
+      "title": "Buy a book",
+      "date": "2018-08-13",
+      "amount": -30,
+      "type": "Credit card",
+      "category": "General",
+      "categoryIcon": "ios-cash-outline"
+    },
+    {
+      "id": "12",
+      "title": "Taxi to office",
+      "date": "2018-08-12",
+      "amount": -25,
+      "type": "Credit card",
+      "category": "Transport",
+      "categoryIcon": "ios-car-outline"
+    },
+    {
+      "id": "11",
+      "title": "Launch with Alex",
+      "date": "2018-08-12",
+      "amount": -30.8,
+      "type": "Credit card",
+      "category": "Eating Out",
+      "categoryIcon": "ios-restaurant-outline"
+    },
+    {
+      "id": "10",
+      "title": "Pay check",
+      "date": "2018-08-12",
+      "amount": 3000,
+      "type": "Bank transfert",
+      "category": "Income",
+      "categoryIcon": "ios-swap"
+    },
+    {
+      "id": "9",
+      "title": "Coffee with Jane",
+      "date": "2018-08-11",
+      "amount": -10,
+      "type": "Cash",
+      "category": "Eating Out",
+      "categoryIcon": "ios-restaurant-outline"
+    },
+    {
+      "id": "8",
+      "title": "Electricity bill",
+      "date": "2018-08-11",
+      "amount": -50,
+      "type": "Credit Card",
+      "category": "Bills",
+      "categoryIcon": "ios-paper-outline"
+    },
+    {
+      "id": "7",
+      "title": "Cinema with children",
+      "date": "2018-08-11",
+      "amount": -50,
+      "type": "Credit Card",
+      "category": "Entertainment",
+      "categoryIcon": "ios-game-controller-b-outline"
+    },
+    {
+      "id": "6",
+      "title": "Dinner with family",
+      "date": "2018-08-13",
+      "amount": -80,
+      "type": "Cash",
+      "category": "Eating Out",
+      "categoryIcon": "ios-restaurant-outline"
+    },
+    {
+      "id": "5",
+      "title": "shirt and jean for Adam",
+      "date": "2018-08-10",
+      "amount": -120,
+      "type": "Credit Card",
+      "category": "Car",
+      "categoryIcon": "ios-shirt-outline"
+    },
+    {
+      "id": "4",
+      "title": "Weekly shopping",
+      "date": "2018-08-10",
+      "amount": -150.5,
+      "type": "Credit Card",
+      "category": "Shopping",
+      "categoryIcon": "ios-basket"
+    },
+    {
+      "id": "3",
+      "title": "Weekly shopping",
+      "date": "2018-08-10",
+      "amount": -150.5,
+      "type": "Credit Card",
+      "category": "Shopping",
+      "categoryIcon": "ios-basket"
+    },
+    {
+      "id": "2",
+      "title": "Stuff from Amazon",
+      "date": "2018-08-10",
+      "amount": -25.5,
+      "type": "Credit Card",
+      "category": "Shopping",
+      "categoryIcon": "ios-basket"
+    },
+    {
+      "id": "1",
+      "title": "Parking",
+      "date": "2018-08-10",
+      "amount": -5.5,
+      "type": "Cash",
+      "category": "Transport",
+      "categoryIcon": "ios-car-outline"
+    }
+  ]
+}

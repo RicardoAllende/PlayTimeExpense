@@ -46,6 +46,12 @@ class Walkthrough extends Component {
             style={styles.slide.btnWrapper}>
             <Text style={styles.slide.btnText}>Jugar</Text>
           </Button>
+          <Button
+            transparent
+            onPress={() => this._goToCourse(item.id)}
+            style={styles.slide.btnWrapper}>
+            <Text style={styles.slide.btnText}>Información del curso</Text>
+          </Button>
         </View>
       </Card>
     );
@@ -74,7 +80,7 @@ class Walkthrough extends Component {
   //   </Button>
   // )}
 
-  loadQuestions = () => {
+  loadCourses = () => {
       // console.warn("Loading questions");
       // console.log(apiGetCourses);
       // () => {
@@ -113,7 +119,7 @@ class Walkthrough extends Component {
 
   render() {
     if(this.loadingQuestions){
-      this.loadQuestions()
+      this.loadCourses()
       this.loadingQuestions = false;
     }
     // console.log(this.props.navigation.state.params.userData)
@@ -145,20 +151,22 @@ class Walkthrough extends Component {
                 primary
                 block
                 style={styles.skipBtn}
-                onPress={() => this.props.navigation.navigate('Drawer')}
+                onPress={() => this.props.navigation.navigate('Drawer', {
+                  userData: this.props.navigation.state.params.userData
+                })}
                 // onPress={() => this.props.navigation.navigate('Quizz', {
                 //   courseId: -1
                 // })}
                 >
                 {/* <Text> Get Started </Text> */}
-                <Text> Modo Aleatorio </Text>
+                <Text> Explorar otras cosas </Text>
               </Button>
             </Footer>
           </ImageBackground>
         </Container>
       );
     }else{
-      // this.loadQuestions()
+      // this.loadCourses()
       return (
         <AppLoading
           

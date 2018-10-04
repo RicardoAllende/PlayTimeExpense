@@ -41,14 +41,14 @@ export class Option extends React.Component {
   };
 
   render() {
-    console.log("Rendering option")
+    // console.log("Rendering option")
     const {
       item: { ...option },
       navigation,
       index,
     } = this.props;
     _animation = animation[this.props.itemIndex]
-    console.log(_animation, ", Índice: ", this.props.itemIndex)
+    // console.log(_animation, ", Índice: ", this.props.itemIndex)
     return (
       <TouchableOpacity
         activeOpacity={0.7}

@@ -14,10 +14,10 @@ export default {
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#F8F8F8',
-      paddingTop: 50,
-      paddingBottom: 50,
-      paddingLeft: 20,
-      paddingRight: 20,
+      paddingTop: "8%", // default 50
+      paddingBottom: "2%", // default 50
+      paddingLeft: "10%", // default 20
+      paddingRight: "10%", //default 20
       height: '95%', // default 95
     },
     illustration: {
@@ -30,16 +30,16 @@ export default {
     },
     title: {
       fontSize: 22,
-      padding: 20,
-      paddingTop: 40,
-      paddingBottom: 40,
+      padding: "10%",  // default 20
+      paddingTop: "20%", // default 40
+      paddingBottom: "20%", // default 40
       fontWeight: '600',
       textAlign: 'center',
     },
     subtitle: {
       fontFamily: 'Roboto_light',
       fontSize: 16,
-      padding: 30,
+      padding: "5%", // default 30
       paddingTop: 0,
       textAlign: 'center',
     },

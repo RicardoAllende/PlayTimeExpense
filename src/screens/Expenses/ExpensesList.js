@@ -10,10 +10,10 @@ import categoryColors from '@theme/categoryColors';
 import styles from './styles';
 
 class ExpensesList extends Component {
-  static propTypes = {
-    expensesList: PropTypes.array,
-    handleDelete: PropTypes.func,
-  };
+  // static propTypes = {
+  //   expensesList: PropTypes.array,
+  //   handleDelete: PropTypes.func,
+  // };
 
   static defaultProps = {
     expensesList: [],

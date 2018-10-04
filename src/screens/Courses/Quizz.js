@@ -152,6 +152,40 @@ class Categories extends Component {
         }, () => console.log('El número de segundos actual es:', this.state.seconds))
     }
 
+    shouldRestartTimer = false;
+
+    setDefaultTime = () => {
+        this.setState({
+            seconds: defaultTime
+        })
+        this.shouldRestartTimer = false;
+    }
+    
+    intervalTime = false;
+    initCoundown = () => {
+        return true;
+        if( this.shouldRestartTimer ){
+            // this.setDefaultTime();
+            if( ! this.intervalTime ){ // Timer doesn't exist
+                this.setState({seconds: defaultTime}, () => {
+                    this.intervalTime = setInterval(() => {
+                        console.log("Comienza retroceso en setInterval")
+                        prevSeconds = this.state.seconds;
+                        if(prevSeconds > 0){
+                            this.setState({
+                                seconds: prevSeconds -1
+                            })
+                        }else{ // counter is finished
+                            clearTimeout(this.intervalTime);
+                            this.intervalTime = false;
+                        }
+                    }, 1000);
+                })
+            }
+            this.shouldRestartTimer = false;
+        }
+    }
+
     render() {
         const navigation = this.props.navigation;
         if(!this.init){
@@ -220,22 +254,23 @@ class Categories extends Component {
     handleNextAnswer = () => {
         // this.setState({ seconds: defaultTime }, () => {
         //         console.log('Segundos establecidos', this.state.seconds)
-        
-                currentIndex = this.state.index
-                currentIndex++
-                if(currentIndex == this.state.maxIndex){
-                    ToastAndroid.show("Ya no hay más preguntas", ToastAndroid.SHORT)
-                    console.warn('Ya no existen más preguntas')
-                    // this.goToResults()
-                }else{
-                    // ToastAndroid.show("Cambio a siguiente pregunta", ToastAndroid.SHORT)
-                    newQuestion = this.state.questions[currentIndex]
-                    this.setState({
-                        index : currentIndex,
-                        currentQuestion: newQuestion,
-                        seconds: defaultTime,
-                    })
-                }
+        currentIndex = this.state.index
+        currentIndex++
+        if(currentIndex == this.state.maxIndex){
+            ToastAndroid.show("Ya no hay más preguntas", ToastAndroid.SHORT)
+            console.warn('Ya no existen más preguntas')
+            // this.goToResults()
+        }else{
+            // ToastAndroid.show("Cambio a siguiente pregunta", ToastAndroid.SHORT)
+            newQuestion = this.state.questions[currentIndex]
+            this.setState({
+                index : currentIndex,
+                currentQuestion: newQuestion,
+                // seconds: defaultTime,
+            })
+        }
+        this.shouldRestartTimer = true;
+        this.initCoundown();
             // }
         // );
     }
@@ -292,7 +327,7 @@ class Categories extends Component {
                 console.log("Retro")
             }
         ).then(
-            jsonResponse => console.log(jsonResponse)
+            // jsonResponse => console.log(jsonResponse)
         ).catch(error => {
             console.log("error")
         });
@@ -345,7 +380,10 @@ class Categories extends Component {
             this.setState( {
                 questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length, 
                 currentQuestion: response.data.questions[0], options: response.data.questions[0].options , ready: true}, 
-                ()=>console.log('')
+                ()=>{
+                    this.shouldRestartTimer = true;
+                    this.initCoundown();
+                }
             )
         }
         ).catch((error) => { console.error(error); })

@@ -20,6 +20,7 @@ const logo = require('@assets/images/header-logo.png');
 const avatar = require('@assets/images/avatar1.png');
 import styles from './styles';
 import CountdownCircle from 'react-native-countdown-circle'
+// import { equal } from 'fast-deep-equal';
 
 class AppHeader extends PureComponent {
 
@@ -27,28 +28,27 @@ class AppHeader extends PureComponent {
     super(props)
     this.state = {
       displaySearchBar: false,
+      seconds: this.props.seconds,
     };
   }
 
+  // componentDidUpdate(prevProps){
+  //   if(! equal(this.props.seconds, prevProps.seconds)){
+  //     this.props
+  //   }
+  // }
+
   render() {
-    // let logoInNav = this.props.timer ? timer : 
     let navLogo;
     if(this.props.timer){ // Timer exists
-      // console.log('Rendereando contador')
       if(this.props.timerVisibility){
+        console.log('Número de segundos obtenidos en Appheader desde state', this.state.seconds)
         navLogo = <CountdownCircle
-          seconds={this.props.seconds}
+          // seconds={this.state.seconds}
           radius={25}
           borderWidth={8}
           color="#ff003f"
           bgColor="#fff"
-          // updateText={
-          //   (elapsedSecs, totalSecs) => {
-          //     seconds = totalSecs - elapsedSecs;
-          //     this.props.setCurrentSecond(seconds)
-          //     return (totalSecs - elapsedSecs).toString()
-          //   }
-          // }
           textStyle={{ fontSize: 20 }}
           onTimeElapsed={this.props._onTimeElapsed}
         />
