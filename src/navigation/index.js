@@ -15,6 +15,7 @@ import Settings from '@screens/Settings';
 import Search from '@screens/Search';
 import Profile from '@screens/Profile';
 import Quizz from '@screens/Courses/Quizz'
+import Ranking from '@screens/Ranking'
 
 const Drawer = createDrawerNavigator(
   {
@@ -27,6 +28,7 @@ const Drawer = createDrawerNavigator(
     Profile: { screen: Profile },
     SignIn: { screen: SignIn },
     Quizz: { screen: Quizz },
+    Ranking: { screen: Ranking },
   },
   {
     initialRouteName: 'Expenses',

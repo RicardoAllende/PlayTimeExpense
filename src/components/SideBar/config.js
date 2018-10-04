@@ -40,6 +40,11 @@ export const routes = [
     icon: 'ios-options-outline',
   },
   {
+    title: 'Ranking del curso',
+    route: 'Ranking',
+    icon: 'ios-options-outline',
+  },
+  {
     title: 'Salir',
     route: 'SignIn',
     icon: 'ios-power',

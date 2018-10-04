@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, ImageBackground, Alert } from 'react-native';
+import { FlatList, ImageBackground, Alert, ToastAndroid } from 'react-native';
 import {
   Container,
   Content,
@@ -47,60 +47,36 @@ class Categories extends Component {
             timerVisibility: true,
             currentSecond: defaultTime,
             secondsInCountdown: defaultTime,
-            currentIndex: 0
+            // optionIndex: 0, 
+            currentIndex: 0,
         }
     }
 
-  static propTypes = {
-    navigation: PropTypes.any,
-    getCategories: PropTypes.func.isRequired,
-    categoriesLoading: PropTypes.bool.isRequired,
-    categoriesError: PropTypes.bool.isRequired,
-    categories: PropTypes.array,
-  };
+    static propTypes = {
+        navigation: PropTypes.any,
+        getCategories: PropTypes.func.isRequired,
+        categoriesLoading: PropTypes.bool.isRequired,
+        categoriesError: PropTypes.bool.isRequired,
+        categories: PropTypes.array,
+    };
+
+    optionIndex = 0
 
 
-  static defaultProps = {
-    categoriesLoading: false,
-    categoriesError: false,
-    categories: [],
-  };
+    static defaultProps = {
+        categoriesLoading: false,
+        categoriesError: false,
+        categories: [],
+    };
 
-  componentDidMount() {
-    this.initialize();
-  }
-
-  initialize = () => {
-    this.props.getCategories();
-  };
-
-    
-
-    _renderOption = (element) => {
-        const { navigation } = this.props;
-        console.log("Rendering option")
-        index = element.index
-        category = element.item
-        // category = element.item
-        return (
-            <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => navigation.navigate('Expenses')}>
-            <View style={styles.categoryBox}>
-                <Icon name={category.iconName} style={styles.categoryIcon} />
-                <Text style={styles.categoryTitle}>{category.name}</Text>
-                <Text style={styles.categoryAmount}>
-                {' '}
-                {formatAmount(category.amount)}
-                </Text>
-                <View
-                style={styles.categoryLine}
-                borderColor={categoryColors[index % categoryColors.length]}
-                />
-            </View>
-            </TouchableOpacity>
-        );
+    componentDidMount() {
+        this.initialize();
     }
+
+    initialize = () => {
+        this.props.getCategories();
+    };
+
 
     itemSeparatorComponent = () => {
         return (<View style = {{height: 10,width: '100%',}} />)
@@ -111,9 +87,9 @@ class Categories extends Component {
             '¿Desea terminar intento?',
             '¿Desea terminar el intento actual?',
             [
-            {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-            {text: 'OK', onPress: () => console.log('OK Pressed')},
+                {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+                {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
             ],
             { cancelable: false }
         )
@@ -211,9 +187,16 @@ class Categories extends Component {
                 this.state.questions.length > 0 && (
                     <FlatList
                     data={ this.state.currentQuestion.options }
-                    renderItem={({ ...props }) => (
-                        <Option showAlert={this.showAlert} gradeAnswer={this.gradeAnswer} questionId={this.state.currentQuestion.id} navigation={navigation} {...props} />
-                    )}
+                    renderItem={ ({ ...props }) => {
+                        if(this.optionIndex == 4){
+                            this.optionIndex = 0;
+                        }else{
+                            this.optionIndex = this.optionIndex + 1
+                        }
+
+                        return (<Option showAlert={this.showAlert} itemIndex={this.optionIndex} gradeAnswer={this.gradeAnswer} questionId={this.state.currentQuestion.id} navigation={navigation} {...props} />)
+                    }
+                }
                     keyExtractor={category => "question" + category.id}
                     initialNumToRender={5}
                     style={styles.flatList}
@@ -237,7 +220,7 @@ class Categories extends Component {
     handleNextAnswer = () => {
         // this.setState({ seconds: defaultTime }, () => {
         //         console.log('Segundos establecidos', this.state.seconds)
-            
+        
                 currentIndex = this.state.index
                 currentIndex++
                 if(currentIndex == this.state.maxIndex){
