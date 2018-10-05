@@ -25,6 +25,8 @@ import styles from './styles';
 import theme from '@theme/variables/myexpense';
 
 import {api} from './../../../api/playTimeApi'
+import {session} from './../../../api/session'
+import { AsyncStorage } from "react-native"
 
 class Expenses extends Component {
   // static propTypes = {

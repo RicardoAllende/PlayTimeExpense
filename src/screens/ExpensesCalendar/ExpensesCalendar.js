@@ -14,6 +14,8 @@ import * as eventsSelectors from './selectors';
 import categoryColors from '@theme/categoryColors';
 import styles from './styles';
 import theme from '@theme/variables/myexpense';
+import {session} from './../../../api/session'
+import { AsyncStorage } from "react-native"
 
 class ExpensesCalendar extends Component {
   static propTypes = {

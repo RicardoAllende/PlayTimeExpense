@@ -29,6 +29,8 @@ import * as actions from './behaviors';
 import * as expenseSelectors from '@screens/NewExpense/selectors';
 
 import styles from './styles';
+import {session} from './../../../api/session'
+import { AsyncStorage } from "react-native"
 
 import theme from '@theme/variables/myexpense';
 var Color = require('color');

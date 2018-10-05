@@ -25,6 +25,8 @@ import IconExplorer from './IconExplorer';
 import * as actions from './behaviors';
 import * as categorySelectors from '@screens/NewCategory/selectors';
 import styles from './styles';
+import {session} from './../../../api/session'
+import { AsyncStorage } from "react-native"
 
 const FORM_NAME = 'AddCategory';
 

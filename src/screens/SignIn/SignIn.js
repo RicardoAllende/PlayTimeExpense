@@ -31,7 +31,7 @@ import {
   email
 } from '@utils/validation';
 
-import { doLogin } from './behaviors';
+import { doLogin, doLoginByToken } from './behaviors';
 import * as loginSelectors from './selectors';
 import styles from './styles';
 
@@ -62,27 +62,17 @@ class SignIn extends Component {
     // console.log("El nombre de usuario es: " + values.username," || mientras que la contraseña es: " + values.password)
     // this.redirectToApp(values);
     // return;
-    this.props.doLogin(values.username, values.password, (userData) => {
-      this.props.navigation.dispatch(
-        StackActions.reset({
-          index: 0,
-          actions: [NavigationActions.navigate({ routeName: 'Walkthrough', params: { userData } })],
-        })
-      );
-    });
+    this.props.doLogin(values.username, values.password, this.onLoginSuccess);
   };
 
   checkSession = async() => {
-    console.log('Mostrando elementos')
     try {
       value = await AsyncStorage.getItem('bearerToken')
-      alert(value);
-      return true;
       if(value !== null){
-        fetch(api.checkUser, { 
+        fetch(api.auth, { 
             method: 'GET', 
             headers: {
-            // "Authorization": 'Bearer ' + bearerToken ,
+                "Authorization": 'Bearer ' + value ,
                 Accept: 'application/json',
                 "Content-Type": "application/json"
             }, 
@@ -90,22 +80,45 @@ class SignIn extends Component {
         })
         .then((response) => response.json())
         .then((jsonResponse) => {
-          if(json.response.status == 'ok'){
-            
+          if(jsonResponse.message != 'Unauthenticated.'){
+            session.setBearerToken(value);
+            session.setUserData(jsonResponse.data)
+            console.log('Se recuperó la sesión');
+            this.props.navigation.dispatch(
+              StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'Walkthrough'})],
+              })
+            );
+            return
+            this.props.doLoginByToken(jsonResponse.data, this.onLoginSuccess);
+          }else{
+            session.unsetBearerToken();
+            session.unsetUserData();
+            // console.log("El bearer token no pudo iniciar la sesión");
           }
         }
         ).catch((error) => {
             console.error(error);
         })
-        alert(bearerToken)
+        // alert(bearerToken)
         // console.warn('Bearer Token encontrado');
       }else{
-        alert('No se encontró variable')
+        alert('No se encontró bearer token')
         // console.warn('No se encontró bearer token');
       }
     } catch (error) {
       console.warn('Error al intentar obtener respuesta');
     }
+  }
+
+  onLoginSuccess = () => {
+    this.props.navigation.dispatch(
+      StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'Walkthrough'})],
+      })
+    );
   }
 
   saveBearerToken = () => {
@@ -118,8 +131,16 @@ class SignIn extends Component {
     AsyncStorage.removeItem('bearerToken');
   }
 
+  verifySession = false
+
   render() {
+    // console.log(this.props)
     // this.checkSession()
+    if( ! this.verifySession ){
+      this.checkSession();
+      this.verifySession = true;
+      // return (<Text>Cargando</Text>)
+    }
     const { navigation, handleSubmit, loginStarted, loginError } = this.props;
     return (
       <Container>
@@ -170,10 +191,10 @@ class SignIn extends Component {
                   small
                   transparent
                   style={{ alignSelf: 'flex-end' }}
-                  // onPress={() => navigation.navigate('ResetPassword')}
-                  onPress={this.checkSession}
+                  onPress={() => navigation.navigate('ResetPassword')}
+                  // onPress={this.checkSession}
                   >
-                  <Text style={styles.resetPwdBtn}>Revisar contraseña</Text>
+                  <Text style={styles.resetPwdBtn}>¿Olvidaste tu contraseña?</Text>
                 </Button>
               </Form>
             </View>
@@ -191,11 +212,11 @@ class SignIn extends Component {
               <Button
                 transparent
                 full
-                // onPress={() => navigation.navigate('SignUp')}
-                onPress={this.saveBearerToken}
+                onPress={() => navigation.navigate('SignUp')}
+                // onPress={this.saveBearerToken}
                 >
                 <Text style={styles.signup.linkText}>
-                  Guardar bearer token
+                  ¿Aún no tiene cuenta?
                 </Text>
                 <Text style={styles.signup.linkBtn}>Registro</Text>
               </Button>
@@ -219,5 +240,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { doLogin }
+  { doLogin, doLoginByToken },
 )(SignInForm);

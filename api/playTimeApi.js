@@ -5,7 +5,7 @@ const app_url = url + "app/"
 export const api = {
     url: url,
     app_url: app_url,
-    auth: url + 'auth',
+    auth: url + 'auth', // POST request if user has email and password, GET request if user has a token
     checkUser: url + 'check-user-by-token',
     getCourses: app_url + 'courses',
     sendAnswers: app_url + 'questions', //post

@@ -20,6 +20,8 @@ import * as categoriesSelectors from './selectors';
 
 import styles from './styles';
 import theme from '@theme/variables/myexpense';
+import {session} from './../../../api/session'
+import { AsyncStorage } from "react-native"
 
 class Categories extends Component {
   static propTypes = {

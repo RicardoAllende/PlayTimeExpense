@@ -12,6 +12,9 @@ const initialState = {
   loginError: false,
 };
 
+import { session } from './../../../api/session'
+import { AsyncStorage } from "react-native"
+
 export default function(state = initialState, action) {
   switch (action.type) {
     case LOGIN_STARTED: {
@@ -69,12 +72,13 @@ export function doLogin(username, password, onLoginSuccess) {
           try {
             if(jsonResponse.response.status == 'ok'){
               dispatch({ type: LOGIN_SUCCESS, response: jsonResponse.data });
+              session.setUserData(jsonResponse.data);
               onLoginSuccess(jsonResponse.data);
             }else{
               dispatch({ type: LOGIN_ERROR });
             }
           } catch (error) {
-            dispatch({type:  LOGIN_ERROR});
+            dispatch({type: LOGIN_ERROR});
           }
         }
       ).catch((error) => {
@@ -82,4 +86,11 @@ export function doLogin(username, password, onLoginSuccess) {
         console.error(error);
       })
     }    
+}
+
+export function doLoginByToken(userData, onLoginSuccess){
+  dispatch({ type: LOGIN_STARTED });
+  session.setUserData(userData);
+  onLoginSuccess();
+  return dispatch({ type: LOGIN_SUCCESS, response: userData });
 }

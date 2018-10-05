@@ -281,7 +281,7 @@ class Categories extends Component {
         fetch(uri, {
                 method: 'POST',
                 headers: {
-                    "Authorization": 'Bearer ' + this.props.navigation.state.params.accessToken,
+                    "Authorization": 'Bearer ' + this.props.navigation.state.params.bearerToken,
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 },
@@ -315,7 +315,7 @@ class Categories extends Component {
         fetch(api.sendAnswers, {
             method: 'POST',
             headers: {
-                "Authorization": 'Bearer ' + this.props.navigation.state.params.accessToken,
+                "Authorization": 'Bearer ' + this.props.navigation.state.params.bearerToken,
                 Accept: 'application/json',
                 'Content-Type': 'application/json'
             },
@@ -369,14 +369,15 @@ class Categories extends Component {
         fetch(url, { 
             method: 'GET', 
             headers: {
-                "Authorization": 'Bearer ' + this.props.navigation.state.params.accessToken,
+                "Authorization": 'Bearer ' + this.state.bearerToken,
                 Accept: 'application/json',
                 "Content-Type": "application/json"
             }
         })
         .then((response) => response.json())
         .then((response) => {
-            // console.log(response)
+            console.log(response)
+            // return 
             this.setState( {
                 questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length, 
                 currentQuestion: response.data.questions[0], options: response.data.questions[0].options , ready: true}, 

@@ -10,6 +10,8 @@ import AppHeader from '@components/AppHeader';
 import * as actions from './behaviors';
 import * as categoriesSelectors from './selectors';
 import theme from '@theme/variables/myexpense';
+import {session} from './../../../api/session'
+import { AsyncStorage } from "react-native"
 
 import {
   getFormattedCurrentWeek,
