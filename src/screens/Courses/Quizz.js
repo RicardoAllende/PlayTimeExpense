@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, ImageBackground, Alert, ToastAndroid } from 'react-native';
+import { Asset, AppLoading, Font } from 'expo';
 import {
   Container,
   Content,
@@ -29,6 +30,8 @@ const defaultTime = 10;
 const num_questions_per_medal = 12
 
 import {api} from './../../../api/playTimeApi'
+import {session, getUserData} from './../../../api/session'
+import { AsyncStorage } from "react-native"
 
 class Categories extends Component {
 
@@ -42,7 +45,6 @@ class Categories extends Component {
             questions: [],
             currentQuestion: false,
             seconds: defaultTime,
-            options: [],
             skippedQuestions: [],
             timerVisibility: true,
             currentSecond: defaultTime,
@@ -192,63 +194,67 @@ class Categories extends Component {
             this.init = true;   
             this.loadData();
         }
-        return (
-        <Container>
-            <ImageBackground
-            source={require('@assets/images/header-bg.png')}
-            style={styles.background}>
-            <AppHeader
-                hasTabs
-                timer={true}
-                timerVisibility={this.state.timerVisibility}
-                seconds={this.state.seconds}
-                _onTimeElapsed={this._onTimeElapsed}
-                setCurrentSecond={this.setCurrentSecond}
-                navigation={navigation}
-                title={ this.state.ready ? this.state.currentQuestion.name : "-" }
-                subTitle="_"
-            />
-            <Content
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ flex: 1 }}
-                style={styles.content}>
-                {!this.state.ready && (
-                <View style={styles.emptyContainer}>
-                    <Spinner color={theme.brandPrimary} />
-                </View>
-                )}
-                {this.state.ready &&
-                this.state.questions.length > 0 && (
-                    <FlatList
-                    data={ this.state.currentQuestion.options }
-                    renderItem={ ({ ...props }) => {
-                        if(this.optionIndex == 4){
-                            this.optionIndex = 0;
-                        }else{
-                            this.optionIndex = this.optionIndex + 1
+        if(this.state.ready){
+            return (
+            <Container>
+                <ImageBackground
+                source={require('@assets/images/header-bg.png')}
+                style={styles.background}>
+                <AppHeader
+                    hasTabs
+                    timer={true}
+                    timerVisibility={this.state.timerVisibility}
+                    seconds={this.state.seconds}
+                    _onTimeElapsed={this._onTimeElapsed}
+                    setCurrentSecond={this.setCurrentSecond}
+                    navigation={navigation}
+                    title={ this.state.ready ? this.state.currentQuestion.name : "-" }
+                    subTitle="_"
+                />
+                <Content
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ flex: 1 }}
+                    style={styles.content}>
+                    {!this.state.ready && (
+                    <View style={styles.emptyContainer}>
+                        <Spinner color={theme.brandPrimary} />
+                    </View>
+                    )}
+                    {this.state.ready &&
+                    this.state.questions.length > 0 && (
+                        <FlatList
+                        data={ this.state.currentQuestion.options }
+                        renderItem={ ({ ...props }) => {
+                            if(this.optionIndex == 4){
+                                this.optionIndex = 0;
+                            }else{
+                                this.optionIndex = this.optionIndex + 1
+                            }
+    
+                            return (<Option showAlert={this.showAlert} itemIndex={this.optionIndex} gradeAnswer={this.gradeAnswer} questionId={this.state.currentQuestion.id} navigation={navigation} {...props} />)
                         }
-
-                        return (<Option showAlert={this.showAlert} itemIndex={this.optionIndex} gradeAnswer={this.gradeAnswer} questionId={this.state.currentQuestion.id} navigation={navigation} {...props} />)
                     }
-                }
-                    keyExtractor={category => "question" + category.id}
-                    initialNumToRender={5}
-                    style={styles.flatList}
-                    ItemSeparatorComponent={this.itemSeparatorComponent}
-                    />
-                )}
-            </Content>
-            <Fab
-                direction="up"
-                containerStyle={{}}
-                style={{ backgroundColor: theme.brandPrimary }}
-                position="bottomRight"
-                onPress={ this._askToEndQuizz }>
-                <Icon type="Ionicons" name="exit" />
-            </Fab>
-            </ImageBackground>
-        </Container>
-        );
+                        keyExtractor={category => "question" + category.id}
+                        initialNumToRender={5}
+                        style={styles.flatList}
+                        ItemSeparatorComponent={this.itemSeparatorComponent}
+                        />
+                    )}
+                </Content>
+                <Fab
+                    direction="up"
+                    containerStyle={{}}
+                    style={{ backgroundColor: theme.brandPrimary }}
+                    position="bottomRight"
+                    onPress={ this._askToEndQuizz }>
+                    <Icon type="Ionicons" name="exit" />
+                </Fab>
+                </ImageBackground>
+            </Container>
+            );
+        }else{
+            return (<AppLoading></AppLoading>);
+        }
     }
 
     handleNextAnswer = () => {
@@ -363,31 +369,38 @@ class Categories extends Component {
         }
     }
 
-    loadData = () => {
-        console.log("Loading questions");
-        url = api.getQuestions(this.props.navigation.state.params.courseId);
-        fetch(url, { 
-            method: 'GET', 
-            headers: {
-                "Authorization": 'Bearer ' + this.state.bearerToken,
-                Accept: 'application/json',
-                "Content-Type": "application/json"
+    loadData = async () => {
+        getUserData().then(
+            (userData) => {this.setState({bearerToken: userData.bearerToken, bearerReady: true, userData: userData}, 
+                    ()=>{
+                        console.log("Loading questions");
+                        url = api.getQuestions(this.props.navigation.state.params.courseId);
+                        fetch(url, { 
+                            method: 'GET', 
+                            headers: {
+                                "Authorization": 'Bearer ' + this.state.bearerToken,
+                                Accept: 'application/json',
+                                "Content-Type": "application/json"
+                            }
+                        })
+                        .then((response) => response.json())
+                        .then((response) => {
+                            console.log(response)
+                            // return 
+                            this.setState( {
+                                questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length, 
+                                currentQuestion: response.data.questions[0], ready: true}, 
+                                ()=>{
+                                    this.shouldRestartTimer = true;
+                                    this.initCoundown();
+                                }
+                            )
+                        }
+                        ).catch((error) => { console.error(error); })
+                    }
+                )
             }
-        })
-        .then((response) => response.json())
-        .then((response) => {
-            console.log(response)
-            // return 
-            this.setState( {
-                questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length, 
-                currentQuestion: response.data.questions[0], options: response.data.questions[0].options , ready: true}, 
-                ()=>{
-                    this.shouldRestartTimer = true;
-                    this.initCoundown();
-                }
-            )
-        }
-        ).catch((error) => { console.error(error); })
+        );
     }
 
 }
