@@ -104,7 +104,6 @@ class SignIn extends Component {
         // alert(bearerToken)
         // console.warn('Bearer Token encontrado');
       }else{
-        alert('No se encontró bearer token')
         // console.warn('No se encontró bearer token');
       }
     } catch (error) {

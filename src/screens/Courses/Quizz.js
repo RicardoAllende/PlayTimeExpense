@@ -51,6 +51,7 @@ class Categories extends Component {
             secondsInCountdown: defaultTime,
             // optionIndex: 0, 
             currentIndex: 0,
+            randomText: "Estado desde quizz",
         }
     }
 
@@ -73,6 +74,10 @@ class Categories extends Component {
 
     componentDidMount() {
         this.initialize();
+    }
+
+    onTimeElapsed = () => {
+        alert(this.state.randomText)
     }
 
     initialize = () => {
@@ -98,7 +103,8 @@ class Categories extends Component {
     }
 
     _onTimeElapsed = () => {
-        console.log("Se terminó el tiempo onTimeElapsed")
+        this.setState({ seconds: 25 }, () => /*this.setState({ seconds: defaultTime })*/ console.log('') )
+        console.log("Se terminó el tiempo onTimeElapsed", "Reiniciando la cuenta regresiva")
         // this.setState({ timerVisibility: false });
         // this.showAlert()
     }
@@ -206,6 +212,7 @@ class Categories extends Component {
                     timerVisibility={this.state.timerVisibility}
                     seconds={this.state.seconds}
                     _onTimeElapsed={this._onTimeElapsed}
+                    onTimeElapsed={this.onTimeElapsed}
                     setCurrentSecond={this.setCurrentSecond}
                     navigation={navigation}
                     title={ this.state.ready ? this.state.currentQuestion.name : "-" }
@@ -385,8 +392,6 @@ class Categories extends Component {
                         })
                         .then((response) => response.json())
                         .then((response) => {
-                            console.log(response)
-                            // return 
                             this.setState( {
                                 questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length, 
                                 currentQuestion: response.data.questions[0], ready: true}, 
