@@ -24,10 +24,11 @@ class AppHeader extends PureComponent {
   }
 
   restartCountDown = () => {
+    this.props._handleNextAnswer()
     this.setState({seconds: 0}, () => { 
-      this.setState({seconds: 5});
+      this.setState({seconds: this.props.seconds});
       console.log('Segundos establecidos en', this.state.seconds) 
-      this.props.onTimeElapsed()
+      // this.props.onTimeElapsed()
     })
   }
 

@@ -1,4 +1,4 @@
-const url = "http://192.168.1.69:8000/api/v1/"
+const url = "http://192.168.0.111:8000/api/v1/"
 
 const app_url = url + "app/"
 
@@ -8,6 +8,7 @@ export const api = {
     auth: url + 'auth', // POST request if user has email and password, GET request if user has a token
     checkUser: url + 'check-user-by-token',
     getCourses: app_url + 'courses',
+    getCoursesWithoutRandom: app_url + 'courses?no-random=1',
     sendAnswers: app_url + 'questions', //post
     getQuestions: (course_id) => { 
         return app_url + 'courses/' + course_id + '/questions'

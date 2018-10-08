@@ -94,18 +94,21 @@ class Expenses extends Component {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ flex: 1 }}
             style={styles.content}>
-            {expensesLoading && (
+            { false && (
+              //expensesLoading && (
               <View style={styles.emptyContainer}>
                 <Spinner color={theme.brandPrimary} />
               </View>
             )}
-            {!expensesLoading &&
+            {true && 
+              //!expensesLoading &&
               expenses.length === 0 && (
                 <View style={styles.emptyContainer}>
                   <Text style={styles.emptyMsg}>No expenses found</Text>
                 </View>
               )}
-            {!expensesLoading &&
+            {
+              //!expensesLoading &&
               expenses.length > 0 && (
                 <Tabs
                   tabContainerStyle={{
@@ -117,19 +120,19 @@ class Expenses extends Component {
                   }>
                   <Tab heading="Today">
                     <ExpensesList
-                      expensesList={expenses}
+                      expensesList={JsonExpenses}
                       handleDelete={deleteExpense}
                     />
                   </Tab>
                   <Tab heading="This Week">
                     <ExpensesList
-                      expensesList={expenses}
+                      expensesList={JsonExpenses}
                       handleDelete={deleteExpense}
                     />
                   </Tab>
                   <Tab heading="This Month">
                     <ExpensesList
-                      expensesList={expenses}
+                      expensesList={JsonExpenses}
                       handleDelete={deleteExpense}
                     />
                   </Tab>
@@ -162,7 +165,7 @@ export default connect(
 )(Expenses);
 
 
-const expenses = [
+const JsonExpenses = [
   {
       "title": "Ricardo",
       "date": "Allende",

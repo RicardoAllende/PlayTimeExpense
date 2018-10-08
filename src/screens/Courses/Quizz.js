@@ -26,7 +26,7 @@ import styles from './styles';
 import theme from '@theme/variables/myexpense';
 
 const url = "http://192.168.0.111:8000/categories"
-const defaultTime = 10;
+const defaultTime = 5;
 const num_questions_per_medal = 12
 
 import {api} from './../../../api/playTimeApi'
@@ -77,7 +77,7 @@ class Categories extends Component {
     }
 
     onTimeElapsed = () => {
-        alert(this.state.randomText)
+        // alert(this.state.randomText)
     }
 
     initialize = () => {
@@ -213,6 +213,7 @@ class Categories extends Component {
                     seconds={this.state.seconds}
                     _onTimeElapsed={this._onTimeElapsed}
                     onTimeElapsed={this.onTimeElapsed}
+                    _handleNextAnswer={this.handleNextAnswer}
                     setCurrentSecond={this.setCurrentSecond}
                     navigation={navigation}
                     title={ this.state.ready ? this.state.currentQuestion.name : "-" }

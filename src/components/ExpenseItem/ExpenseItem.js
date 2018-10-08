@@ -1,21 +1,22 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {TouchableOpacity} from 'react-native'
-import { View, Grid, Col, Text, Icon } from 'native-base';
+import { View, Grid, Col, Text, Icon, Item } from 'native-base';
 
 import { formatAmount } from '@utils/formatters';
 import styles from './styles';
 
-const ExpenseItem = ({ item, style, color }) => {
+const ExpenseItem = ({ item, style, color, _onPress }) => {
   const borderColor = color ? color : item.color;
 
   _onPressButton = (courseName) => {
     console.log('Se presionó el elemnto:', courseName)
   }
 
+  console.log(this.props)
   return (
     <View style={[styles.item.content, { borderColor: borderColor }, style]}>
-      <TouchableOpacity onPress={() => this._onPressButton(item.name)}>
+      <TouchableOpacity onPress={() => _onPress(item.name) }>
       <Grid>
         <Col size={7} style={{ flexDirection: 'row' }}>
           <Icon name="laptop" style={styles.item.icon} />

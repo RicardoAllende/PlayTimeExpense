@@ -88,6 +88,7 @@ class ExpenseForm extends React.Component {
   };
 
   render() {
+    console.log('ExpenseForm.js', 'props.courseId', this.props.navigation.state.params)
     const {
       navigation,
       handleSubmit,

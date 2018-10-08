@@ -43,7 +43,9 @@ class ExpensesList extends Component {
               body={
                 <ExpenseItem
                   item={item}
+                  style={{}}
                   color={categoryColors[index % categoryColors.length]}
+                  _onPress={this.props._onPress}
                 />
               }
               right={
@@ -56,7 +58,7 @@ class ExpensesList extends Component {
               }
             />
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={item => "course" + item.id}
         />
       </View>
     );

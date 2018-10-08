@@ -57,6 +57,11 @@ export const session = {
     }
 };
 
+export async function getBearerToken() {
+    bearerToken = await AsyncStorage.getItem(session.bearerTokenName)
+    return bearerToken
+}
+
 export async function getUserData() {
     firstname = await AsyncStorage.getItem(session.firstnameDataName)
     lastname = await AsyncStorage.getItem(session.lastnameDataName)
