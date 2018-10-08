@@ -20,6 +20,7 @@ class AppHeader extends PureComponent {
     this.state = {
       displaySearchBar: false,
       seconds: this.props.seconds,
+      questionId: this.props.questionId
     };
   }
 
@@ -28,15 +29,20 @@ class AppHeader extends PureComponent {
     this.setState({seconds: 0}, () => { 
       this.setState({seconds: this.props.seconds});
       console.log('Segundos establecidos en', this.state.seconds) 
-      // this.props.onTimeElapsed()
     })
+  }
+
+  _onTimeElapsed = () => {
+    this.props._handleNextAnswer();
+    this.restartCountDown();
   }
 
   render() {
     let navLogo;
+    console.log('AppHeader.js', 'courseId', this.props.courseId)
     if(this.props.timer){ // Timer exists
       if(this.props.timerVisibility){
-        console.log('Número de segundos obtenidos en Appheader desde state', this.state.seconds)
+        // console.log('Número de segundos obtenidos en Appheader desde state', this.state.seconds)
         navLogo = <CountdownCircle
           seconds={this.state.seconds}
           radius={25}

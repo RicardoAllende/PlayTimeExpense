@@ -9,11 +9,10 @@ import styles from './styles';
 const ExpenseItem = ({ item, style, color, _onPress }) => {
   const borderColor = color ? color : item.color;
 
-  _onPressButton = (courseName) => {
-    console.log('Se presionó el elemnto:', courseName)
+  _onPressButton = (courseId) => {
+    console.log('Se presionó el elemento:', courseId)
   }
 
-  console.log(this.props)
   return (
     <View style={[styles.item.content, { borderColor: borderColor }, style]}>
       <TouchableOpacity onPress={() => _onPress(item.name) }>

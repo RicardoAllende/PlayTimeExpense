@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, ImageBackground, Alert, ToastAndroid } from 'react-native';
+import { FlatList, ImageBackground, Alert, ToastAndroid, Image } from 'react-native';
 import { Asset, AppLoading, Font } from 'expo';
 import {
-  Container,
-  Content,
-  Fab,
-  Icon,
-  Text,
-  View,
-  Spinner,
-  TouchableOpacity,
+  Container, Content, Fab, Icon,  Text,  View,  Spinner, TouchableOpacity, Left, Right, Thumbnail, Body, Button, Header
 } from 'native-base';
+
+import HeaderDrawerButton from '../../components/AppHeader/HeaderDrawerButton';
+const avatar = require('@assets/images/avatar1.png');
+import CountdownCircle from 'react-native-countdown-circle'
+
 import { connect } from 'react-redux';
 import { formatAmount } from '@utils/formatters';
 
@@ -23,10 +21,11 @@ import * as actions from './behaviors';
 import * as categoriesSelectors from './selectors';
 
 import styles from './styles';
+import headerStyles from '@components/AppHeader/styles'
 import theme from '@theme/variables/myexpense';
 
 const url = "http://192.168.0.111:8000/categories"
-const defaultTime = 5;
+const defaultTime = 10;
 const num_questions_per_medal = 12
 
 import {api} from './../../../api/playTimeApi'
@@ -74,10 +73,6 @@ class Categories extends Component {
 
     componentDidMount() {
         this.initialize();
-    }
-
-    onTimeElapsed = () => {
-        // alert(this.state.randomText)
     }
 
     initialize = () => {
@@ -206,19 +201,68 @@ class Categories extends Component {
                 <ImageBackground
                 source={require('@assets/images/header-bg.png')}
                 style={styles.background}>
-                <AppHeader
+                { /* Inicia Appheader */ }
+
+                <View>
+                    <Header transparent hasTabs>
+                        <Left style={{ flex: 1 }}>
+                            <HeaderDrawerButton navigation={navigation} />
+                        </Left>
+                        <Body style={{ flex: 1, alignItems: 'center' }}>
+                            <CountdownCircle
+                              seconds={this.state.seconds}
+                              radius={25}
+                              borderWidth={8}
+                              color="#ff003f"
+                              bgColor="#fff"
+                              textStyle={{ fontSize: 20 }}
+                              onTimeElapsed={() => console.log('')}
+                            />
+                        </Body>
+                        <Right style={{ flex: 1 }}>
+                            {this.props.displayAvatar && (
+                            <TouchableOpacity
+                                onPress={() => {
+                                this.props.navigation.navigate('Profile');
+                                }}>
+                                <Thumbnail source={avatar} style={styles.avatar} />
+                            </TouchableOpacity>
+                            )}
+                            {this.props.displaySearch && (
+                            <Button
+                                transparent
+                                onPress={() => {
+                                this.setState(() => ({
+                                    displaySearchBar: !this.state.displaySearchBar,
+                                }));
+                                }}>
+                                <Icon active name="ios-search" style={{ fontSize: 34 }} />
+                            </Button>
+                            )}
+                        </Right>
+                    </Header>
+                    
+                    <View style={headerStyles.titles.container}>
+                        <View style={headerStyles.titles.content}>
+                        <Text style={headerStyles.titles.text}>Título de la pregunta</Text>
+                        </View>
+                    </View>
+                </View>
+
+                { /* Termina Appheader */ }
+                {/* <AppHeader
                     hasTabs
                     timer={true}
                     timerVisibility={this.state.timerVisibility}
                     seconds={this.state.seconds}
                     _onTimeElapsed={this._onTimeElapsed}
-                    onTimeElapsed={this.onTimeElapsed}
-                    _handleNextAnswer={this.handleNextAnswer}
+                    _handleNextAnswer={this.handleNextAnswerByTime}
+                    _questionId={this.state.currentQuestion.id}
                     setCurrentSecond={this.setCurrentSecond}
                     navigation={navigation}
                     title={ this.state.ready ? this.state.currentQuestion.name : "-" }
                     subTitle="_"
-                />
+                /> */}
                 <Content
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ flex: 1 }}
@@ -239,7 +283,9 @@ class Categories extends Component {
                                 this.optionIndex = this.optionIndex + 1
                             }
     
-                            return (<Option showAlert={this.showAlert} itemIndex={this.optionIndex} gradeAnswer={this.gradeAnswer} questionId={this.state.currentQuestion.id} navigation={navigation} {...props} />)
+                            return (<Option showAlert={this.showAlert}
+                                 itemIndex={this.optionIndex} gradeAnswer={this.gradeAnswer}
+                                 questionId={this.state.currentQuestion.id} navigation={navigation} {...props} />)
                         }
                     }
                         keyExtractor={category => "question" + category.id}
@@ -289,6 +335,18 @@ class Categories extends Component {
         // );
     }
 
+    handleNextAnswerByTime = () => {
+        currentQuestion = this.state.currentQuestion;
+        skippedQuestions = this.state.skippedQuestions;
+        skippedQuestions.push(currentQuestion);
+        this.setState({
+            skippedQuestions
+        }, () => {
+            console.log('Quizz.js', 'skippedQuestions', this.state.skippedQuestions.length)
+            this.handleNextAnswer()
+        })
+    }
+
     _deliverMedalQuestions = () => {
         uri = api.setMedalQuestions(this.props.courseId);
         // console.warn(uri);po
@@ -329,7 +387,7 @@ class Categories extends Component {
         fetch(api.sendAnswers, {
             method: 'POST',
             headers: {
-                "Authorization": 'Bearer ' + this.props.navigation.state.params.bearerToken,
+                "Authorization": 'Bearer ' + this.state.bearerToken,
                 Accept: 'application/json',
                 'Content-Type': 'application/json'
             },

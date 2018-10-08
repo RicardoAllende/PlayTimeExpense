@@ -97,7 +97,8 @@ class Expenses extends Component {
         .then((response) => response.json())
         .then((response) => {
               this.setState( { courses: response.data.courses, coursesLoading: false}, () => {
-                console.log('Se terminó la carga de los cursos');
+                console.log('');
+                // console.log('Se terminó la carga de los cursos');
               })
           }
         ).catch((error) => {

@@ -86,7 +86,7 @@ class ExpensesCharts extends Component {
           {!categoriesLoading &&
             categories.length === 0 && (
               <View style={styles.emptyContainer}>
-                <Text style={styles.emptyMsg}>No categories found</Text>
+                <Text style={styles.emptyMsg}>Error al cargar las estadísticas del curso</Text>
               </View>
             )}
 
@@ -100,19 +100,19 @@ class ExpensesCharts extends Component {
                 onChangeTab={({ i, ref, from }) =>
                   this.switchPeriod(i, ref, from)
                 }>
-                <Tab heading="This Week">
+                <Tab heading="Ranking de usuarios">
                   <ExpensesCarousel
                     categories={categories}
                     navigation={navigation}
                   />
                 </Tab>
-                <Tab heading="This Month">
+                <Tab heading="Estadísticas del curso">
                   <ExpensesCarousel
                     categories={categories}
                     navigation={navigation}
                   />
                 </Tab>
-                <Tab heading="This Year">
+                <Tab heading="Logros en el curso">
                   <ExpensesCarousel
                     categories={categories}
                     navigation={navigation}
