@@ -87,13 +87,14 @@ class ExpensesCalendar extends Component {
               style={styles.agenda.container}
               items={this.state.events}
               loadItemsForMonth={day => {
+                console.log('ExpensesCalendar ', day);
                 this.props.getEvents(day);
               }}
               renderItem={this.renderItem.bind(this)}
               rowHasChanged={this.rowHasChanged.bind(this)}
               selected={'2018-08-11'}
-              pastScrollRange={2}
-              futureScrollRange={2}
+              pastScrollRange={4}
+              futureScrollRange={4}
               renderEmptyData={this.renderEmptyData.bind(this)}
               renderKnob={() => {
                 return (

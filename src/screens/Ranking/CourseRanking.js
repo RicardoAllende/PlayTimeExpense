@@ -3,19 +3,11 @@ import PropTypes from 'prop-types';
 import { ImageBackground } from 'react-native';
 import moment from 'moment';
 import {
-  Container,
-  Content,
-  Tabs,
-  Tab,
-  Text,
-  Icon,
-  Fab,
-  Spinner,
-  View,
+  Container, Content,  Tabs,  Tab,  Text,  Icon,  Fab,  Spinner,  View,
 } from 'native-base';
 import { connect } from 'react-redux';
 
-import ExpensesList from './ExpensesList';
+import RankingList from './RankingList';
 import AppHeader from '@components/AppHeader';
 
 import * as actions from './behaviors';
@@ -24,7 +16,12 @@ import * as expensesSelectors from './selectors';
 import styles from './styles';
 import theme from '@theme/variables/myexpense';
 
-class Expenses extends Component {
+import {api} from './../../../api/playTimeApi'
+import {session, getUserData} from './../../../api/session'
+import { AsyncStorage } from "react-native"
+
+
+class CourseRanking extends Component {
   static propTypes = {
     navigation: PropTypes.any,
     getExpenses: PropTypes.func.isRequired,
@@ -34,6 +31,37 @@ class Expenses extends Component {
     deleteExpense: PropTypes.func,
   };
 
+  loadData = () => {
+    getUserData().then(
+      
+      this.setState({ bearerToken: userData.bearerToken, bearerReady: true, userData: userData }, () => {
+        () => { // BearerToken ready
+          url = api.getCourseOverView(this.props.navigation.state.params.courseId);
+          fetch(url, { 
+              method: 'GET', 
+              headers: {
+                  "Authorization": 'Bearer ' + this.state.bearerToken,
+                  Accept: 'application/json',
+                  "Content-Type": "application/json"
+              }
+          })
+          .then((response) => response.json())
+          .then((jsonResponse) => {
+              this.setState({
+                  ranking: jsonResponse.data.ranking.users, times: jsonResponse.data.ranking.times, 
+                  medals: jsonResponse.data.medal_ranking, ready: true
+                }, 
+                ()=>{
+                    console.log('Carga de elementos terminada')
+                }
+              )
+          }
+          ).catch((error) => { console.error(error); })
+        }
+      })
+    )
+  }
+
   static defaultProps = {
     expensesLoading: false,
     expensesError: false,
@@ -42,6 +70,7 @@ class Expenses extends Component {
   state = {
     headerTitle: moment().format('dddd,'),
     headerTitleSuffix: moment().format('MMM DD'),
+    ready: false
   };
 
   componentDidMount() {
@@ -79,7 +108,7 @@ class Expenses extends Component {
 
   render() {
     const { navigation,  deleteExpense, expensesLoading } = this.props;
-    console.log(expenses)
+    // console.log(JsonExpenses)
     return (
       <Container>
         <ImageBackground
@@ -94,22 +123,15 @@ class Expenses extends Component {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ flex: 1 }}
             style={styles.content}>
-            { false && (
+            { ! this.state.ready && (
               //expensesLoading && (
               <View style={styles.emptyContainer}>
                 <Spinner color={theme.brandPrimary} />
               </View>
             )}
-            {true && 
-              //!expensesLoading &&
-              expenses.length === 0 && (
-                <View style={styles.emptyContainer}>
-                  <Text style={styles.emptyMsg}>No expenses found</Text>
-                </View>
-              )}
             {
-              //!expensesLoading &&
-              expenses.length > 0 && (
+              this.state.ready &&
+              (
                 <Tabs
                   tabContainerStyle={{
                     elevation: 0,
@@ -118,20 +140,20 @@ class Expenses extends Component {
                   onChangeTab={({ i, ref, from }) =>
                     this.switchPeriod(i, ref, from)
                   }>
-                  <Tab heading="Today">
-                    <ExpensesList
+                  <Tab heading="Avances del curso">
+                    <RankingList
+                      expensesList={jsonExp}
+                      handleDelete={deleteExpense}
+                    />
+                  </Tab>
+                  <Tab heading="Ranking del curso">
+                    <RankingList
                       expensesList={JsonExpenses}
                       handleDelete={deleteExpense}
                     />
                   </Tab>
-                  <Tab heading="This Week">
-                    <ExpensesList
-                      expensesList={JsonExpenses}
-                      handleDelete={deleteExpense}
-                    />
-                  </Tab>
-                  <Tab heading="This Month">
-                    <ExpensesList
+                  <Tab heading="Logros en el curso">
+                    <RankingList
                       expensesList={JsonExpenses}
                       handleDelete={deleteExpense}
                     />
@@ -151,6 +173,7 @@ class Expenses extends Component {
       </Container>
     );
   }
+
 }
 
 const mapStateToProps = state => ({
@@ -162,128 +185,98 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   actions
-)(Expenses);
+)(CourseRanking);
 
 
 const JsonExpenses = [
   {
-      "title": "Ricardo",
-      "date": "Allende",
-      "gender": "male",
-      "amount": 4,
-      "correct_answers": 4,
-      "tries": 4,
-      "id": 1,
-      "type": 'Credit card',
-      "category": 'General',
-      "categoryIcon": 'ios-cash-outline'
-  },
-  {
-      "title": "Eileen O'Keefe",
-      "date": "Andrew Schumm",
-      "gender": "male",
-      "amount": 4,
-      "correct_answers": 4,
-      "tries": 4,
-      "id": 2,
-      "type": 'Credit card',
-      "category": 'General',
-      "categoryIcon": 'ios-cash-outline'
-  },
-  {
-      "title": "Alanna Gerlach",
-      "date": "Skylar Ryan I",
-      "gender": "male",
-      "amount": 4,
-      "correct_answers": 4,
-      "tries": 4,
-      "id": 3,
-      "type": 'Credit card',
-      "category": 'General',
-      "categoryIcon": 'ios-cash-outline'
-  },
-  {
-      "title": "Ms. Liliana Haley",
-      "date": "Quinten Hamill",
+      "firstname": "Lenna Baumbach",
+      "lastname": "Tabitha Brekke",
       "gender": "female",
-      "amount": 4,
-      "correct_answers": 4,
-      "tries": 4,
-      "id": 4,
-      "type": 'Credit card',
-      "category": 'General',
-      "categoryIcon": 'ios-cash-outline'
-  },
-  {
-      "title": "Prof. Joey Gerhold",
-      "date": "Frederik Murphy",
-      "gender": "female",
-      "amount": 3,
+      "hits": 3,
       "correct_answers": 3,
       "tries": 3,
-      "id": 5,
-      "type": 'Credit card',
-      "category": 'General',
-      "categoryIcon": 'ios-cash-outline'
+      "rank": 1
   },
   {
-      "title": "Jamar Satterfield",
-      "date": "Miss Fabiola Cremin",
-      "gender": "female",
-      "amount": 3,
-      "correct_answers": 3,
-      "tries": 3,
-      "id": 6,
-      "type": 'Credit card',
-      "category": 'General',
-      "categoryIcon": 'ios-cash-outline'
-  },
-  {
-      "title": "Letitia Carroll III",
-      "date": "Mr. Wiley Lind",
-      "gender": "female",
-      "amount": 3,
-      "correct_answers": 3,
-      "tries": 3,
-      "id": 7,
-      "type": 'Credit card',
-      "category": 'General',
-      "categoryIcon": 'ios-cash-outline'
-  },
-  {
-      "title": "Isaiah Schmeler",
-      "date": "Lexie Kilback",
-      "gender": "female",
-      "amount": 3,
-      "correct_answers": 3,
-      "tries": 3,
-      "id": 8,
-      "type": 'Credit card',
-      "category": 'General',
-      "categoryIcon": 'ios-cash-outline'
-  },
-  {
-      "title": "Abdul Bauch",
-      "date": "Prof. Alexane Bosco",
+      "firstname": "Crystel Lowe",
+      "lastname": "Prof. Cody Ledner MD",
       "gender": "male",
-      "amount": 2,
+      "hits": 3,
+      "correct_answers": 3,
+      "tries": 3,
+      "rank": 2
+  },
+  {
+      "firstname": "Grace Hoppe",
+      "lastname": "Prof. Elva Brakus PhD",
+      "gender": "female",
+      "hits": 3,
+      "correct_answers": 3,
+      "tries": 3,
+      "rank": 3
+  },
+  {
+      "firstname": "Ricardo",
+      "lastname": "Allende",
+      "gender": "male",
+      "hits": 2,
       "correct_answers": 2,
       "tries": 2,
-      "id": 9,
-      "type": 'Credit card',
-      "category": 'General',
-      "categoryIcon": 'ios-cash-outline'
+      "rank": 4
   },
   {
-      "title": "Elisa Trantow",
-      "date": "Prof. Stephen Mueller V",
-      "gender": "female",
-      "amount": 2,
+      "firstname": "Krystina Leffler",
+      "lastname": "Dr. Scot Langosh",
+      "gender": "male",
+      "hits": 2,
       "correct_answers": 2,
       "tries": 2,
-      "id": 10,
-      "type": 'Credit card',
-      "category": 'General',
-      "categoryIcon": 'ios-cash-outline'
+      "rank": 5
+  },
+  {
+      "firstname": "Prof. Lizzie Orn V",
+      "lastname": "Damien Purdy",
+      "gender": "male",
+      "hits": 2,
+      "correct_answers": 2,
+      "tries": 2,
+      "rank": 6
+  },
+  {
+      "firstname": "Miss Kailyn Brekke",
+      "lastname": "Theresia Prosacco",
+      "gender": "male",
+      "hits": 2,
+      "correct_answers": 2,
+      "tries": 2,
+      "rank": 7
+  },
+  {
+      "firstname": "Natalia Pacocha",
+      "lastname": "Evalyn Reilly",
+      "gender": "female",
+      "hits": 2,
+      "correct_answers": 2,
+      "tries": 2,
+      "rank": 8
+  },
+  {
+      "firstname": "Dr. Casper Lockman",
+      "lastname": "Prof. Austin Gerlach",
+      "gender": "male",
+      "hits": 2,
+      "correct_answers": 2,
+      "tries": 2,
+      "rank": 9
+  },
+  {
+      "firstname": "Gage Bashirian",
+      "lastname": "Rosalyn Doyle",
+      "gender": "female",
+      "hits": 2,
+      "correct_answers": 2,
+      "tries": 2,
+      "rank": 10
   }
-];
+]

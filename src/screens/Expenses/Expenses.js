@@ -86,7 +86,7 @@ class Expenses extends Component {
 
   loadCourses = () => {
     getUserData().then( (userData) => this.setState({ userData: userData}, () => {
-        fetch(api.getCourses, { 
+        fetch(api.getCoursesWithoutRandom, { 
             method: 'GET', 
             headers: {
                 "Authorization": 'Bearer ' + this.state.userData.bearerToken,

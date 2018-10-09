@@ -5,14 +5,14 @@ import { Container, Tabs, Tab, Spinner, View, Text } from 'native-base';
 import { connect } from 'react-redux';
 import moment from 'moment/moment';
 
-import ExpensesCarousel from './ExpensesCarousel';
+import CourseCarousel from './CourseCarousel';
 import AppHeader from '@components/AppHeader';
 import * as actions from './behaviors';
 import * as categoriesSelectors from './selectors';
 import theme from '@theme/variables/myexpense';
-import {session} from './../../../api/session'
 import { AsyncStorage } from "react-native"
-
+import {api} from './../../../api/playTimeApi'
+import {session, getUserData} from './../../../api/session'
 import {
   getFormattedCurrentWeek,
   getFormattedCurrentMonth,
@@ -20,7 +20,7 @@ import {
 
 import styles from './styles';
 
-class ExpensesCharts extends Component {
+class CourseCharts extends Component {
   static propTypes = {
     navigation: PropTypes.any,
     getCategories: PropTypes.func.isRequired,
@@ -38,6 +38,7 @@ class ExpensesCharts extends Component {
   state = {
     currentPeriod: getFormattedCurrentWeek(),
     showPieChart: false,
+    ready: false,
   };
 
   componentDidMount() {
@@ -65,8 +66,55 @@ class ExpensesCharts extends Component {
     this.setState({ currentPeriod: period });
   }
 
+  loadData = () => {
+    console.log('CourseCharts.js Cargando preguntas')
+    getUserData().then(
+      (userData) => {
+        this.setState({ bearerToken: userData.bearerToken, bearerReady: true, userData: userData }, () => {
+          // () => { // BearerToken ready
+          console.log("Loading questions");
+          url = api.getCourseOverView(this.props.navigation.state.params.courseId);
+          // console.log(this.state.bearerToken, url);
+            fetch(url, { 
+                method: 'GET', 
+                headers: {
+                    "Authorization": 'Bearer ' + this.state.bearerToken,
+                    Accept: 'application/json',
+                    "Content-Type": "application/json"
+                }
+            })
+            .then((response) => response.json())
+            .then((jsonResponse) => {
+                // console.log(jsonResponse)
+                // return
+                this.setState({
+                    usersRanking: jsonResponse.data.ranking, times: jsonResponse.data.ranking.times, 
+                    medals: jsonResponse.data.medal_ranking, advance: jsonResponse.data.advance,
+                    achievements: jsonResponse.data.achievements, medals: jsonResponse.data.medals, ready: true
+                  }, 
+                  ()=>{
+                      console.log('Carga de elementos terminada')
+                  }
+                )
+            }
+            ).catch((error) => { console.error(error); })
+          // }
+        })
+      }
+    )
+  }
+
+  componentDidMount(){
+    this.loadData();
+  }
+
+  init = false;
   render() {
-    console.log("Course Overview")
+    // if(! this.init ){
+    //   this.loadData();
+    //   this.init = true;
+    // }
+    // console.log("CourseChart.js Overview")
     const { navigation, categoriesLoading, categories } = this.props;
     return (
       <Container>
@@ -75,23 +123,22 @@ class ExpensesCharts extends Component {
           style={styles.container}>
           <AppHeader
             navigation={this.props.navigation}
-            title="Analytics"
+            title="Análisis de los cursos"
             titleSuffix={this.state.currentPeriod}
           />
-          {categoriesLoading && (
+          { ! this.state.ready && (
             <View style={styles.emptyContainer}>
               <Spinner color={theme.brandPrimary} />
             </View>
           )}
-          {!categoriesLoading &&
+          {/* { this.state.ready &&
             categories.length === 0 && (
               <View style={styles.emptyContainer}>
                 <Text style={styles.emptyMsg}>Error al cargar las estadísticas del curso</Text>
               </View>
-            )}
+            )} */}
 
-          {!categoriesLoading &&
-            categories.length > 0 && (
+          { this.state.ready &&(
               <Tabs
                 tabContainerStyle={{
                   elevation: 0,
@@ -101,19 +148,19 @@ class ExpensesCharts extends Component {
                   this.switchPeriod(i, ref, from)
                 }>
                 <Tab heading="Ranking de usuarios">
-                  <ExpensesCarousel
+                  <CourseCarousel
                     categories={categories}
                     navigation={navigation}
                   />
                 </Tab>
                 <Tab heading="Estadísticas del curso">
-                  <ExpensesCarousel
+                  <CourseCarousel
                     categories={categories}
                     navigation={navigation}
                   />
                 </Tab>
                 <Tab heading="Logros en el curso">
-                  <ExpensesCarousel
+                  <CourseCarousel
                     categories={categories}
                     navigation={navigation}
                   />
@@ -135,4 +182,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   actions
-)(ExpensesCharts);
+)(CourseCharts);

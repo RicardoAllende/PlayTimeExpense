@@ -52,8 +52,12 @@ class ExpensesList extends Component {
                 <Button
                   primary
                   style={styles.swipeBtn}
-                  onPress={() => this.deleteItem(item.id)}>
-                  <Icon active name="trash" style={{ fontSize: 35 }} />
+                  onPress={
+                    () => this.props.navigation.navigate('Quizz', {
+                      courseId: courseId
+                    })
+                  }>
+                  <Icon active name="ios-play" style={{ fontSize: 35 }} />
                 </Button>
               }
             />

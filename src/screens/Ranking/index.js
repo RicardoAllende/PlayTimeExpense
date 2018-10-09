@@ -1,3 +1,3 @@
-import Expenses from './Expenses';
+import CourseRanking from './CourseRanking';
 
-export default Expenses;
+export default CourseRanking;

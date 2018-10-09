@@ -30,8 +30,8 @@ export const api = {
         return app_url + 'courses/' + course_id + '/achievements'
     },
     addAchievement: app_url + "/achievement",
-    getRanking: (course_id) => {
-        return app_url + 'courses/' + course_id + '/ranking'
+    getCourseOverView: (course_id) => {
+        return app_url + 'courses/' + course_id + '/overview'
     },
     getCompleteRanking: app_url + 'ranking',
     setMedalQuestions: (course_id) => {

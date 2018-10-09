@@ -6,37 +6,45 @@ import { View, Grid, Col, Text, Icon, Item } from 'native-base';
 import { formatAmount } from '@utils/formatters';
 import styles from './styles';
 
-const ExpenseItem = ({ item, style, color, _onPress }) => {
+const RankingItem = ({ item, style, color, _onPress }) => {
   const borderColor = color ? color : item.color;
 
   _onPressButton = (courseId) => {
-    console.log('Se presionó el elemento:', courseId)
+    alert("Ranking item " + courseId);
+    // <Button
+    //               primary
+    //               style={styles.swipeBtn}
+    //               onPress={
+    this.props.navigation.navigate('Quizz', {
+      courseId: courseId
+    })
+    // }>
+    // <Icon active name="ios-play" style={{ fontSize: 35 }} />
+    // console.log('Se presionó el elemento:', courseId)
   }
 
+  // console.log('ExpenseItem.js', item);
   return (
     <View style={[styles.item.content, { borderColor: borderColor }, style]}>
-      <TouchableOpacity onPress={() => _onPress(item.id) }>
+      <TouchableOpacity onPress={() => _onPressButton(item.name) }>
       <Grid>
         <Col size={7} style={{ flexDirection: 'row' }}>
           <Icon name="laptop" style={styles.item.icon} />
           <View>
             <Text numberOfLines={2} style={styles.item.title}>
-              {item.name}
+              {item.rank + ' ' + item.firstname + ' ' + item.lastname }
             </Text>
             <Text numberOfLines={2} style={styles.item.subtitle}>
-              {item.description ? item.description.substr(0, 25) + ' ...' : "Description" }
+              {item.rank + ' ' + item.firstname + ' ' + item.lastname }
             </Text>
           </View>
         </Col>
         <Col size={3}>
           <Text
             numberOfLines={2}
-            style={
-              item.amount < 0
-                ? styles.item.expenseAmount
-                : styles.item.incomeAmount
-            }>
-            {item.num_questions}
+            style={ styles.item.incomeAmount }>
+            {/* .expenseAmount || .incomeAmount */}
+            { item.hits }
           </Text>
         </Col>
       </Grid>
@@ -51,4 +59,4 @@ const ExpenseItem = ({ item, style, color, _onPress }) => {
 //   color: PropTypes.string,
 // };
 
-export default ExpenseItem;
+export default RankingItem;

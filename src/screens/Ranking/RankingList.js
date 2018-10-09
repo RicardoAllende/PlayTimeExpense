@@ -4,12 +4,12 @@ import { FlatList } from 'react-native';
 
 import { View, Button, Icon, SwipeRow } from 'native-base';
 
-import ExpenseItem from '@components/ExpenseItem';
+import RankingItem from '@components/ExpenseItem/RankingItem';
 import categoryColors from '@theme/categoryColors';
 
 import styles from './styles';
 
-class ExpensesList extends Component {
+class RankingList extends Component {
   static propTypes = {
     expensesList: PropTypes.array,
     handleDelete: PropTypes.func,
@@ -41,26 +41,28 @@ class ExpensesList extends Component {
               disableRightSwipe={true}
               style={styles.item.container}
               body={
-                <ExpenseItem
+                <RankingItem
                   item={item}
+                  style
                   color={categoryColors[index % categoryColors.length]}
+                  _onPress={ () => console.log('elemento del ranking presionado') }
                 />
               }
               right={
                 <Button
                   primary
                   style={styles.swipeBtn}
-                  onPress={() => this.deleteItem(item.id)}>
-                  <Icon active name="trash" style={{ fontSize: 35 }} />
+                  onPress={() => alert("Yendo al curso") }>
+                  <Icon active name="ios-play" style={{ fontSize: 35 }} />
                 </Button>
               }
             />
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={item => "userRank" + item.id}
         />
       </View>
     );
   }
 }
 
-export default ExpensesList;
+export default RankingList;

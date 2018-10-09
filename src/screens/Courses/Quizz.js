@@ -155,6 +155,15 @@ class Categories extends Component {
         }, () => console.log('El número de segundos actual es:', this.state.seconds))
     }
 
+    restartTimer = () => {
+        this.setState({seconds: 0}, () => { this.setState({ seconds: defaultTime }, 
+                () => {
+                    console.log('Quizz.js', 'Restarting timer', this.state.seconds)
+                }   
+            ) // end setState defaultTime
+        })
+    }
+
     shouldRestartTimer = false;
 
     setDefaultTime = () => {
@@ -216,7 +225,7 @@ class Categories extends Component {
                               color="#ff003f"
                               bgColor="#fff"
                               textStyle={{ fontSize: 20 }}
-                              onTimeElapsed={() => console.log('')}
+                              onTimeElapsed={ this.handleNextAnswerByTime }
                             />
                         </Body>
                         <Right style={{ flex: 1 }}>
@@ -244,25 +253,10 @@ class Categories extends Component {
                     
                     <View style={headerStyles.titles.container}>
                         <View style={headerStyles.titles.content}>
-                        <Text style={headerStyles.titles.text}>Título de la pregunta</Text>
+                        <Text style={headerStyles.titles.text}>{ this.state.currentQuestion.name }</Text>
                         </View>
                     </View>
                 </View>
-
-                { /* Termina Appheader */ }
-                {/* <AppHeader
-                    hasTabs
-                    timer={true}
-                    timerVisibility={this.state.timerVisibility}
-                    seconds={this.state.seconds}
-                    _onTimeElapsed={this._onTimeElapsed}
-                    _handleNextAnswer={this.handleNextAnswerByTime}
-                    _questionId={this.state.currentQuestion.id}
-                    setCurrentSecond={this.setCurrentSecond}
-                    navigation={navigation}
-                    title={ this.state.ready ? this.state.currentQuestion.name : "-" }
-                    subTitle="_"
-                /> */}
                 <Content
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ flex: 1 }}
@@ -329,8 +323,7 @@ class Categories extends Component {
                 // seconds: defaultTime,
             })
         }
-        this.shouldRestartTimer = true;
-        this.initCoundown();
+        this.restartTimer()
             // }
         // );
     }
@@ -439,7 +432,6 @@ class Categories extends Component {
         getUserData().then(
             (userData) => {this.setState({bearerToken: userData.bearerToken, bearerReady: true, userData: userData}, 
                     ()=>{
-                        console.log("Loading questions");
                         url = api.getQuestions(this.props.navigation.state.params.courseId);
                         fetch(url, { 
                             method: 'GET', 

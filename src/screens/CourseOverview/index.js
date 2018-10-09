@@ -1,3 +1,3 @@
-import ExpensesCharts from './ExpensesCharts';
+import CourseCharts from './CourseCharts';
 
-export default ExpensesCharts;
+export default CourseCharts;

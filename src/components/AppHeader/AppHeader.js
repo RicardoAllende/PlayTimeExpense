@@ -39,7 +39,7 @@ class AppHeader extends PureComponent {
 
   render() {
     let navLogo;
-    console.log('AppHeader.js', 'courseId', this.props.courseId)
+    // console.log('AppHeader.js', 'courseId', this.props.courseId)
     if(this.props.timer){ // Timer exists
       if(this.props.timerVisibility){
         // console.log('Número de segundos obtenidos en Appheader desde state', this.state.seconds)

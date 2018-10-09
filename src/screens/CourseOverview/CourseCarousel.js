@@ -12,8 +12,11 @@ import styles from './styles';
 import theme from '@theme/variables/myexpense';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
+import {api} from './../../../api/playTimeApi'
+import {session, getUserData} from './../../../api/session'
+import { AsyncStorage } from "react-native"
 
-export class ExpensesCarousel extends React.Component {
+export class CourseCarousel extends React.Component {
   static propTypes = {
     categories: PropTypes.array,
     navigation: PropTypes.any,
@@ -96,4 +99,4 @@ export class ExpensesCarousel extends React.Component {
   }
 }
 
-export default ExpensesCarousel;
+export default CourseCarousel;

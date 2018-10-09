@@ -63,7 +63,6 @@ class Walkthrough extends Component {
 
   _goToCourse = (courseId) => {
     this.props.navigation.navigate('Quizz', {
-      // bearerToken: this.state.userData.access_token,
       courseId: courseId
     })
   }
