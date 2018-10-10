@@ -35,7 +35,7 @@ const RankingItem = ({ item, style, color, _onPress }) => {
               {item.rank + ' ' + item.firstname + ' ' + item.lastname }
             </Text>
             <Text numberOfLines={2} style={styles.item.subtitle}>
-              {item.rank + ' ' + item.firstname + ' ' + item.lastname }
+              Subtítulo del elemento
             </Text>
           </View>
         </Col>

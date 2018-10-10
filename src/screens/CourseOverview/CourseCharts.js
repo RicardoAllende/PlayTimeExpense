@@ -18,6 +18,7 @@ import {
   getFormattedCurrentWeek,
   getFormattedCurrentMonth,
 } from '@utils/formatters';
+import Ranking from './Ranking'
 
 import styles from './styles';
 
@@ -126,7 +127,7 @@ class CourseCharts extends Component {
           <AppHeader
             navigation={this.props.navigation}
             title={this.props.navigation.state.params.courseName}
-            titleSuffix={this.state.currentPeriod}
+            titleSuffix='_'
           />
           { ! this.state.ready && (
             <View style={styles.emptyContainer}>
@@ -162,9 +163,9 @@ class CourseCharts extends Component {
                   />
                 </Tab>
                 <Tab heading="Estadísticas del curso">
-                  <CourseCarousel
+                  <Ranking
                     gaugeChart
-                    list
+                    showList
                     users={this.state.usersRanking}
                     gaugeData={this.state.advance}
                     categories={categories}

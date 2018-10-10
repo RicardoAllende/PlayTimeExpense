@@ -19,7 +19,7 @@ import ExpensesList from './ExpensesList'
 import listStyles from '../../components/ExpenseItem/styles'
 // import { FlatList } from 'react-native-gesture-handler';
 
-export class CourseCarousel extends React.Component {
+export class Ranking extends React.Component {
   static propTypes = {
     categories: PropTypes.array,
     navigation: PropTypes.any,
@@ -98,14 +98,14 @@ export class CourseCarousel extends React.Component {
 
     return (
       <View>
-        {/* <ExpensesList
+        <ExpensesList
           expensesList={this.props.users}
           handleDelete={ console.log('CourseCarousel handleDelete ExpensesList') }
           _onPress={
             () => console.log('CourseCarousel ExpensesList')
           }
-        /> */}
-        <Carousel
+        />
+        {/* <Carousel
           width={deviceWidth}
           height={deviceHeight}
           loop={false}
@@ -125,6 +125,42 @@ export class CourseCarousel extends React.Component {
               <Text style={styles.chartTitle}>Porcentaje de avance del curso</Text>              
               <Text>¡Aún no ha iniciado el curso!</Text>
             </View>
+          }
+          {
+            this.props.showList &&
+            <View pointerEvents="none" style={styles.slides}>            
+              <Text style={styles.chartTitle}>Ranking del curso</Text>
+              <Text>Otro texto</Text>
+              <FlatList
+                data={this.props.users}
+                renderItem={ 
+                  // this._renderUserList
+
+                  (item, index) => {
+                    console.log(item)
+                    return (<View>
+                      <Text style={{ flex: 1, backgroundColor: 'blue' }}>
+                        Elemento
+                      </Text>
+                    </View>)
+                  }
+                }
+                keyExtractor={
+                  (item, index) => "elemento" + index
+                }
+                />
+            </View>
+
+            // <View pointerEvents="none" style={styles.slides}>
+            //   <Text style={styles.chartTitle}>Ranking del curso</Text>
+            //   <ExpensesList
+            //     expensesList={this.props.users}
+            //     handleDelete={ console.log('CourseCarousel handleDelete ExpensesList') }
+            //     _onPress={
+            //       () => console.log('CourseCarousel ExpensesList')
+            //     }
+            //   />
+            // </View>
           }
           {
             this.props.pieChart &&
@@ -150,10 +186,10 @@ export class CourseCarousel extends React.Component {
               />
             </View>
           }
-        </Carousel>
+        </Carousel> */}
       </View>
     );
   }
 }
 
-export default CourseCarousel;
+export default Ranking;
