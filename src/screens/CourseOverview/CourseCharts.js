@@ -93,7 +93,7 @@ class CourseCharts extends Component {
                     usersRanking: jsonResponse.data.ranking.users, times: jsonResponse.data.ranking.times, 
                     medalRanking: jsonResponse.data.medal_ranking, advance: jsonResponse.data.advance, 
                     approvalPercentage: jsonResponse.data.pie_chart, medals: jsonResponse.data.medals,
-                    achievements: jsonResponse.data.achievements, ready: true
+                    achievements: jsonResponse.data.achievements, totalQuestions: jsonResponse.data.ranking.total_questions, ready: true
                   }, 
                   ()=>{
                       console.log('CoursCharts Carga de elementos terminada')
@@ -153,11 +153,12 @@ class CourseCharts extends Component {
                 <Tab heading="Avances">
                   <CourseCarousel
                     categories={categories}
-                    gaugeChart
+                    totalQuestions={this.state.totalQuestions}
                     pieChart
                     approvalPercentage={this.state.approvalPercentage}
                     barChart
                     chashFlowChart
+                    totalQuestions={this.state.totalQuestions}
                     coursePercentage={this.state.advance}
                     navigation={navigation}
                   />
@@ -172,7 +173,13 @@ class CourseCharts extends Component {
                     navigation={navigation}
                   />
                 </Tab>
-                <Tab heading="Estadísticas">
+                <Tab heading="Logros">
+                  <CourseCarousel
+                    categories={categories}
+                    navigation={navigation}
+                  />
+                </Tab>
+                <Tab heading="Tiempo">
                   <CourseCarousel
                     categories={categories}
                     navigation={navigation}

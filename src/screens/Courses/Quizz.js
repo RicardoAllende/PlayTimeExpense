@@ -31,8 +31,12 @@ const num_questions_per_medal = 12
 import {api} from './../../../api/playTimeApi'
 import {session, getUserData} from './../../../api/session'
 import { AsyncStorage } from "react-native"
+import Notification from '@components/Notification';
 
-class Categories extends Component {
+
+const defaultNotificationTime = 5000 // 5 seconds
+
+class Quizz extends Component {
 
     constructor(props){
         super(props)
@@ -51,6 +55,8 @@ class Categories extends Component {
             // optionIndex: 0, 
             currentIndex: 0,
             randomText: "Estado desde quizz",
+            showSuccessNotification: true,
+            showErrorNotification: false
         }
     }
 
@@ -297,6 +303,24 @@ class Categories extends Component {
                     onPress={ this._askToEndQuizz }>
                     <Icon type="Ionicons" name="exit" />
                 </Fab>
+                {this.state.showErrorNotification && (
+                  <Notification
+                    message="Respuesta correcta"
+                    buttonText="_"
+                    duration={5000}
+                    position="bottom"
+                    type="danger"
+                  />
+                )}
+                {this.state.showSuccessNotification && (
+                  <Notification
+                    message="¡Respuesta correcta!"
+                    buttonText="_"
+                    duration={5000}
+                    position="bottom"
+                    type="success"
+                  />
+                )}
                 </ImageBackground>
             </Container>
             );
@@ -470,4 +494,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   actions
-)(Categories);
+)(Quizz);

@@ -1,3 +1,3 @@
 import Quizz from './Quizz'
 
-export default Categories;
+export default Quizz;

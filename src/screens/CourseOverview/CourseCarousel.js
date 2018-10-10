@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Platform, Dimensions, View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { Platform, Dimensions, View, Text, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import Carousel from 'react-native-carousel-view';
 import PieChart from '@components/Charts/PieChart';
 import BarChart from '@components/Charts/BarChart';
@@ -79,21 +79,25 @@ export class CourseCarousel extends React.Component {
           indicatorColor={theme.brandPrimary}
           animate={false}>
           {
-            this.props.gaugeChart &&
+            this.props.coursePercentage &&
             this.props.coursePercentage > 0 ?
-            <View pointerEvents="none" style={styles.slides}>
-              <Text style={styles.chartTitle}>Porcentaje del curso</Text>
-              <GaugeChart percent={this.props.coursePercentage} />
-            </View> :
-            <View pointerEvents="none" style={styles.slides}>
-              <Text style={styles.chartTitle}>Porcentaje de avance del curso</Text>              
-              <Text>¡Aún no ha iniciado el curso!</Text>
-            </View>
+              <View pointerEvents="none" style={styles.slides}>
+                  <ScrollView>
+                  <Text style={styles.chartTitle}>Porcentaje del curso</Text>
+                  <GaugeChart percent={this.props.coursePercentage} />
+                    <Text>Número de preguntas: { this.props.totalQuestions } </Text>
+                </ScrollView>
+              </View> 
+              :
+              <View pointerEvents="none" style={styles.slides}>
+                <Text style={styles.chartTitle}>Porcentaje de avance del curso</Text>              
+                <Text>¡Aún no ha iniciado el curso!</Text>
+              </View>
           }
           {
             this.props.pieChart &&
             <View pointerEvents="none" style={styles.slides}>
-              <Text style={styles.chartTitle}>Estadísticas del curso</Text>
+              <Text style={styles.chartTitle}>Aprobación del curso en el grupo</Text>
               <PieChart data={this.props.approvalPercentage} />
             </View>
           }
