@@ -26,7 +26,7 @@ class PieChart extends PureComponent {
             data={this.props.data}
             events={[]}
             style={{
-              labels: { fontSize: '10' },
+              labels: { fontSize: '8' },
             }}
           />
         </View>

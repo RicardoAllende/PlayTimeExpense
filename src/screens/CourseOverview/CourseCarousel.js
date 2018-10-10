@@ -37,35 +37,6 @@ export class CourseCarousel extends React.Component {
       };
     });
 
-    _renderUserList = (item) => {
-      console.log(item)
-      return (<View style={[listStyles.item.content, { borderColor: 'blue', flex: 1, backgroundColor: 'green' }]}>
-        <TouchableOpacity onPress={() => _onPressButton(item.name) }>
-        <Grid>
-          <Col size={7} style={{ flexDirection: 'row' }}>
-            <Icon name="laptop" style={listStyles.item.icon} />
-            <View>
-              <Text numberOfLines={2} style={listStyles.item.title}>
-                {item.rank + ' ' + item.firstname + ' ' + item.lastname }
-              </Text>
-              <Text numberOfLines={2} style={listStyles.item.subtitle}>
-                {item.rank + ' ' + item.firstname + ' ' + item.lastname }
-              </Text>
-            </View>
-          </Col>
-          <Col size={3}>
-            <Text
-              numberOfLines={2}
-              style={ listStyles.item.incomeAmount }>
-              {/* .expenseAmount || .incomeAmount */}
-              { item.hits }
-            </Text>
-          </Col>
-        </Grid>
-        </TouchableOpacity>
-      </View>);
-    }
-
   render() {
     const expenseHistory = [
       { x: 'Jan', y: 1522 },
@@ -98,13 +69,6 @@ export class CourseCarousel extends React.Component {
 
     return (
       <View>
-        {/* <ExpensesList
-          expensesList={this.props.users}
-          handleDelete={ console.log('CourseCarousel handleDelete ExpensesList') }
-          _onPress={
-            () => console.log('CourseCarousel ExpensesList')
-          }
-        /> */}
         <Carousel
           width={deviceWidth}
           height={deviceHeight}

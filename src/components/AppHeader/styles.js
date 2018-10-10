@@ -30,7 +30,7 @@ export default {
     },
     text: {
       fontFamily: 'Roboto_light',
-      fontSize: 26,
+      fontSize: 22,
       color: '#FFF',
     },
     suffix: {

@@ -150,7 +150,7 @@ class CourseCharts extends Component {
                 onChangeTab={({ i, ref, from }) =>
                   this.switchPeriod(i, ref, from)
                 }>
-                <Tab heading="Ranking de usuarios">
+                <Tab heading="Avances">
                   <CourseCarousel
                     categories={categories}
                     gaugeChart
@@ -162,7 +162,7 @@ class CourseCharts extends Component {
                     navigation={navigation}
                   />
                 </Tab>
-                <Tab heading="Estadísticas del curso">
+                <Tab heading="Ranking">
                   <Ranking
                     gaugeChart
                     showList
@@ -172,7 +172,7 @@ class CourseCharts extends Component {
                     navigation={navigation}
                   />
                 </Tab>
-                <Tab heading="Logros en el curso">
+                <Tab heading="Estadísticas">
                   <CourseCarousel
                     categories={categories}
                     navigation={navigation}

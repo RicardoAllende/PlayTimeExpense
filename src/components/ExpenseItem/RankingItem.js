@@ -26,7 +26,7 @@ const RankingItem = ({ item, style, color, _onPress }) => {
   // console.log('ExpenseItem.js', item);
   return (
     <View style={[styles.item.content, { borderColor: borderColor }, style]}>
-      <TouchableOpacity onPress={() => _onPressButton(item.name) }>
+      <TouchableOpacity onPress={() => console.log('') }>
       <Grid>
         <Col size={7} style={{ flexDirection: 'row' }}>
           <Icon name="laptop" style={styles.item.icon} />

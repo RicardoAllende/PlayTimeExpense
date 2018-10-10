@@ -14,11 +14,17 @@ import {
 import MenuItem from './MenuItem';
 import styles from './styles';
 import { routes } from './config';
+
+import { session } from '../../../api/session'
+
 class SideBar extends Component {
   state = {
     selected: '',
   };
   onPressItem = route => {
+    if(route == 'SingIn'){
+      session.unsetBearerToken()
+    }
     this.setState(() => ({
       selected: route,
     }));

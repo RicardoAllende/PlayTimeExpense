@@ -38,31 +38,31 @@ class AppHeader extends PureComponent {
   }
 
   render() {
-    let navLogo;
-    // console.log('AppHeader.js', 'courseId', this.props.courseId)
-    if(this.props.timer){ // Timer exists
-      if(this.props.timerVisibility){
-        // console.log('Número de segundos obtenidos en Appheader desde state', this.state.seconds)
-        navLogo = <CountdownCircle
-          seconds={this.state.seconds}
-          radius={25}
-          borderWidth={8}
-          color="#ff003f"
-          bgColor="#fff"
-          textStyle={{ fontSize: 20 }}
-          onTimeElapsed={this.restartCountDown}
-        />
-      }
-    }else{
-      if(this.props.displayLogo){
-        navLogo = <TouchableOpacity
-          onPress={() => {
-            this.props.navigation.navigate('Expenses');
-          }}>
-          <Image source={logo} style={styles.logo} />
-        </TouchableOpacity>
-      }
-    }
+    // let navLogo;
+    // // console.log('AppHeader.js', 'courseId', this.props.courseId)
+    // if(this.props.timer){ // Timer exists
+    //   if(this.props.timerVisibility){
+    //     // console.log('Número de segundos obtenidos en Appheader desde state', this.state.seconds)
+    //     navLogo = <CountdownCircle
+    //       seconds={this.state.seconds}
+    //       radius={25}
+    //       borderWidth={8}
+    //       color="#ff003f"
+    //       bgColor="#fff"
+    //       textStyle={{ fontSize: 20 }}
+    //       onTimeElapsed={this.restartCountDown}
+    //     />
+    //   }
+    // }else{
+    //   if(this.props.displayLogo){
+    //     navLogo = <TouchableOpacity
+    //       onPress={() => {
+    //         this.props.navigation.navigate('Expenses');
+    //       }}>
+    //       <Image source={logo} style={styles.logo} />
+    //     </TouchableOpacity>
+    //   }
+    // }
     return (
       <View style={this.props.style}>
         <Header transparent hasTabs>
@@ -70,15 +70,14 @@ class AppHeader extends PureComponent {
             <HeaderDrawerButton navigation={this.props.navigation} />
           </Left>
           <Body style={{ flex: 1, alignItems: 'center' }}>
-            { navLogo }
-            {/* {this.props.displayLogo && (
+            {this.props.displayLogo && (
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate('Expenses');
                 }}>
                 <Image source={logo} style={styles.logo} />
               </TouchableOpacity>
-            )} */}
+            )}
           </Body>
           <Right style={{ flex: 1 }}>
             {this.props.displayAvatar && (
