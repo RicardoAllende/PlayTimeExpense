@@ -99,8 +99,26 @@ class Walkthrough extends Component {
 
   loadUserData = async() => {
     getUserData().then(
-        (userData) => {this.setState({bearerToken: userData.bearerToken, bearerReady: true, userData: userData})
-        // console.log("loadUserData", userData);
+        (userData) => {this.setState({bearerToken: userData.bearerToken, bearerReady: true, userData: userData}, 
+          () => { // bearerToken is setted
+            fetch(api.getCourses, { 
+                method: 'GET', 
+                headers: {
+                    "Authorization": 'Bearer ' + this.state.bearerToken,
+                    Accept: 'application/json',
+                    "Content-Type": "application/json"
+                }
+            })
+            .then((response) => response.json())
+            .then((response) => {
+                  this.setState( { courses: response.data.courses, coursesLength: response.data.courses.length - 1, ready: true}, () => {
+                }) 
+              }
+            ).catch((error) => {
+                console.error(error);
+            })
+          }
+        )
       }
     );
   }
@@ -119,12 +137,12 @@ class Walkthrough extends Component {
     //   this.loadUserData();
     //   this.loadingBearer = false;
     // }
-    if(this.state.bearerReady){
-      if(this.loadingQuestions){
-        this.loadCourses()
-        this.loadingQuestions = false;
-      }
-      if(this.state.ready){
+    // if(this.state.bearerReady){
+      // if(this.loadingQuestions){
+      //   this.loadCourses()
+      //   this.loadingQuestions = false;
+      // }
+      // if(this.state.ready){
         return (
           <Container>
             <StatusBar
@@ -136,15 +154,17 @@ class Walkthrough extends Component {
               source={require('@assets/images/background2.png')}
               style={styles.background}>
               <Content>
-                <Carousel
-                  ref={c => (this.carousel = c)}
-                  data={this.state.courses}
-                  renderItem={this.renderSlide}
-                  sliderWidth={deviceWidth}
-                  itemWidth={deviceWidth - 50}
-                  hasParallaxImages={true}
-                  containerCustomStyle={styles.slider}
-                />
+                { this.state.ready &&
+                  <Carousel
+                    ref={c => (this.carousel = c)}
+                    data={this.state.courses}
+                    renderItem={this.renderSlide}
+                    sliderWidth={deviceWidth}
+                    itemWidth={deviceWidth - 50}
+                    hasParallaxImages={true}
+                    containerCustomStyle={styles.slider}
+                  />
+                }
               </Content>
               <Footer>
                 <Button
@@ -160,18 +180,18 @@ class Walkthrough extends Component {
                   // })}
                   >
                   {/* <Text> Get Started </Text> */}
-                  <Text> Explorar otras cosas </Text>
+                  <Text> Saltar </Text>
                 </Button>
               </Footer>
             </ImageBackground>
           </Container>
         );
-      }
+      // }
       
-    }
-    return (
-      <AppLoading />
-    );    
+    // }
+    // return (
+    //   <AppLoading />
+    // );    
   }
 }
 

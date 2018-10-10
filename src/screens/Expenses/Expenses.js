@@ -151,8 +151,8 @@ class Expenses extends Component {
                   expensesList={this.state.courses}
                   handleDelete={deleteExpense}
                   _onPress={
-                    (courseId) => navigation.navigate('CourseOverview', {
-                      courseId: courseId
+                    (courseId, courseName) => navigation.navigate('CourseOverview', {
+                      courseId: courseId, courseName
                     })
                   }
                 />

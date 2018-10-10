@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Platform, Dimensions, View, Text } from 'react-native';
+import { Platform, Dimensions, View, Text, } from 'react-native';
 import Carousel from 'react-native-carousel-view';
 import PieChart from '@components/Charts/PieChart';
 import BarChart from '@components/Charts/BarChart';
@@ -15,6 +15,8 @@ const deviceWidth = Dimensions.get('window').width;
 import {api} from './../../../api/playTimeApi'
 import {session, getUserData} from './../../../api/session'
 import { AsyncStorage } from "react-native"
+import ExpensesList from './ExpensesList'
+import { FlatList } from 'react-native-gesture-handler';
 
 export class CourseCarousel extends React.Component {
   static propTypes = {
@@ -63,6 +65,15 @@ export class CourseCarousel extends React.Component {
       { x: 'Nov', y: 2307 },
       { x: 'Dec', y: 2707 },
     ];
+
+    _renderUserList = (item) => {
+      return <View>
+        <Text>
+          Elemento
+        </Text>
+      </View>
+    }
+
     return (
       <View>
         <Carousel
@@ -74,25 +85,62 @@ export class CourseCarousel extends React.Component {
           indicatorSize={Platform.OS === 'android' ? 15 : 10}
           indicatorColor={theme.brandPrimary}
           animate={false}>
-          <View pointerEvents="none" style={styles.slides}>
-            <Text style={styles.chartTitle}>Budget Goal Completion</Text>
-            <GaugeChart percent={65} />
-          </View>
-          <View pointerEvents="none" style={styles.slides}>
-            <Text style={styles.chartTitle}>Expenses By Categories</Text>
-            <PieChart data={this.getCategoriesDataForChart(true)} />
-          </View>
-          <View pointerEvents="none" style={styles.slides}>
-            <Text style={styles.chartTitle}>Expenses By Categories</Text>
-            <BarChart data={this.getCategoriesDataForChart()} />
-          </View>
-          <View pointerEvents="none" style={styles.slides}>
-            <Text style={styles.chartTitle}>Cash Flow History</Text>
-            <CashFlowChart
-              incomeData={incomeHistory}
-              expenseData={expenseHistory}
-            />
-          </View>
+          {
+            this.props.gaugeChart &&
+            this.props.coursePercentage > 0 ?
+            <View pointerEvents="none" style={styles.slides}>
+              <Text style={styles.chartTitle}>Porcentaje del curso</Text>
+              <GaugeChart percent={this.props.coursePercentage} />
+            </View> :
+            <View pointerEvents="none" style={styles.slides}>
+              <Text style={styles.chartTitle}>Porcentaje de avance del curso</Text>              
+              <Text>¡Aún no ha iniciado el curso!</Text>
+            </View>
+          }
+          {
+            this.props.list &&
+            <View pointerEvents="none" style={styles.slides}>            
+              <FlatList
+                data={this.props.usersRanking}
+                renderItem={
+                  this._renderUserList
+                }
+                />
+            </View>
+            // <View pointerEvents="none" style={styles.slides}>
+            // <ExpensesList
+            //   expensesList={this.props.usersRanking}
+            //   handleDelete={ console.log('CourseCarousel handleDelete ExpensesList') }
+            //   _onPress={
+            //     () => console.log('CourseCarousel ExpensesList')
+            //   }
+            // />
+            // </View>
+          }
+          {
+            this.props.pieChart &&
+            <View pointerEvents="none" style={styles.slides}>
+              <Text style={styles.chartTitle}>Estadísticas del curso</Text>
+              <PieChart data={this.props.approvalPercentage} />
+            </View>
+          }
+          {
+            this.props.barChart &&
+            <View pointerEvents="none" style={styles.slides}>
+              <Text style={styles.chartTitle}>Expenses By Categories</Text>
+              <BarChart data={this.getCategoriesDataForChart()} />
+            </View>
+          }
+          {
+            this.props.chashFlowChart &&
+            <View pointerEvents="none" style={styles.slides}>
+              <Text style={styles.chartTitle}>Cash Flow History</Text>
+              <CashFlowChart
+                incomeData={incomeHistory}
+                expenseData={expenseHistory}
+              />
+            </View>
+          }
         </Carousel>
       </View>
     );

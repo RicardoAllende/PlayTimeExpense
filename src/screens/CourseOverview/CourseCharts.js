@@ -13,6 +13,7 @@ import theme from '@theme/variables/myexpense';
 import { AsyncStorage } from "react-native"
 import {api} from './../../../api/playTimeApi'
 import {session, getUserData} from './../../../api/session'
+import ExpensesList from './ExpensesList'
 import {
   getFormattedCurrentWeek,
   getFormattedCurrentMonth,
@@ -88,12 +89,13 @@ class CourseCharts extends Component {
                 // console.log(jsonResponse)
                 // return
                 this.setState({
-                    usersRanking: jsonResponse.data.ranking, times: jsonResponse.data.ranking.times, 
-                    medals: jsonResponse.data.medal_ranking, advance: jsonResponse.data.advance,
-                    achievements: jsonResponse.data.achievements, medals: jsonResponse.data.medals, ready: true
+                    usersRanking: jsonResponse.data.ranking.users, times: jsonResponse.data.ranking.times, 
+                    medalRanking: jsonResponse.data.medal_ranking, advance: jsonResponse.data.advance, 
+                    approvalPercentage: jsonResponse.data.pie_chart, medals: jsonResponse.data.medals,
+                    achievements: jsonResponse.data.achievements, ready: true
                   }, 
                   ()=>{
-                      console.log('Carga de elementos terminada')
+                      console.log('CoursCharts Carga de elementos terminada')
                   }
                 )
             }
@@ -123,7 +125,7 @@ class CourseCharts extends Component {
           style={styles.container}>
           <AppHeader
             navigation={this.props.navigation}
-            title="Análisis de los cursos"
+            title={this.props.navigation.state.params.courseName}
             titleSuffix={this.state.currentPeriod}
           />
           { ! this.state.ready && (
@@ -150,11 +152,21 @@ class CourseCharts extends Component {
                 <Tab heading="Ranking de usuarios">
                   <CourseCarousel
                     categories={categories}
+                    gaugeChart
+                    pieChart
+                    approvalPercentage={this.state.approvalPercentage}
+                    barChart
+                    chashFlowChart
+                    coursePercentage={this.state.advance}
                     navigation={navigation}
                   />
                 </Tab>
                 <Tab heading="Estadísticas del curso">
                   <CourseCarousel
+                    gaugeChart
+                    list
+                    users={this.state.usersRanking}
+                    gaugeData={this.state.advance}
                     categories={categories}
                     navigation={navigation}
                   />

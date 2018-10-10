@@ -15,7 +15,7 @@ const ExpenseItem = ({ item, style, color, _onPress }) => {
 
   return (
     <View style={[styles.item.content, { borderColor: borderColor }, style]}>
-      <TouchableOpacity onPress={() => _onPress(item.id) }>
+      <TouchableOpacity onPress={() => _onPress(item.id, item.name) }>
       <Grid>
         <Col size={7} style={{ flexDirection: 'row' }}>
           <Icon name="laptop" style={styles.item.icon} />
