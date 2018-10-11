@@ -29,7 +29,7 @@ const defaultTime = 10;
 const num_questions_per_medal = 12
 
 import {api} from './../../../api/playTimeApi'
-import {session, getUserData} from './../../../api/session'
+import {session, getBearerTokenCountdownSeconds} from './../../../api/session'
 import { AsyncStorage } from "react-native"
 import Notification from '@components/Notification';
 
@@ -51,11 +51,8 @@ class Quizz extends Component {
             seconds: defaultTime,
             skippedQuestions: [],
             timerVisibility: true,
-            currentSecond: defaultTime,
-            secondsInCountdown: defaultTime,
             // optionIndex: 0, 
             currentIndex: 0,
-            randomText: "Estado desde quizz",
             showSuccessNotification: false,
             showErrorNotification: false, 
             retro: "",
@@ -82,9 +79,6 @@ class Quizz extends Component {
     };
 
     componentDidMount() {
-        setTimeout(() => {
-            this.setState({showErrorNotification: true})
-        }, 6000)
         this.initialize();
     }
 
@@ -96,7 +90,7 @@ class Quizz extends Component {
 
     showErrorNotification = () => {
         this.setState({ showErrorNotification: false, showSuccessNotification: false }, () => {
-            this.setState({ showErrorNotification: true, showErrorNotification: false })
+            this.setState({ showErrorNotification: true, showSuccessNotification: false })
         })
     }
 
@@ -120,12 +114,6 @@ class Quizz extends Component {
             ],
             { cancelable: false }
         )
-    }
-
-    _onTimeElapsed = () => {
-        this.setState({ seconds: 25 }, () => /*this.setState({ seconds: defaultTime })*/ console.log('') )
-        console.log("Se terminó el tiempo onTimeElapsed", "Reiniciando la cuenta regresiva")
-        // this.showAlert()
     }
 
     init = false
@@ -164,56 +152,15 @@ class Quizz extends Component {
         this._continueTimer()
     }
 
-    setCurrentSecond = (seconds) => 
-    {
-        this.setState({
-            seconds: seconds
-        }, () => console.log('El número de segundos actual es:', this.state.seconds))
-    }
-
     restartTimer = () => {
-        this.setState({seconds: 0}, () => { this.setState({ seconds: defaultTime }, 
+        this.setState({seconds: 0}, () => { this.setState({ seconds: this.state.countdownSeconds }, 
                 () => {
-                    console.log('Quizz.js', 'Restarting timer', this.state.seconds)
+                    // console.log('Quizz.js', 'Restarting timer', this.state.seconds)
                 }   
-            ) // end setState defaultTime
+            ) // end setState this.state.countdownSeconds
         })
-    }
-
-    shouldRestartTimer = false;
-
-    setDefaultTime = () => {
-        this.setState({
-            seconds: defaultTime
-        })
-        this.shouldRestartTimer = false;
     }
     
-    intervalTime = false;
-    initCoundown = () => {
-        return true;
-        if( this.shouldRestartTimer ){
-            // this.setDefaultTime();
-            if( ! this.intervalTime ){ // Timer doesn't exist
-                this.setState({seconds: defaultTime}, () => {
-                    this.intervalTime = setInterval(() => {
-                        console.log("Comienza retroceso en setInterval")
-                        prevSeconds = this.state.seconds;
-                        if(prevSeconds > 0){
-                            this.setState({
-                                seconds: prevSeconds -1
-                            })
-                        }else{ // counter is finished
-                            clearTimeout(this.intervalTime);
-                            this.intervalTime = false;
-                        }
-                    }, 1000);
-                })
-            }
-            this.shouldRestartTimer = false;
-        }
-    }
-
     render() {
         const navigation = this.props.navigation;
         if(!this.init){
@@ -221,13 +168,32 @@ class Quizz extends Component {
             this.loadData();
         }
         if(this.state.ready){
+            let notification;
+            if(this.state.showSuccessNotification){
+                notification = <Notification
+                    message="¡Respuesta correcta!"
+                    // buttonText="_"
+                    duration={defaultNotificationTime}
+                    position="bottom"
+                    type="success"
+                  />
+            }
+            if(this.state.showErrorNotification){
+                console.log("Mostrando notificación de error");
+                notification = <Notification
+                    message={this.state.retro}
+                    // buttonText="_"
+                    duration={defaultNotificationTime}
+                    position="bottom"
+                    type="danger"
+                />
+            }
             return (
             <Container>
                 <ImageBackground
                 source={require('@assets/images/header-bg.png')}
                 style={styles.background}>
                 { /* Inicia Appheader */ }
-
                 <View>
                     <Header transparent hasTabs>
                         <Left style={{ flex: 1 }}>
@@ -237,6 +203,7 @@ class Quizz extends Component {
                             {
                                 // this.state.timerVisibility 
                                 // ? 
+                                this.state.timerVisibility &&
                                     <CountdownCircle
                                       seconds={this.state.seconds}
                                       radius={25}
@@ -324,24 +291,7 @@ class Quizz extends Component {
                     onPress={ this._askToEndQuizz }>
                     <Icon type="Ionicons" name="exit" />
                 </Fab>
-                {this.state.showErrorNotification && (
-                  <Notification
-                    message={this.state.retro}
-                    // buttonText="_"
-                    duration={defaultNotificationTime}
-                    position="bottom"
-                    type="danger"
-                  />
-                )}
-                {this.state.showSuccessNotification && (
-                  <Notification
-                    message="¡Respuesta correcta!"
-                    // buttonText="_"
-                    duration={defaultNotificationTime}
-                    position="bottom"
-                    type="success"
-                  />
-                )}
+                {notification}
                 </ImageBackground>
             </Container>
             );
@@ -350,9 +300,42 @@ class Quizz extends Component {
         }
     }
 
+    turnOffCountdownTimer = () => {
+        this.setState({ seconds: 0 });
+    }
+
+    getSessionStats = (session, numQuestions, courseId) => {
+        var data = JSON.stringify({
+            session: session,
+            num_questions_given: numQuestions,
+            course_id: courseId
+        })
+        // console.warn(this.props)
+        fetch(api.getSessionStats, {
+            method: 'POST',
+            headers: {
+                "Authorization": 'Bearer ' + this.state.bearerToken,
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: data
+        }).then(
+            // Enviando retroalimentación
+            response => {
+                // console.log('Quizz handleNextAnswer Response before json', response)
+                return response.json();
+                console.log("Retro")
+            }
+        ).then(
+            jsonResponse => console.log(jsonResponse)
+        ).catch(error => {
+            console.log("Error en la función getSessionStats", error);
+            console.log(data, api.getSessionStats);
+        });
+    }
+
     handleNextAnswer = () => {
-        console.log('Quizz.js ejecutando handelNextAnswer')
-        // this.setState({ seconds: defaultTime }, () => {
+        // this.setState({ seconds: this.state.countdownSeconds }, () => {
         //         console.log('Segundos establecidos', this.state.seconds)
         currentIndex = this.state.index
         currentIndex++
@@ -363,30 +346,9 @@ class Quizz extends Component {
             })
             // console.warn('Ya no existen más preguntas')
 
-            var data = JSON.stringify({
-                session: this.props.session,
-            })
-            fetch(api.getSessionStats, {
-                method: 'POST',
-                headers: {
-                    "Authorization": 'Bearer ' + this.state.bearerToken,
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: data
-            }).then(
-                // Enviando retroalimentación
-                response => {
-                    console.log('Quizz handleNextAnswer Response before json', response)
-                    return response.json();
-                    console.log("Retro")
-                }
-            ).then(
-                jsonResponse => console.log(jsonResponse)
-            ).catch(error => {
-                console.log("Error en la función handleNextAnswer", error);
-                console.log(data, api.getSessionStats);
-            });
+            this.getSessionStats(this.state.session, this.state.maxIndex, this.props.navigation.state.params.courseId)
+            
+            
 
             // this.goToResults()
         }else{
@@ -395,7 +357,7 @@ class Quizz extends Component {
             this.setState({
                 index : currentIndex,
                 currentQuestion: newQuestion,
-                // seconds: defaultTime,
+                // seconds: this.state.countdownSeconds,
             })
         }
         this.restartTimer()
@@ -438,7 +400,7 @@ class Quizz extends Component {
                 console.log("Retro")
             }
         ).then(
-            // jsonResponse => console.log(jsonResponse)
+            jsonResponse => console.log(jsonResponse)
         ).catch(error => {
             console.log("error")
         });
@@ -481,7 +443,7 @@ class Quizz extends Component {
             hits = this.state.hits;
             hits++;
             this.setState({
-                hits: hits
+                hits
             }, () => {
                 if(this.state.hits > this.state.maxHits){
                     this.setState({
@@ -494,23 +456,13 @@ class Quizz extends Component {
             this.next = true;
             setTimeout(() => {
                 if(this.next){
-                    console.log('Quizz.js invocando handelNextAnswer')
                     this.handleNextAnswer()
                     this.next = false;
-                }else{
-                    console.log('Quizz.js no invocado handelNextAnswer')
                 }
             }, defaultDelayToShowQuestion)
-            // Alert.alert(
-            //     '¡Acertaste!',
-            //     'Respuesta correcta',
-            //     [
-            //         {text: 'Terminar', onPress: () => this._goToResults() , style: 'cancel'},
-            //         {text: 'Siguiente', onPress: () => this.handleNextAnswer(), style: 'default' },
-            //     ]
-            // )
         }else{
             this.setState({retro: this.state.currentQuestion.feedback, hits: 0}, () => {
+                // console.log('Estableciendo la retroalimentación en: ', this.state.retro)
                 this.showErrorNotification()
                 this.next = true
                 setTimeout(() => {
@@ -534,8 +486,8 @@ class Quizz extends Component {
     next = false;
 
     loadData = async () => {
-        getUserData().then(
-            (userData) => {this.setState({bearerToken: userData.bearerToken, bearerReady: true, userData: userData}, 
+        getBearerTokenCountdownSeconds().then(
+            (data) => {this.setState({bearerToken: data.bearerToken, bearerReady: true, countdownSeconds: data.countdownSeconds, seconds: data.countdownSeconds}, 
                     ()=>{
                         url = api.getQuestions(this.props.navigation.state.params.courseId);
                         fetch(url, { 
