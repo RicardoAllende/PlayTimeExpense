@@ -50,12 +50,15 @@ class Walkthrough extends Component {
             style={styles.slide.btnWrapper}>
             <Text style={styles.slide.btnText}>Jugar</Text>
           </Button>
-          <Button
-            transparent
-            onPress={() => this._goToCourse(item.id)}
-            style={styles.slide.btnWrapper}>
-            <Text style={styles.slide.btnText}>Información del curso</Text>
-          </Button>
+          {
+            item.id != -1 &&
+            <Button
+              transparent
+              onPress={() => this._goToCourseOverview(item.id)}
+              style={styles.slide.btnWrapper}>
+              <Text style={styles.slide.btnText}>Información del curso</Text>
+            </Button>
+          }
         </View>
       </Card>
     );
@@ -63,6 +66,12 @@ class Walkthrough extends Component {
 
   _goToCourse = (courseId) => {
     this.props.navigation.navigate('Quizz', {
+      courseId: courseId
+    })
+  }
+
+  _goToCourseOverview = (courseId) => {
+    this.props.navigation.navigate('CourseOverview', {
       courseId: courseId
     })
   }

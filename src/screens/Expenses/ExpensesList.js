@@ -54,7 +54,7 @@ class ExpensesList extends Component {
                   style={styles.swipeBtn}
                   onPress={
                     () => this.props.navigation.navigate('Quizz', {
-                      courseId: courseId
+                      courseId: item.id
                     })
                   }>
                   <Icon active name="ios-play" style={{ fontSize: 35 }} />

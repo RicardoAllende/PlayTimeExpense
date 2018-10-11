@@ -34,7 +34,8 @@ export const api = {
         return app_url + 'courses/' + course_id + '/overview'
     },
     getCompleteRanking: app_url + 'ranking',
-    setMedalQuestions: (course_id) => {
-        return app_url + 'courses/' + course_id + '/achievements/save/medal'
-    }
+    getSessionStats: app_url + 'sessions/results', // POST 
+    setHitsInCourse: (course_id) => {
+        return app_url + 'courses/' + course_id + '/achievements/set-hits'
+    },
 }

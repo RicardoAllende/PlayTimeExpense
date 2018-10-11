@@ -33,8 +33,9 @@ import {session, getUserData} from './../../../api/session'
 import { AsyncStorage } from "react-native"
 import Notification from '@components/Notification';
 
-
-const defaultNotificationTime = 5000 // 5 seconds
+const logo = require('@assets/images/header-logo.png');
+const defaultNotificationTime = 1200 // 1000 equals a second
+const defaultDelayToShowQuestion = defaultNotificationTime + 0
 
 class Quizz extends Component {
 
@@ -55,8 +56,11 @@ class Quizz extends Component {
             // optionIndex: 0, 
             currentIndex: 0,
             randomText: "Estado desde quizz",
-            showSuccessNotification: true,
-            showErrorNotification: false
+            showSuccessNotification: false,
+            showErrorNotification: false, 
+            retro: "",
+            hits: 0,
+            maxHits: 0,
         }
     }
 
@@ -78,7 +82,22 @@ class Quizz extends Component {
     };
 
     componentDidMount() {
+        setTimeout(() => {
+            this.setState({showErrorNotification: true})
+        }, 6000)
         this.initialize();
+    }
+
+    showSuccessNotification = () => {
+        this.setState({ showSuccessNotification: false, showErrorNotification: false }, () => {
+            this.setState({ showSuccessNotification: true, showErrorNotification: false })
+        })
+    }
+
+    showErrorNotification = () => {
+        this.setState({ showErrorNotification: false, showSuccessNotification: false }, () => {
+            this.setState({ showErrorNotification: true, showErrorNotification: false })
+        })
     }
 
     initialize = () => {
@@ -106,7 +125,6 @@ class Quizz extends Component {
     _onTimeElapsed = () => {
         this.setState({ seconds: 25 }, () => /*this.setState({ seconds: defaultTime })*/ console.log('') )
         console.log("Se terminó el tiempo onTimeElapsed", "Reiniciando la cuenta regresiva")
-        // this.setState({ timerVisibility: false });
         // this.showAlert()
     }
 
@@ -114,7 +132,6 @@ class Quizz extends Component {
 
     _askToEndQuizz = () => {
         // console.log("Función para finalizar el curso")
-        // this._pauseTimer();
         Alert.alert(
             '¿Desea terminar intento?',
             '¿Desea terminar el intento actual?',
@@ -127,13 +144,6 @@ class Quizz extends Component {
         )
     }
 
-    _pauseTimer = () => {
-        this.setState({ timerVisibility: false });
-    }
-
-    _continueTimer = () => {
-        this.setState({ seconds: this.state.seconds, timerVisibility: true })
-    }
 
     _goToResults = () => {
         console.log("Yendo a los resultados del curso")
@@ -224,15 +234,26 @@ class Quizz extends Component {
                             <HeaderDrawerButton navigation={navigation} />
                         </Left>
                         <Body style={{ flex: 1, alignItems: 'center' }}>
-                            <CountdownCircle
-                              seconds={this.state.seconds}
-                              radius={25}
-                              borderWidth={8}
-                              color="#ff003f"
-                              bgColor="#fff"
-                              textStyle={{ fontSize: 20 }}
-                              onTimeElapsed={ this.handleNextAnswerByTime }
-                            />
+                            {
+                                // this.state.timerVisibility 
+                                // ? 
+                                    <CountdownCircle
+                                      seconds={this.state.seconds}
+                                      radius={25}
+                                      borderWidth={8}
+                                      color="#ff003f"
+                                      bgColor="#fff"
+                                      textStyle={{ fontSize: 20 }}
+                                      onTimeElapsed={ this.handleNextAnswerByTime }
+                                    />
+                                // :
+                                // <TouchableOpacity
+                                //     onPress={() => {
+                                //         this.props.navigation.navigate('Expenses');
+                                //     }}>
+                                //     <Image source={logo} style={headerStyles.logo} />
+                                // </TouchableOpacity>
+                            }
                         </Body>
                         <Right style={{ flex: 1 }}>
                             {this.props.displayAvatar && (
@@ -305,9 +326,9 @@ class Quizz extends Component {
                 </Fab>
                 {this.state.showErrorNotification && (
                   <Notification
-                    message="Respuesta correcta"
-                    buttonText="_"
-                    duration={5000}
+                    message={this.state.retro}
+                    // buttonText="_"
+                    duration={defaultNotificationTime}
                     position="bottom"
                     type="danger"
                   />
@@ -315,8 +336,8 @@ class Quizz extends Component {
                 {this.state.showSuccessNotification && (
                   <Notification
                     message="¡Respuesta correcta!"
-                    buttonText="_"
-                    duration={5000}
+                    // buttonText="_"
+                    duration={defaultNotificationTime}
                     position="bottom"
                     type="success"
                   />
@@ -330,13 +351,42 @@ class Quizz extends Component {
     }
 
     handleNextAnswer = () => {
+        console.log('Quizz.js ejecutando handelNextAnswer')
         // this.setState({ seconds: defaultTime }, () => {
         //         console.log('Segundos establecidos', this.state.seconds)
         currentIndex = this.state.index
         currentIndex++
         if(currentIndex == this.state.maxIndex){
             ToastAndroid.show("Ya no hay más preguntas", ToastAndroid.SHORT)
-            console.warn('Ya no existen más preguntas')
+            this.setState({
+                timerVisibility: false,
+            })
+            // console.warn('Ya no existen más preguntas')
+
+            var data = JSON.stringify({
+                session: this.props.session,
+            })
+            fetch(api.getSessionStats, {
+                method: 'POST',
+                headers: {
+                    "Authorization": 'Bearer ' + this.state.bearerToken,
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: data
+            }).then(
+                // Enviando retroalimentación
+                response => {
+                    return response.json();
+                    console.log("Retro")
+                }
+            ).then(
+                jsonResponse => console.log(jsonResponse)
+            ).catch(error => {
+                console.log("Error en la función handleNextAnswer", error);
+                console.log(data, api.getSessionStats);
+            });
+
             // this.goToResults()
         }else{
             // ToastAndroid.show("Cambio a siguiente pregunta", ToastAndroid.SHORT)
@@ -353,40 +403,44 @@ class Quizz extends Component {
     }
 
     handleNextAnswerByTime = () => {
-        currentQuestion = this.state.currentQuestion;
-        skippedQuestions = this.state.skippedQuestions;
-        skippedQuestions.push(currentQuestion);
-        this.setState({
-            skippedQuestions
-        }, () => {
-            console.log('Quizz.js', 'skippedQuestions', this.state.skippedQuestions.length)
-            this.handleNextAnswer()
-        })
+        if(this.state.timerVisibility){
+            currentQuestion = this.state.currentQuestion;
+            skippedQuestions = this.state.skippedQuestions;
+            skippedQuestions.push(currentQuestion);
+            this.setState({
+                skippedQuestions
+            }, () => {
+                console.log('Quizz.js', 'skippedQuestions', this.state.skippedQuestions.length)
+                this.handleNextAnswer()
+            })
+        }
     }
 
-    _deliverMedalQuestions = () => {
-        uri = api.setMedalQuestions(this.props.courseId);
-        // console.warn(uri);po
-        fetch(uri, {
-                method: 'POST',
-                headers: {
-                    "Authorization": 'Bearer ' + this.props.navigation.state.params.bearerToken,
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: data
-            }
-        ).then(
+    sendMaxHits = (maxHits, courseId) => {
+        url = api.setHitsInCourse(courseId);
+        console.log("Quizz sendMaxHits: maxHits", maxHits, ' -- Course_id', courseId, ' Url', url)
+        var data = JSON.stringify({
+            max_hits: maxHits,
+        })
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                "Authorization": 'Bearer ' + this.state.bearerToken,
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: data
+        }).then(
             // Enviando retroalimentación
             response => {
-                // console.log(response)
+                return response.json();
+                console.log("Retro")
             }
-            ).catch(error => {
-                // console.log(error)
-            }
-        );
-                
-        // console.warn('Delivering 10 questions medal');
+        ).then(
+            // jsonResponse => console.log(jsonResponse)
+        ).catch(error => {
+            console.log("error")
+        });
     }
 
     gradeAnswer = (questionId, optionId, is_correct) => {
@@ -399,6 +453,7 @@ class Quizz extends Component {
         var data = JSON.stringify({
                 question_id: questionId,
                 option_id: optionId,
+                course_id: this.props.navigation.state.params.courseId,
                 session: this.state.session,
             })
         fetch(api.sendAnswers, {
@@ -418,39 +473,63 @@ class Quizz extends Component {
         ).then(
             // jsonResponse => console.log(jsonResponse)
         ).catch(error => {
-            console.log("error")
+            console.log("error grade Answer")
         });
 
         if(is_correct){
-            correctas = this.state.corrects;
-            correctas ++;
-            if(correctas == num_questions_per_medal){
-                this._deliverMedalQuestions(this.props.courseId)
-                correctas = 0;
-            }
+            hits = this.state.hits;
+            hits++;
             this.setState({
-                corrects : correctas,
-                // seconds: defaultTime,
+                hits: hits
+            }, () => {
+                if(this.state.hits > this.state.maxHits){
+                    this.setState({
+                        maxHits: hits
+                    })
+                    this.sendMaxHits(hits, this.props.navigation.state.params.courseId);
+                }
             })
-            Alert.alert(
-                '¡Acertaste!',
-                'Respuesta correcta',
-                [
-                    {text: 'Terminar', onPress: () => this._goToResults() , style: 'cancel'},
-                    {text: 'Siguiente', onPress: () => this.handleNextAnswer(), style: 'default' },
-                ]
-            )
+            this.showSuccessNotification()
+            this.next = true;
+            setTimeout(() => {
+                if(this.next){
+                    console.log('Quizz.js invocando handelNextAnswer')
+                    this.handleNextAnswer()
+                    this.next = false;
+                }else{
+                    console.log('Quizz.js no invocado handelNextAnswer')
+                }
+            }, defaultDelayToShowQuestion)
+            // Alert.alert(
+            //     '¡Acertaste!',
+            //     'Respuesta correcta',
+            //     [
+            //         {text: 'Terminar', onPress: () => this._goToResults() , style: 'cancel'},
+            //         {text: 'Siguiente', onPress: () => this.handleNextAnswer(), style: 'default' },
+            //     ]
+            // )
         }else{
-            Alert.alert(
-                this.state.currentQuestion.feedback,
-                '¿Deseas continuar?',
-                [
-                    {text: 'Terminar', onPress: () => this._goToResults() , style: 'cancel'},
-                    {text: 'Siguiente', onPress: () => this.handleNextAnswer(), style: 'default' },
-                ]
-            )
+            this.setState({retro: this.state.currentQuestion.feedback})
+            this.showErrorNotification()
+            this.next = true
+            setTimeout(() => {
+                if(this.next){
+                    this.handleNextAnswer()
+                    this.next = false;
+                }
+            }, defaultDelayToShowQuestion)
+            // Alert.alert(
+            //     this.state.currentQuestion.feedback,
+            //     '¿Deseas continuar?',
+            //     [
+            //         {text: 'Terminar', onPress: () => this._goToResults() , style: 'cancel'},
+            //         {text: 'Siguiente', onPress: () => this.handleNextAnswer(), style: 'default' },
+            //     ]
+            // )
         }
     }
+
+    next = false;
 
     loadData = async () => {
         getUserData().then(
@@ -471,8 +550,7 @@ class Quizz extends Component {
                                 questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length, 
                                 currentQuestion: response.data.questions[0], ready: true}, 
                                 ()=>{
-                                    this.shouldRestartTimer = true;
-                                    this.initCoundown();
+                                    console.log('');
                                 }
                             )
                         }

@@ -76,6 +76,7 @@ class CourseCharts extends Component {
           // () => { // BearerToken ready
           console.log("Loading questions");
           url = api.getCourseOverView(this.props.navigation.state.params.courseId);
+          // console.log(url)
           // console.log(this.state.bearerToken, url);
             fetch(url, { 
                 method: 'GET', 
@@ -89,6 +90,7 @@ class CourseCharts extends Component {
             .then((jsonResponse) => {
                 // console.log(jsonResponse)
                 // return
+                // console.log(jsonResponse)
                 this.setState({
                     usersRanking: jsonResponse.data.ranking.users, times: jsonResponse.data.ranking.times, 
                     medalRanking: jsonResponse.data.medal_ranking, advance: jsonResponse.data.advance, 

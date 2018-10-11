@@ -47,6 +47,7 @@ class CourseRanking extends Component {
           })
           .then((response) => response.json())
           .then((jsonResponse) => {
+              console.log('CourseRanking.js cargando Overview')
               this.setState({
                   ranking: jsonResponse.data.ranking.users, times: jsonResponse.data.ranking.times, 
                   medals: jsonResponse.data.medal_ranking, ready: true

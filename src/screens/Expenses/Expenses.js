@@ -149,6 +149,7 @@ class Expenses extends Component {
               this.state.courses.length > 0 && (
                 <ExpensesList
                   expensesList={this.state.courses}
+                  navigation={navigation}
                   handleDelete={deleteExpense}
                   _onPress={
                     (courseId, courseName) => navigation.navigate('CourseOverview', {
