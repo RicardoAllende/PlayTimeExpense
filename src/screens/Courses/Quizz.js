@@ -377,6 +377,7 @@ class Quizz extends Component {
             }).then(
                 // Enviando retroalimentación
                 response => {
+                    console.log('Quizz handleNextAnswer Response before json', response)
                     return response.json();
                     console.log("Retro")
                 }
@@ -509,15 +510,16 @@ class Quizz extends Component {
             //     ]
             // )
         }else{
-            this.setState({retro: this.state.currentQuestion.feedback})
-            this.showErrorNotification()
-            this.next = true
-            setTimeout(() => {
-                if(this.next){
-                    this.handleNextAnswer()
-                    this.next = false;
-                }
-            }, defaultDelayToShowQuestion)
+            this.setState({retro: this.state.currentQuestion.feedback, hits: 0}, () => {
+                this.showErrorNotification()
+                this.next = true
+                setTimeout(() => {
+                    if(this.next){
+                        this.handleNextAnswer()
+                        this.next = false;
+                    }
+                }, defaultDelayToShowQuestion)
+            })
             // Alert.alert(
             //     this.state.currentQuestion.feedback,
             //     '¿Deseas continuar?',

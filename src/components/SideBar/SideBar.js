@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, TouchableOpacity } from 'react-native';
+import { FlatList, TouchableOpacity, AsyncStorage } from 'react-native';
 import { DrawerActions } from 'react-navigation';
 import {
   Container,
@@ -22,7 +22,7 @@ class SideBar extends Component {
     selected: '',
   };
   onPressItem = route => {
-    if(route == 'SingIn'){
+    if(route == 'SignIn'){
       session.unsetBearerToken()
     }
     this.setState(() => ({
