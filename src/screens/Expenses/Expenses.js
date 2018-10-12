@@ -127,8 +127,7 @@ class Expenses extends Component {
           style={styles.container}>
           <AppHeader
             navigation={navigation}
-            title={this.state.headerTitle}
-            titleSuffix={this.state.headerTitleSuffix}
+            title="Mis cursos"
           />
           <Content
             showsVerticalScrollIndicator={false}

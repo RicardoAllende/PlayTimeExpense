@@ -1,3 +1,4 @@
+// Creación de drawer
 import React from 'react';
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
 import SignUp from '@screens/SignUp/';
@@ -17,6 +18,7 @@ import Profile from '@screens/Profile';
 import Quizz from '@screens/Courses/Quizz'
 import Ranking from '@screens/Ranking'
 import CourseOverView from '@screens/CourseOverview'
+import SessionResults from '@screens/Courses/SessionResults'
 
 const Drawer = createDrawerNavigator(
   {
@@ -31,6 +33,7 @@ const Drawer = createDrawerNavigator(
     Quizz: { screen: Quizz },
     Ranking: { screen: Ranking },
     CourseOverview: { screen: CourseOverView },
+    SessionResults: { screen: SessionResults },
   },
   {
     initialRouteName: 'Expenses',

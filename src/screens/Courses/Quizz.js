@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, ImageBackground, Alert, ToastAndroid, Image } from 'react-native';
+import { FlatList, ImageBackground, Alert, ToastAndroid, Image, BackHandler } from 'react-native';
 import { Asset, AppLoading, Font } from 'expo';
 import {
   Container, Content, Fab, Icon,  Text,  View,  Spinner, TouchableOpacity, Left, Right, Thumbnail, Body, Button, Header
@@ -79,7 +79,18 @@ class Quizz extends Component {
     };
 
     componentDidMount() {
-        this.initialize();
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+    }
+
+    handleBackPress = () => {
+        console.warn('Botón atrás presionado');
+        return true;
+        this.goBack(); // works best when the goBack is async
+        return true;
     }
 
     showSuccessNotification = () => {
@@ -288,7 +299,7 @@ class Quizz extends Component {
                     containerStyle={{}}
                     style={{ backgroundColor: theme.brandPrimary }}
                     position="bottomRight"
-                    onPress={ this._askToEndQuizz }>
+                    onPress={ this.goToSessionScreen }>
                     <Icon type="Ionicons" name="exit" />
                 </Fab>
                 {notification}
@@ -302,6 +313,15 @@ class Quizz extends Component {
 
     turnOffCountdownTimer = () => {
         this.setState({ seconds: 0 });
+    }
+
+    goToSessionScreen = () => {
+        // this.getSessionStats(this.state.session, this.state.maxIndex, this.props.navigation.state.params.courseId)
+        this.props.navigation.navigate('SessionResults', {
+            session: this.state.session,
+            num_questions_given: this.state.maxIndex,
+            course_id: this.props.navigation.state.params.courseId,
+        });
     }
 
     getSessionStats = (session, numQuestions, courseId) => {
