@@ -4,13 +4,21 @@ import { View } from 'native-base';
 import { Dimensions } from 'react-native';
 const deviceWidth = Dimensions.get('window').width;
 
-import categoryColors from '@theme/categoryColors';
+// import categoryColors from '@theme/categoryColors';
+const brandSuccess = '#50D2C2';
+const brandDanger = '#F25A55';
+const categoryColors = [
+  brandDanger,
+  brandSuccess,
+]
+
 
 const theme = {
   pie: {
-    colorScale: categoryColors,
+    colorScale: categoryColors
   },
 };
+
 
 class PieChart extends PureComponent {
   render() {

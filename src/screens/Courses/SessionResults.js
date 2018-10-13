@@ -1,222 +1,242 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, ImageBackground, Alert, ToastAndroid, Image, BackHandler } from 'react-native';
-import { Asset, AppLoading, Font } from 'expo';
-import {
-  Container, Content, Fab, Icon,  Text,  View,  Spinner, TouchableOpacity, Left, Right, Thumbnail, Body, Button, Header
-} from 'native-base';
-
-import HeaderDrawerButton from '../../components/AppHeader/HeaderDrawerButton';
-const avatar = require('@assets/images/avatar1.png');
-import CountdownCircle from 'react-native-countdown-circle'
-
+import { ImageBackground } from 'react-native';
+import { Container, Tabs, Tab, Spinner, View, Text } from 'native-base';
 import { connect } from 'react-redux';
-import { formatAmount } from '@utils/formatters';
+import moment from 'moment/moment';
 
+import CourseCarousel from '../CourseOverview/CourseCarousel';
 import AppHeader from '@components/AppHeader';
-import Option from './Option';
-import categoryColors from '@theme/categoryColors';
-
 import * as actions from './behaviors';
 import * as categoriesSelectors from './selectors';
-
-import styles from './styles';
-import headerStyles from '@components/AppHeader/styles'
 import theme from '@theme/variables/myexpense';
-
-const url = "http://192.168.0.111:8000/categories"
-const defaultTime = 10;
-const num_questions_per_medal = 12
-
-import {api} from './../../../api/playTimeApi'
-import {session, getBearerToken} from './../../../api/session'
 import { AsyncStorage } from "react-native"
-import Notification from '@components/Notification';
+import {api} from './../../../api/playTimeApi'
+import {session, getUserData} from './../../../api/session'
+import ExpensesList from '../CourseOverview/ExpensesList'
+import {
+  getFormattedCurrentWeek,
+  getFormattedCurrentMonth,
+} from '@utils/formatters';
+import Ranking from '../CourseOverview/Ranking'
 
-const logo = require('@assets/images/header-logo.png');
-const defaultNotificationTime = 1200 // 1000 equals a second
-const defaultDelayToShowQuestion = defaultNotificationTime + 0
+import chartStyles from './chartStyles';
 
-class SessionResults extends Component {
+class CourseCharts extends Component {
+  static propTypes = {
+    navigation: PropTypes.any,
+    getCategories: PropTypes.func.isRequired,
+    categoriesLoading: PropTypes.bool.isRequired,
+    categoriesError: PropTypes.bool.isRequired,
+    categories: PropTypes.array,
+  };
 
-    constructor(props){
-        super(props)
-        this.state = {
-          coursesLoading: false,
-          courses: [],
-            ready: false,
-            categories: [],
-            corrects: 0,
-            answers: 0,
-            questions: [],
-            currentQuestion: false,
-            seconds: defaultTime,
-            skippedQuestions: [],
-            timerVisibility: true,
-            // optionIndex: 0, 
-            currentIndex: 0,
-            showSuccessNotification: false,
-            showErrorNotification: false, 
-            retro: "",
-            hits: 0,
-            maxHits: 0,
-        }
+  static defaultProps = {
+    categoriesLoading: false,
+    categoriesError: false,
+    categories: [],
+  };
+
+  state = {
+    currentPeriod: getFormattedCurrentWeek(),
+    showPieChart: false,
+    ready: false,
+  };
+
+  componentDidMount() {
+    this.initialize();
+  }
+
+  initialize = () => {
+    this.props.getCategories();
+  };
+
+  switchPeriod(i) {
+    let period = '';
+    switch (i) {
+      case 0:
+        period = getFormattedCurrentWeek();
+        break;
+      case 1:
+        period = getFormattedCurrentMonth();
+        break;
+      case 2:
+        period = moment().format('YYYY');
+        break;
     }
 
-    optionIndex = 0
+    this.setState({ currentPeriod: period });
+  }
 
-    static defaultProps = {
-        categoriesLoading: false,
-        categoriesError: false,
-        categories: [],
-    };
-
-    componentDidMount() {
-        this.loadData()
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
-    }
-
-    componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
-    }
-
-    handleBackPress = () => {
-        console.warn('Botón atrás presionado');
-        return true;
-        this.goBack(); // works best when the goBack is async
-        return true;
-    }
-
-    
-    render() {
-      // console.warn(this.props.navigation.state.params)
-      if(this.state.ready) {
-        console.warn(this.state)
-      }
-      // if( ! this.init ){
-      //   this.loadCourses();
-      //   this.init = true;
-      // }
-      const { navigation, expenses, deleteExpense, expensesLoading } = this.props;
-      return (
-        <Container>
-          <ImageBackground
-            source={require('@assets/images/header-bg.png')}
-            style={styles.background}>
-            <AppHeader
-              navigation={navigation}
-              title="Mis cursos"
-            />
-            <Content
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ flex: 1 }}
-              style={styles.content}>
-              {this.state.coursesLoading && (
-                <View style={styles.emptyContainer}>
-                  <Spinner color={theme.brandPrimary} />
-                </View>
-              )}
-              {!this.state.coursesLoading &&
-                this.state.courses.length === 0 && (
-                  <View style={styles.emptyContainer}>
-                    <Text style={styles.emptyMsg}>No expenses found</Text>
-                  </View>
-                )}
-
-              {this.state.ready && (
-                  <View style={styles.emptyContainer}>
-                    <Text>{ this.state.numAnswers }</Text>
-                    <Text>{ this.state.numQuestionGiven }</Text>
-                    <Text>{ this.state.numCorrectAnswers }</Text>
-                    <Text>{ this.state.finishedInASession }</Text>
-                    <Text>{ this.state.randomMode }</Text>
-                    <Text>{ this.state.courseCompleted }</Text>
-                    <Text>{ this.state.time } segundos</Text>
-
-                  </View>
-                )
-                
-                /**
-                  numAnswers:  jsonResponse.data.num_answers,
-                  numQuestionGiven: jsonResponse.data.num_questions_given,
-                  numCorrectAnswers: jsonResponse.data.num_correct_answers,
-                  finishedInASession: jsonResponse.data.finished_in_a_session,
-                  randomMode: jsonResponse.data.random_mode,
-                  courseCompleted: jsonResponse.data.course_completed, // Time is returned in seconds
-                  time: jsonResponse.data.time,
-                  ready: ready,
-                 */
+  loadData = () => {
+    console.log('CourseCharts.js Cargando preguntas')
+    getUserData().then(
+      (userData) => {
+        this.setState({ bearerToken: userData.bearerToken, bearerReady: true, userData: userData }, () => {
+          // () => { // BearerToken ready
+          console.log("Loading questions");
+          url = api.getCourseOverView(this.props.navigation.state.params.courseId);
+          // console.log(url)
+          // console.log(this.state.bearerToken, url);
+            fetch(url, { 
+                method: 'GET', 
+                headers: {
+                    "Authorization": 'Bearer ' + this.state.bearerToken,
+                    Accept: 'application/json',
+                    "Content-Type": "application/json"
                 }
-              {!this.state.coursesLoading &&
-                this.state.courses.length > 0 && (
-                  <ExpensesList
-                    expensesList={this.state.courses}
-                    navigation={navigation}
-                    handleDelete={deleteExpense}
-                    _onPress={
-                      (courseId, courseName) => navigation.navigate('CourseOverview', {
-                        courseId: courseId, courseName
-                      })
-                    }
-                  />
-                )}
-              {/* <Fab
-                direction="up"
-                containerStyle={{}}
-                style={{ backgroundColor: theme.brandPrimary }}
-                position="bottomRight"
-                onPress={() => navigation.navigate('NewExpense')}>
-                <Icon type="Feather" name="plus" />
-              </Fab> */}
-            </Content>
-          </ImageBackground>
-        </Container>
-      );
-    }
-
-    loadData = async () => {
-      getBearerToken().then(
-        (bearerToken) => {
-          this.setState({ bearerToken }, () => {
-            url = api.getSessionStats;
-            data = JSON.stringify({
-              session: this.props.navigation.state.params.session,
-              num_questions: this.props.navigation.state.params.num_questions_given,
-              course_id: this.props.navigation.state.params.course_id,
-            });
-            
-            fetch(url, {
-              method: 'POST', 
-              headers: {
-                "Authorization": 'Bearer ' + this.state.bearerToken,
-                Accept: 'application/json',
-                "Content-Type": "application/json"
-              },
-              body: data
-            }).then(
-              response => {
-                return response.json();
-              }
-            ).then(
-              jsonResponse => {
-                console.log(jsonResponse)
+            })
+            .then((response) => response.json())
+            .then((jsonResponse) => {
+                // console.log(jsonResponse)
+                // return
+                // console.log(jsonResponse)
                 this.setState({
-                  numAnswers:  jsonResponse.data.num_answers,
-                  numQuestionGiven: jsonResponse.data.num_questions_given,
-                  numCorrectAnswers: jsonResponse.data.num_correct_answers,
-                  finishedInASession: jsonResponse.data.finished_in_a_session,
-                  randomMode: jsonResponse.data.random_mode,
-                  courseCompleted: jsonResponse.data.course_completed, // Time is returned in seconds
-                  time: jsonResponse.data.time,
-                  ready: true,
-                })
-              }
-            )
+                    usersRanking: jsonResponse.data.ranking.users, times: jsonResponse.data.ranking.times, 
+                    medalRanking: jsonResponse.data.medal_ranking, advance: jsonResponse.data.advance, 
+                    approvalPercentage: jsonResponse.data.pie_chart, medals: jsonResponse.data.medals,
+                    achievements: jsonResponse.data.achievements, totalQuestions: jsonResponse.data.ranking.total_questions, ready: true
+                  }, 
+                  ()=>{
+                      console.log('CoursCharts Carga de elementos terminada')
+                  }
+                )
+            }
+            ).catch((error) => { console.error(error); })
+          // }
+        })
+      }
+    )
+  }
 
-          })
-        }
-      )
-    }
+  componentDidMount(){
+    this.loadData();
+  }
+
+  init = false;
+  render() {
+    // if(! this.init ){
+    //   this.loadData();
+    //   this.init = true;
+    // }
+    // console.log("CourseChart.js Overview")
+    const { navigation, categoriesLoading, categories } = this.props;
+    return (
+      <Container>
+        <ImageBackground
+          source={require('@assets/images/header-bg.png')}
+          style={chartStyles.container}>
+          <AppHeader
+            navigation={this.props.navigation}
+            title={"this.props.navigation.state.params.courseName"}
+            titleSuffix='_'
+          />
+          { ! this.state.ready && (
+            <View style={chartStyles.emptyContainer}>
+              <Spinner color={theme.brandPrimary} />
+            </View>
+          )}
+          {/* { this.state.ready &&
+            categories.length === 0 && (
+              <View style={chartStyles.emptyContainer}>
+                <Text style={chartStyles.emptyMsg}>Error al cargar las estadísticas del curso</Text>
+              </View>
+            )} */}
+
+          { this.state.ready &&(
+              <Tabs
+                tabContainerStyle={{
+                  elevation: 0,
+                }}
+                locked
+                onChangeTab={({ i, ref, from }) =>
+                  this.switchPeriod(i, ref, from)
+                }>
+                <Tab heading="Avance del curso">
+                  <CourseCarousel
+                    categories={categories}
+                    totalQuestions={this.state.totalQuestions}
+                    pieChart
+                    approvalPercentage={this.state.approvalPercentage}
+                    barChart
+                    chashFlowChart
+                    totalQuestions={this.state.totalQuestions}
+                    coursePercentage={this.state.advance}
+                    navigation={navigation}
+                  />
+                </Tab>
+                <Tab heading="Ranking">
+                  <Ranking
+                    gaugeChart
+                    showList
+                    users={this.state.usersRanking}
+                    gaugeData={this.state.advance}
+                    categories={categories}
+                    navigation={navigation}
+                  />
+                </Tab>
+                <Tab heading="Logros">
+                  <CourseCarousel
+                    categories={categories}
+                    navigation={navigation}
+                  />
+                </Tab>
+                <Tab heading="Tiempo">
+                  <CourseCarousel
+                    categories={categories}
+                    navigation={navigation}
+                  />
+                </Tab>
+              </Tabs>
+            )}
+        </ImageBackground>
+      </Container>
+    );
+  }
+
+  loadData = async () => {
+    getBearerToken().then(
+      (bearerToken) => {
+        this.setState({ bearerToken }, () => {
+          url = api.getSessionStats;
+          data = JSON.stringify({
+            session: this.props.navigation.state.params.session,
+            num_questions: this.props.navigation.state.params.num_questions_given,
+            course_id: this.props.navigation.state.params.course_id,
+          });
+          
+          fetch(url, {
+            method: 'POST', 
+            headers: {
+              "Authorization": 'Bearer ' + this.state.bearerToken,
+              Accept: 'application/json',
+              "Content-Type": "application/json"
+            },
+            body: data
+          }).then(
+            response => {
+              return response.json();
+            }
+          ).then(
+            jsonResponse => {
+              console.log(jsonResponse)
+              this.setState({
+                numAnswers:  jsonResponse.data.num_answers,
+                numQuestionGiven: jsonResponse.data.num_questions_given,
+                numCorrectAnswers: jsonResponse.data.num_correct_answers,
+                finishedInASession: jsonResponse.data.finished_in_a_session,
+                randomMode: jsonResponse.data.random_mode,
+                courseCompleted: jsonResponse.data.course_completed, // Time is returned in seconds
+                time: jsonResponse.data.time,
+                ready: true,
+              })
+            }
+          )
+
+        })
+      }
+    )
+  }
 
 }
 
@@ -229,4 +249,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   actions
-)(SessionResults);
+)(CourseCharts);
