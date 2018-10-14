@@ -38,7 +38,7 @@ export class Ranking extends React.Component {
     });
 
     _renderUserList = (item) => {
-      console.log(item)
+      // console.log(item)
       return (<View style={[listStyles.item.content, { borderColor: 'blue', flex: 1, backgroundColor: 'green' }]}>
         <TouchableOpacity onPress={() => _onPressButton(item.name) }>
         <Grid>

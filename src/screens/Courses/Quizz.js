@@ -87,7 +87,9 @@ class Quizz extends Component {
     }
 
     handleBackPress = () => {
-        console.warn('Botón atrás presionado');
+        this.goToSessionScreen();
+        return true;
+        // alert('Botón atrás presionado');
         return true;
         this.goBack(); // works best when the goBack is async
         return true;
@@ -324,6 +326,12 @@ class Quizz extends Component {
         });
     }
 
+    goToCourseOverview = () =>{
+        this.props.navigation.navigation.navigate('CourseOverview', {
+            course_id: this.props.navigation.state.params.courseId,
+        })
+    } 
+
     getSessionStats = (session, numQuestions, courseId) => {
         var data = JSON.stringify({
             session: session,
@@ -364,13 +372,7 @@ class Quizz extends Component {
             this.setState({
                 timerVisibility: false,
             })
-            // console.warn('Ya no existen más preguntas')
-
-            this.getSessionStats(this.state.session, this.state.maxIndex, this.props.navigation.state.params.courseId)
-            
-            
-
-            // this.goToResults()
+            this.goToSessionScreen()
         }else{
             // ToastAndroid.show("Cambio a siguiente pregunta", ToastAndroid.SHORT)
             newQuestion = this.state.questions[currentIndex]
@@ -520,6 +522,9 @@ class Quizz extends Component {
                         })
                         .then((response) => response.json())
                         .then((response) => {
+                            if(response.data.questions.length == 0){
+                                this.goToCourseOverview()
+                            }
                             this.setState( {
                                 questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length, 
                                 currentQuestion: response.data.questions[0], ready: true}, 

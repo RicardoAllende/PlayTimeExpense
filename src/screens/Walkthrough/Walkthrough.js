@@ -75,36 +75,6 @@ class Walkthrough extends Component {
       courseId: courseId
     })
   }
-  
-  loadCourses = () => {
-      // console.warn("Loading questions");
-      // console.log(apiGetCourses);
-      // () => {
-      // if( this.state.isLoggedIn == false ){
-        // console.log('Cargando los cursos con el siguiente token:', this.state.bearerToken)
-          fetch(api.getCourses, { 
-              method: 'GET', 
-              headers: {
-                  "Authorization": 'Bearer ' + this.state.bearerToken,
-                  Accept: 'application/json',
-                  "Content-Type": "application/json"
-              }
-          })
-          .then((response) => response.json())
-          .then((response) => {
-                // console.log(response)
-                this.setState( { courses: response.data.courses, coursesLength: response.data.courses.length - 1, ready: true}, () => {
-                // this.setState({loaded: true});
-                // console.warn(this.state.coursesLength);
-                // jsonResult = this.state.courses
-                // console.log(jsonResult)
-              }) 
-            }
-          ).catch((error) => {
-              console.error(error);
-          })
-      // }
-  }
 
   loadUserData = async() => {
     getUserData().then(

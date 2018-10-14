@@ -95,6 +95,7 @@ class CourseCharts extends Component {
                     usersRanking: jsonResponse.data.ranking.users, times: jsonResponse.data.ranking.times, 
                     medalRanking: jsonResponse.data.medal_ranking, advance: jsonResponse.data.advance, 
                     approvalPercentage: jsonResponse.data.pie_chart, medals: jsonResponse.data.medals,
+                    course: json.data.course,
                     achievements: jsonResponse.data.achievements, totalQuestions: jsonResponse.data.ranking.total_questions, ready: true
                   }, 
                   ()=>{
@@ -128,7 +129,7 @@ class CourseCharts extends Component {
           style={styles.container}>
           <AppHeader
             navigation={this.props.navigation}
-            title={this.props.navigation.state.params.courseName}
+            title={ this.state.course ? this.state.course.name : "_"}
             titleSuffix='_'
           />
           { ! this.state.ready && (

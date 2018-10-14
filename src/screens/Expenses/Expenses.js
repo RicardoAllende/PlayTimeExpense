@@ -16,7 +16,7 @@ import {
   View,
 } from 'native-base';
 import { connect } from 'react-redux';
-import {session, getUserData} from './../../../api/session'
+import {session, getUserData} from '../../../api/session'
 
 import ExpensesList from './ExpensesList';
 import AppHeader from '@components/AppHeader';
@@ -27,7 +27,7 @@ import * as expensesSelectors from './selectors';
 import styles from './styles';
 import theme from '@theme/variables/myexpense';
 
-import {api} from './../../../api/playTimeApi'
+import {api} from '../../../api/playTimeApi'
 import { AsyncStorage } from "react-native"
 
 class Expenses extends Component {
