@@ -20,23 +20,11 @@ import {
 } from '@utils/formatters';
 import Ranking from '../CourseOverview/Ranking'
 
+import PercentageCircle from 'react-native-percentage-circle';
+
 import chartStyles from './chartStyles';
 
 class CourseCharts extends Component {
-  static propTypes = {
-    navigation: PropTypes.any,
-    getCategories: PropTypes.func.isRequired,
-    categoriesLoading: PropTypes.bool.isRequired,
-    categoriesError: PropTypes.bool.isRequired,
-    categories: PropTypes.array,
-  };
-
-  static defaultProps = {
-    categoriesLoading: false,
-    categoriesError: false,
-    categories: [],
-  };
-
   state = {
     currentPeriod: getFormattedCurrentWeek(),
     showPieChart: false,
@@ -155,12 +143,15 @@ class CourseCharts extends Component {
                 <Tab heading="Resultados">
                   <View style={stylesTabView.container}>
                     <Text style={stylesTabView.textDescription} >Usted contestó { this.state.numAnswers } preguntas</Text>
-                    <Text>Total de preguntas restantes en el curso: { this.state.numQuestionsGiven }</Text>
+                    <Text style={stylesTabView.textDescription} >Total de preguntas restantes en el curso: { this.state.numQuestionsGiven }</Text>
                     <Text style={stylesTabView.textDescription} >De las cuales, tuvo { this.state.numCorrectAnswers } correctas</Text>
-                    <Text>{ this.state.finishedInASession ? 'Terminado en una sesión' : 'No terminado' }</Text>
+                    <Text style={stylesTabView.textDescription} >{ this.state.finishedInASession ? 'Terminado en una sesión' : 'No terminado' }</Text>
                     <Text style={stylesTabView.textDescription} >{ this.state.randomMode ? "Se hizo en modo aleatorio" : "Se hizo en modo normal" }</Text>
-                    <Text>{ this.state.courseCompleted ? "El curso está terminado" : "El curso no está terminado" }</Text>
+                    <Text style={stylesTabView.textDescription} >{ this.state.courseCompleted ? "Este curso está terminado" : "Este curso no está terminado" }</Text>
                     <Text style={stylesTabView.textDescription} >Su tiempo fue de: { this.state.time } segundos</Text>
+                    <PercentageCircle style={stylesTabView.percentage} radius={35} percent={50} color={"#3498db"}></PercentageCircle>
+                    <PercentageCircle style={stylesTabView.percentage} radius={35} percent={0} color={"#3498db"}></PercentageCircle>
+
                   </View>
                   {/* <CourseCarousel
                     categories={categories}
@@ -174,18 +165,12 @@ class CourseCharts extends Component {
                     navigation={navigation}
                   /> */}
                 </Tab>
-                <Tab heading="Avance">
+                <Tab heading="Logros en el curso">
                   <Ranking
                     gaugeChart
                     showList
                     users={this.state.usersRanking}
                     gaugeData={this.state.advance}
-                    categories={categories}
-                    navigation={navigation}
-                  />
-                </Tab>
-                <Tab heading="Compartir">
-                  <CourseCarousel
                     categories={categories}
                     navigation={navigation}
                   />
@@ -255,8 +240,11 @@ const stylesTabView = StyleSheet.create({
     fontSize: 16,
     padding: "5%", // default 30
     paddingTop: 0,
-    textAlign: 'center',
+    // textAlign: 'center',
   },
+  percentage: {
+    textAlign: 'center',
+  }
 });
 
 const mapStateToProps = state => ({

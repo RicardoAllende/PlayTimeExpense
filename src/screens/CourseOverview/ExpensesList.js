@@ -24,7 +24,7 @@ class ExpensesList extends Component {
   }
 
   render() {
-    console.log('ExpensesList gaugeData', this.props.expensesList)
+    // console.log('ExpensesList gaugeData', this.props.expensesList)
     const { expensesList } = this.props;
 
     return (

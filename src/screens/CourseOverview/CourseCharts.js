@@ -95,7 +95,7 @@ class CourseCharts extends Component {
                     usersRanking: jsonResponse.data.ranking.users, times: jsonResponse.data.ranking.times, 
                     medalRanking: jsonResponse.data.medal_ranking, advance: jsonResponse.data.advance, 
                     approvalPercentage: jsonResponse.data.pie_chart, medals: jsonResponse.data.medals,
-                    course: json.data.course,
+                    course: jsonResponse.data.course,
                     achievements: jsonResponse.data.achievements, totalQuestions: jsonResponse.data.ranking.total_questions, ready: true
                   }, 
                   ()=>{
