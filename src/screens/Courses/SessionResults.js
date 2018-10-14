@@ -20,9 +20,11 @@ import {
 } from '@utils/formatters';
 import Ranking from '../CourseOverview/Ranking'
 
-import PercentageCircle from 'react-native-percentage-circle';
 
 import chartStyles from './chartStyles';
+
+import PercentageCircle from 'react-native-percentage-circle';
+const brandSuccess = '#50D2C2';
 
 class CourseCharts extends Component {
   state = {
@@ -149,8 +151,8 @@ class CourseCharts extends Component {
                     <Text style={stylesTabView.textDescription} >{ this.state.randomMode ? "Se hizo en modo aleatorio" : "Se hizo en modo normal" }</Text>
                     <Text style={stylesTabView.textDescription} >{ this.state.courseCompleted ? "Este curso está terminado" : "Este curso no está terminado" }</Text>
                     <Text style={stylesTabView.textDescription} >Su tiempo fue de: { this.state.time } segundos</Text>
-                    <PercentageCircle style={stylesTabView.percentage} radius={35} percent={50} color={"#3498db"}></PercentageCircle>
-                    <PercentageCircle style={stylesTabView.percentage} radius={35} percent={0} color={"#3498db"}></PercentageCircle>
+                    <PercentageCircle style={stylesTabView.percentage} radius={35} percent={50} color={brandSuccess}></PercentageCircle>
+                    <PercentageCircle style={stylesTabView.percentage} radius={35} percent={0} color={brandSuccess}></PercentageCircle>
 
                   </View>
                   {/* <CourseCarousel

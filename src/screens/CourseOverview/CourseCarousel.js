@@ -19,6 +19,9 @@ import ExpensesList from './ExpensesList'
 import listStyles from '../../components/ExpenseItem/styles'
 // import { FlatList } from 'react-native-gesture-handler';
 
+import PercentageCircle from 'react-native-percentage-circle';
+const brandSuccess = '#50D2C2';
+
 export class CourseCarousel extends React.Component {
   static propTypes = {
     categories: PropTypes.array,
@@ -98,7 +101,8 @@ export class CourseCarousel extends React.Component {
             this.props.pieChart &&
             <View pointerEvents="none" style={styles.slides}>
               <Text style={styles.chartTitle}>Aprobación del curso en el grupo</Text>
-              <PieChart data={this.props.approvalPercentage} />
+              <PercentageCircle radius={35} percent={this.props.approvalPercentage} color={brandSuccess}></PercentageCircle>              
+              {/* <PieChart data={this.props.approvalPercentage} /> */}
             </View>
           }
           {

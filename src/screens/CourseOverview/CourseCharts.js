@@ -22,6 +22,9 @@ import Ranking from './Ranking'
 
 import styles from './styles';
 
+import PercentageCircle from 'react-native-percentage-circle';
+const brandSuccess = '#50D2C2';
+
 class CourseCharts extends Component {
   static propTypes = {
     navigation: PropTypes.any,
@@ -158,9 +161,9 @@ class CourseCharts extends Component {
                     categories={categories}
                     totalQuestions={this.state.totalQuestions}
                     pieChart
-                    approvalPercentage={this.state.approvalPercentage}
-                    barChart
-                    chashFlowChart
+                    approvalPercentage={this.state.advance}
+                    // barChart
+                    // chashFlowChart
                     totalQuestions={this.state.totalQuestions}
                     coursePercentage={this.state.advance}
                     navigation={navigation}
