@@ -15,7 +15,6 @@ const deviceWidth = Dimensions.get('window').width;
 import {api} from './../../../api/playTimeApi'
 import {session, getUserData} from './../../../api/session'
 import { AsyncStorage } from "react-native"
-import ExpensesList from './ExpensesList'
 import listStyles from '../../components/ExpenseItem/styles'
 // import { FlatList } from 'react-native-gesture-handler';
 

@@ -9,7 +9,7 @@ import categoryColors from '@theme/categoryColors';
 
 import styles from '../Expenses/styles';
 
-class ExpensesList extends Component {
+class RankingList extends Component {
   // static propTypes = {
   //   expensesList: PropTypes.array,
   //   handleDelete: PropTypes.func,
@@ -24,7 +24,7 @@ class ExpensesList extends Component {
   }
 
   render() {
-    // console.log('ExpensesList gaugeData', this.props.expensesList)
+    // console.log('RankingList gaugeData', this.props.expensesList)
     const { expensesList } = this.props;
 
     return (
@@ -37,7 +37,7 @@ class ExpensesList extends Component {
           data={expensesList}
           initialNumToRender={7}
           renderItem={({ item, index }) => 
-          // console.log("ExpensesList.js ", item)
+          // console.log("RankingList.js ", item)
           (
             // console.log(item)
             // return;
@@ -50,7 +50,7 @@ class ExpensesList extends Component {
                   item={item}
                   // style={{}}
                   color={categoryColors[index % categoryColors.length]}
-                  // _onPress={ console.log('Click desde ExpensesList.js ') }
+                  // _onPress={ console.log('Click desde RankingList.js ') }
                 />
               }
               right={
@@ -73,4 +73,4 @@ class ExpensesList extends Component {
   }
 }
 
-export default ExpensesList;
+export default RankingList;

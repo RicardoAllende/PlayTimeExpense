@@ -362,6 +362,46 @@ class Quizz extends Component {
         });
     }
 
+    dropSkippedQuestion = (index) => {
+        skippedQuestions = this.state.skippedQuestions
+        skippedQuestions.shift()
+        this.setState({skippedQuestions})
+        return true;
+    }
+
+    nextSkippedQuestion = () => {
+        skippedQuestions = this.state.skippedQuestions
+        if(skippedQuestions.length == 0){
+            return false;
+        }
+        return skippedQuestions[0]
+    }
+
+    getNextSkippedQuestion = () => {
+        return this.state.skippedQuestions[0];
+        if(this.state.currentIndex == this.state){
+
+        }
+    }
+
+    isSkippedQuestionAvailable = () => {
+        // if(this.state.currentIndex + 1 < this.state.maxIndex){
+        //     return true;
+        // }
+        if(this.state.skippedQuestions.length == 0){
+            return false;
+        }
+        return true;
+    }
+
+    queueSkippedQuestion = () => {
+        skippedQuestions = this.state.skippedQuestions
+        question = skippedQuestions[0]
+        skippedQuestions.shift();
+        skippedQuestions.push(question)
+        this.setState({skippedQuestions})
+    }
+
     handleNextAnswer = () => {
         // this.setState({ seconds: this.state.countdownSeconds }, () => {
         //         console.log('Segundos establecidos', this.state.seconds)
@@ -372,7 +412,16 @@ class Quizz extends Component {
             this.setState({
                 timerVisibility: false,
             })
-            this.goToSessionScreen()
+            if(this.isSkippedQuestionAvailable()){
+                nextQuestion = this.getNextSkippedQuestion()
+                this.showingSkippedQuestions = true;
+                this.setState({
+                    currentQuestion: nextQuestion
+                })
+            }else{
+                this.goToSessionScreen()
+            }
+            
         }else{
             // ToastAndroid.show("Cambio a siguiente pregunta", ToastAndroid.SHORT)
             newQuestion = this.state.questions[currentIndex]
@@ -387,11 +436,16 @@ class Quizz extends Component {
         // );
     }
 
+    showingSkippedQuestions = false
     handleNextAnswerByTime = () => {
         if(this.state.timerVisibility){
-            currentQuestion = this.state.currentQuestion;
-            skippedQuestions = this.state.skippedQuestions;
-            skippedQuestions.push(currentQuestion);
+            if(this.showingSkippedQuestions){
+                this.queueSkippedQuestion();
+            }else{
+                currentQuestion = this.state.currentQuestion;
+                skippedQuestions = this.state.skippedQuestions;
+                skippedQuestions.push(currentQuestion);
+            }
             this.setState({
                 skippedQuestions
             }, () => {

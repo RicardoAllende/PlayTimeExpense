@@ -13,7 +13,6 @@ import theme from '@theme/variables/myexpense';
 import { AsyncStorage } from "react-native"
 import {api} from './../../../api/playTimeApi'
 import {session, getUserData} from './../../../api/session'
-import ExpensesList from './ExpensesList'
 import {
   getFormattedCurrentWeek,
   getFormattedCurrentMonth,
