@@ -75,6 +75,7 @@ export function doLogin(username, password, onLoginSuccess) {
               session.setUserData(jsonResponse.data);
               onLoginSuccess(jsonResponse.data);
             }else{
+              console.log('No se pudo iniciar sesión');
               dispatch({ type: LOGIN_ERROR });
             }
           } catch (error) {

@@ -11,6 +11,9 @@ import Social from './Social';
 import * as profileSelectors from './selectors';
 import styles from './styles';
 
+import {api} from './../../../api/playTimeApi'
+import {session, getBearerToken} from './../../../api/session'
+
 const avatar = require('@assets/images/avatar1.png');
 
 class Profile extends Component {
@@ -18,6 +21,39 @@ class Profile extends Component {
     navigation: PropTypes.any,
     profile: PropTypes.object,
   };
+
+  loadData = async () => {
+    getBearerToken().then(
+        (bearerToken) => {this.setState({bearerToken, bearerReady: true}, 
+                ()=>{
+                    url = api.getQuestions(this.props.navigation.state.params.courseId);
+                    fetch(url, { 
+                        method: 'GET', 
+                        headers: {
+                            "Authorization": 'Bearer ' + this.state.bearerToken,
+                            Accept: 'application/json',
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then((response) => response.json())
+                    .then((response) => {
+                        if(response.data.questions.length == 0){
+                            this.goToCourseOverview()
+                        }
+                        this.setState( {
+                            questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length, 
+                            currentQuestion: response.data.questions[0], ready: true}, 
+                            ()=>{
+                                console.log('');
+                            }
+                        )
+                    }
+                    ).catch((error) => { console.error(error); })
+                }
+            )
+        }
+    );
+  }
 
   render() {
     const { navigation, profile } = this.props;

@@ -192,7 +192,7 @@ class Quizz extends Component {
                   />
             }
             if(this.state.showErrorNotification){
-                console.log("Mostrando notificación de error");
+                // console.log("Mostrando notificación de error");
                 notification = <Notification
                     message={this.state.retro}
                     // buttonText="_"
@@ -394,12 +394,12 @@ class Quizz extends Component {
         return true;
     }
 
-    queueSkippedQuestion = () => {
+    queueSkippedQuestion = (callback) => {
         skippedQuestions = this.state.skippedQuestions
         question = skippedQuestions[0]
         skippedQuestions.shift();
         skippedQuestions.push(question)
-        this.setState({skippedQuestions})
+        this.setState({skippedQuestions}, callback)
     }
 
     handleNextAnswer = () => {
@@ -408,11 +408,12 @@ class Quizz extends Component {
         currentIndex = this.state.index
         currentIndex++
         if(currentIndex == this.state.maxIndex){
-            ToastAndroid.show("Ya no hay más preguntas", ToastAndroid.SHORT)
+            // ToastAndroid.show("Ya no hay más preguntas", ToastAndroid.SHORT)
             this.setState({
                 timerVisibility: false,
             })
             if(this.isSkippedQuestionAvailable()){
+                console.log('Quizz handleNextAnswer showing skipped question')
                 nextQuestion = this.getNextSkippedQuestion()
                 this.showingSkippedQuestions = true;
                 this.setState({
@@ -439,19 +440,19 @@ class Quizz extends Component {
     showingSkippedQuestions = false
     handleNextAnswerByTime = () => {
         if(this.state.timerVisibility){
-            if(this.showingSkippedQuestions){
-                this.queueSkippedQuestion();
+            if(this.showingSkippedQuestions){ // Moving skipped question to the end in the array
+                this.queueSkippedQuestion(this.handleNextAnswer());
             }else{
                 currentQuestion = this.state.currentQuestion;
                 skippedQuestions = this.state.skippedQuestions;
                 skippedQuestions.push(currentQuestion);
+                this.setState({
+                    skippedQuestions
+                }, () => {
+                    console.log('Quizz.js', 'skippedQuestions', this.state.skippedQuestions.length)
+                    this.handleNextAnswer()
+                })
             }
-            this.setState({
-                skippedQuestions
-            }, () => {
-                console.log('Quizz.js', 'skippedQuestions', this.state.skippedQuestions.length)
-                this.handleNextAnswer()
-            })
         }
     }
 

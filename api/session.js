@@ -44,7 +44,7 @@ export const session = {
         AsyncStorage.removeItem(bearerTokenName);
     },
     setUserData: (userData) => {
-        console.log('Session.js, setUserData, userData', userData)
+        // console.log('Session.js, setUserData, userData', userData)
         AsyncStorage.setItem(bearerTokenName, userData.access_token);
         AsyncStorage.setItem(firstnameDataName, userData.firstname)
         AsyncStorage.setItem(lastnameDataName, userData.lastname)
