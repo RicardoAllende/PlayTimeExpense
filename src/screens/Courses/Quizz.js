@@ -584,6 +584,7 @@ class Quizz extends Component {
                                 questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length, 
                                 currentQuestion: response.data.questions[0], ready: true}, 
                                 ()=>{
+                                    console.log('Quizz.js session', this.state.session)
                                     console.log('');
                                 }
                             )

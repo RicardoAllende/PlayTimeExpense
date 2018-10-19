@@ -31,14 +31,6 @@ import {api} from '../../../api/playTimeApi'
 import { AsyncStorage } from "react-native"
 
 class Expenses extends Component {
-  // static propTypes = {
-  //   navigation: PropTypes.any,
-  //   getExpenses: PropTypes.func.isRequired,
-  //   expensesLoading: PropTypes.bool.isRequired,
-  //   expensesError: PropTypes.bool.isRequired,
-  //   expenses: PropTypes.array,
-  //   deleteExpense: PropTypes.func,
-  // };
 
   static defaultProps = {
     expensesLoading: false,
@@ -151,7 +143,7 @@ class Expenses extends Component {
                   navigation={navigation}
                   handleDelete={deleteExpense}
                   _onPress={
-                    (courseId, courseName) => navigation.navigate('CourseOverview', {
+                    (courseId, courseName) => navigation.navigate('Quizz', {
                       courseId: courseId, courseName
                     })
                   }

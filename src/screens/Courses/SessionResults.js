@@ -194,7 +194,7 @@ class CourseCharts extends Component {
             num_questions: this.props.navigation.state.params.num_questions_given,
             course_id: this.props.navigation.state.params.course_id,
           });
-          
+          console.log('SessionResults ', data);
           fetch(url, {
             method: 'POST', 
             headers: {
@@ -259,3 +259,14 @@ export default connect(
   mapStateToProps,
   actions
 )(CourseCharts);
+
+function formatSeconds(seconds){
+  minutes = 0;
+  if(seconds > 59){
+      minutes = parseInt(seconds / 60);
+      seconds = seconds - (minutes * 60);
+  }else{
+      return seconds + " segundos"
+  }
+  return minutes + ':' + seconds + ' minutos';
+}
