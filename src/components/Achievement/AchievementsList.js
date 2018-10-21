@@ -4,12 +4,12 @@ import { FlatList } from 'react-native';
 
 import { View, Button, Icon, SwipeRow } from 'native-base';
 
-import ExpenseItem from '@components/ExpenseItem';
+import AchievementItem from '@components/ExpenseItem/AchievementItem';
 import categoryColors from '@theme/categoryColors';
 
 import styles from './styles';
 
-class ExpensesList extends Component {
+class AchievementsList extends Component {
   // static propTypes = {
   //   expensesList: PropTypes.array,
   //   handleDelete: PropTypes.func,
@@ -24,8 +24,7 @@ class ExpensesList extends Component {
   }
 
   render() {
-    const { expensesList } = this.props;
-
+    console.log('AchievementsList this.props.achievements', this.props.achievements)
     return (
       <View
         showsVerticalScrollIndicator={false}
@@ -33,19 +32,23 @@ class ExpensesList extends Component {
         <FlatList
           horizontal={false}
           showsVerticalScrollIndicator={false}
-          data={expensesList}
+          data={this.props.achievements}
           initialNumToRender={7}
-          renderItem={({ item, index }) => (
+          renderItem={({ item, index }) => 
+          // console.log("AchievementsList.js ", item)
+          (
+            // console.log(item)
+            // return;
             <SwipeRow
               rightOpenValue={-85}
               disableRightSwipe={true}
               style={styles.item.container}
               body={
-                <ExpenseItem
+                <AchievementItem
                   item={item}
-                  style={{}}
+                  // style={{}}
                   color={categoryColors[index % categoryColors.length]}
-                  _onPress={this.props._onPress}
+                  // _onPress={ console.log('Click desde AchievementsList.js ') }
                 />
               }
               right={
@@ -53,20 +56,19 @@ class ExpensesList extends Component {
                   primary
                   style={styles.swipeBtn}
                   onPress={
-                    () => this.props.navigation.navigate('CourseOverview', {
-                      courseId: item.id
-                    })
+                    () => console.log('Tap en elemento')
                   }>
-                  <Icon active name="ios-stats" style={{ fontSize: 35 }} />
+                  <Icon active name="ios-play" style={{ fontSize: 35 }} />
                 </Button>
               }
             />
-          )}
-          keyExtractor={item => "course" + item.id}
+          )
+        }
+          keyExtractor={(item, index) => "course" + index}
         />
       </View>
     );
   }
 }
 
-export default ExpensesList;
+export default AchievementsList;

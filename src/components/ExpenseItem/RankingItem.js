@@ -29,13 +29,10 @@ const RankingItem = ({ item, style, color, _onPress }) => {
       <TouchableOpacity onPress={() => console.log('') }>
       <Grid>
         <Col size={7} style={{ flexDirection: 'row' }}>
-          <Icon name="laptop" style={styles.item.icon} />
+          <Icon name="person" style={styles.item.icon} />
           <View>
             <Text numberOfLines={2} style={styles.item.title}>
               {item.rank + ' ' + item.firstname + ' ' + item.lastname }
-            </Text>
-            <Text numberOfLines={2} style={styles.item.subtitle}>
-              Subtítulo del elemento
             </Text>
           </View>
         </Col>

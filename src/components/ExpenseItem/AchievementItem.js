@@ -4,7 +4,7 @@ import {TouchableOpacity} from 'react-native'
 import { View, Grid, Col, Text, Icon, Item } from 'native-base';
 
 import { formatAmount } from '@utils/formatters';
-import {formatSeconds} from '@api/helpers'
+// import {formatSeconds} from '@api/helpers'
 import styles from './styles';
 import { api } from '../../../api/playTimeApi';
 
@@ -34,7 +34,8 @@ const AchievementItem = ({ item, style, color, _onPress }) => {
           <Icon name="laptop" style={styles.item.icon} />
           <View>
             <Text numberOfLines={2} style={styles.item.title}>
-              {item.rank + ' ' + item.firstname + ' ' + item.lastname }
+              {/* {item.rank + ' ' + item.firstname + ' ' + item.lastname } */}
+              {item.name}
             </Text>
             {/* <Text numberOfLines={2} style={styles.item.subtitle}>
               Subtítulo del elemento
@@ -46,7 +47,7 @@ const AchievementItem = ({ item, style, color, _onPress }) => {
             numberOfLines={2}
             style={ styles.item.incomeAmount }>
             {/* .expenseAmount || .incomeAmount */}
-            { formatSeconds(item.time) }
+            { item.pivot.number }
           </Text>
         </Col>
       </Grid>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ImageBackground, StyleSheet } from 'react-native';
-import { Container, Tabs, Tab, Spinner, View, Text } from 'native-base';
+import { ImageBackground, StyleSheet, ScrollView } from 'react-native';
+import { Container, Tabs, Tab, Spinner, View, Text, Button } from 'native-base';
 import { connect } from 'react-redux';
 import moment from 'moment/moment';
 
@@ -14,6 +14,9 @@ import { AsyncStorage } from "react-native"
 import {api} from './../../../api/playTimeApi'
 import {session, getBearerToken, getUserData} from './../../../api/session'
 import RankingList from '../CourseOverview/RankingList'
+
+import AchievementsList from '@components/Achievement/AchievementsList'
+
 import {
   getFormattedCurrentWeek,
   getFormattedCurrentMonth,
@@ -24,6 +27,7 @@ import Ranking from '../CourseOverview/Ranking'
 import chartStyles from './chartStyles';
 
 import PercentageCircle from 'react-native-percentage-circle';
+import styles from './styles';
 const brandSuccess = '#50D2C2';
 
 class CourseCharts extends Component {
@@ -56,47 +60,6 @@ class CourseCharts extends Component {
     }
 
     this.setState({ currentPeriod: period });
-  }
-
-  loadData = () => {
-    console.log('CourseCharts.js Cargando preguntas')
-    getUserData().then(
-      (userData) => {
-        this.setState({ bearerToken: userData.bearerToken, bearerReady: true, userData: userData }, () => {
-          // () => { // BearerToken ready
-          console.log("Loading questions");
-          url = api.getCourseOverView(this.props.navigation.state.params.courseId);
-          // console.log(url)
-          // console.log(this.state.bearerToken, url);
-            fetch(url, { 
-                method: 'GET', 
-                headers: {
-                    "Authorization": 'Bearer ' + this.state.bearerToken,
-                    Accept: 'application/json',
-                    "Content-Type": "application/json"
-                }
-            })
-            .then((response) => response.json())
-            .then((jsonResponse) => {
-                // console.log(jsonResponse)
-                // return
-                // console.log(jsonResponse)
-                this.setState({
-                    usersRanking: jsonResponse.data.ranking.users, times: jsonResponse.data.ranking.times, 
-                    medalRanking: jsonResponse.data.medal_ranking, advance: jsonResponse.data.advance, 
-                    approvalPercentage: jsonResponse.data.pie_chart, medals: jsonResponse.data.medals,
-                    achievements: jsonResponse.data.achievements, totalQuestions: jsonResponse.data.ranking.total_questions, ready: true
-                  }, 
-                  ()=>{
-                      console.log('SessionResults Carga de elementos terminada')
-                  }
-                )
-            }
-            ).catch((error) => { console.error(error); })
-          // }
-        })
-      }
-    )
   }
 
   componentDidMount(){
@@ -143,18 +106,39 @@ class CourseCharts extends Component {
                   this.switchPeriod(i, ref, from)
                 }>
                 <Tab heading="Resultados">
-                  <View style={stylesTabView.container}>
+                  <ScrollView style={stylesTabView.container}>
                     <Text style={stylesTabView.textDescription} >Usted contestó { this.state.numAnswers } preguntas</Text>
-                    <Text style={stylesTabView.textDescription} >Total de preguntas restantes en el curso: { this.state.numQuestionsGiven }</Text>
                     <Text style={stylesTabView.textDescription} >De las cuales, tuvo { this.state.numCorrectAnswers } correctas</Text>
-                    <Text style={stylesTabView.textDescription} >{ this.state.finishedInASession ? 'Terminado en una sesión' : 'No terminado' }</Text>
-                    <Text style={stylesTabView.textDescription} >{ this.state.randomMode ? "Se hizo en modo aleatorio" : "Se hizo en modo normal" }</Text>
-                    <Text style={stylesTabView.textDescription} >{ this.state.courseCompleted ? "Este curso está terminado" : "Este curso no está terminado" }</Text>
-                    <Text style={stylesTabView.textDescription} >Su tiempo fue de: { this.state.time } segundos</Text>
-                    <PercentageCircle style={stylesTabView.percentage} radius={35} percent={50} color={brandSuccess}></PercentageCircle>
-                    <PercentageCircle style={stylesTabView.percentage} radius={35} percent={0} color={brandSuccess}></PercentageCircle>
+                    <Text style={stylesTabView.textDescription} >Total de preguntas restantes en el curso: { this.state.numQuestionsGiven }</Text>
+                    {
+                      this.state.finishedInASession &&
+                      (<Text style={stylesTabView.textDescription} >Usted terminó el curso en una sesión</Text>)
+                    }
+                    {/* <Text style={stylesTabView.textDescription} >{ this.state.randomMode ? "Se hizo en modo aleatorio" : "Se hizo en modo normal" }</Text> */}
+                    {
+                      this.state.courseCompleted &&
+                      (<Text style={stylesTabView.textDescription} >Este curso está terminado</Text>)         
+                    }
+                    <Text style={stylesTabView.textDescription} >Tiempo: { this.state.time }</Text>
+                    <Text style={stylesTabView.textDescription} >Porcentaje de avance del curso</Text>                    
+                    <View style={stylesTabView.percentageCircle}>
+                      <PercentageCircle style={stylesTabView.percentage} radius={50} percent={this.state.advance} color={brandSuccess}></PercentageCircle>
+                      <Button
+                      style={styles.statsButton}
+                        onPress={
+                          () => {
+                            navigation.navigate('CourseOverview', {
+                              courseId: this.props.navigation.state.params.course_id
+                            })
+                          }
+                        }
+                      >
+                        <Text>Ver estadísticas del curso</Text>
+                      </Button>
+                    </View>
+                    {/* <PercentageCircle style={stylesTabView.percentage} radius={35} percent={0} color={brandSuccess}></PercentageCircle> */}
 
-                  </View>
+                  </ScrollView>
                   {/* <CourseCarousel
                     categories={categories}
                     totalQuestions={this.state.totalQuestions}
@@ -167,16 +151,29 @@ class CourseCharts extends Component {
                     navigation={navigation}
                   /> */}
                 </Tab>
-                <Tab heading="Logros en el curso">
-                  <Ranking
-                    gaugeChart
-                    showList
-                    users={this.state.usersRanking}
-                    gaugeData={this.state.advance}
-                    categories={categories}
-                    navigation={navigation}
-                  />
-                </Tab>
+                {
+                  ! this.state.randomMode &&
+                  (<Tab heading="Logros obtenidos">
+                    <AchievementsList
+                    achievements={this.state.achievements}
+                    />
+                  </Tab>)
+                }
+                {/* {
+                  ! this.state.randomMode &&
+                  (
+                  <Tab heading="Estadísticas del curso">
+                    <Ranking
+                      gaugeChart
+                      showList
+                      users={this.state.usersRanking}
+                      gaugeData={this.state.advance}
+                      categories={categories}
+                      navigation={navigation}
+                    />
+                  </Tab>
+                  )
+                } */}
               </Tabs>
             )}
         </ImageBackground>
@@ -217,8 +214,10 @@ class CourseCharts extends Component {
                 finishedInASession: jsonResponse.data.finished_in_a_session,
                 randomMode: jsonResponse.data.random_mode,
                 courseCompleted: jsonResponse.data.course_completed, // Time is returned in seconds
-                time: jsonResponse.data.time,
+                time: formatSeconds(jsonResponse.data.time),
                 courseName: jsonResponse.data.course_name,
+                achievements: jsonResponse.data.achievements,
+                advance: jsonResponse.data.advance,
                 ready: true,
               }, () => console.log("Elementos cargados en el estado") )
             }
@@ -246,7 +245,13 @@ const stylesTabView = StyleSheet.create({
   },
   percentage: {
     textAlign: 'center',
-  }
+  },
+  percentageCircle: {
+    alignItems: 'center',
+  },
+  statsButton: {
+    paddingTop: "3%",
+  },
 });
 
 const mapStateToProps = state => ({

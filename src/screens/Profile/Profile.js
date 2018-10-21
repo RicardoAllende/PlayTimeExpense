@@ -56,7 +56,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { navigation, profile } = this.props;
+    const { navigation } = this.props;
     return (
       <Container>
         <ImageBackground
@@ -92,6 +92,15 @@ class Profile extends Component {
     );
   }
 }
+
+const profile = {
+  username: '@johnDoe',
+  firstname: 'John',
+  lastname: 'Doe',
+  email: 'john.doe@mail.com',
+  mobile: '+33 345 678 901',
+  phone: '+33 123 456 789',
+};
 
 const mapStateToProps = state => ({
   profile: profileSelectors.getUserProfile(state),

@@ -97,12 +97,28 @@ export class CourseCarousel extends React.Component {
               </View>
           }
           {
-            this.props.pieChart &&
-            <View pointerEvents="none" style={styles.slides}>
-              <Text style={styles.chartTitle}>Aprobación del curso en el grupo</Text>
-              <PercentageCircle radius={35} percent={this.props.approvalPercentage} color={brandSuccess}></PercentageCircle>              
-              {/* <PieChart data={this.props.approvalPercentage} /> */}
-            </View>
+            this.props.approval &&
+            this.props.approvalPercentage > 0 ?
+              <View pointerEvents="none" style={styles.slides}>
+                  <ScrollView>
+                  <Text style={styles.chartTitle}>Porcentaje de aprobación del curso</Text>
+                  <GaugeChart percent={this.props.approvalPercentage} />
+                    <Text>Número de preguntas: { this.props.totalQuestions } </Text>
+                </ScrollView>
+              </View> 
+              :
+              <View pointerEvents="none" style={styles.slides}>
+                <Text style={styles.chartTitle}>Porcentaje de aprovación del curso</Text>              
+                <Text>No se han obtenido respuestas correctas</Text>
+              </View>
+
+
+            // this.props.approval &&
+            // <View pointerEvents="none" style={styles.slides}>
+            //   <Text style={styles.chartTitle}>Aprobación del curso en el grupo</Text>
+            //   <PercentageCircle radius={35} percent={this.props.approvalPercentage} color={brandSuccess}></PercentageCircle>              
+            //   {/* <PieChart data={this.props.approvalPercentage} /> */}
+            // </View>
           }
           {
             this.props.barChart &&

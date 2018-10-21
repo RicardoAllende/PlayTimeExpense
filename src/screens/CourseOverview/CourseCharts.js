@@ -21,6 +21,8 @@ import Ranking from './Ranking'
 
 import styles from './styles';
 
+import AchievementsList from '@components/Achievement/AchievementsList'
+
 import PercentageCircle from 'react-native-percentage-circle';
 const brandSuccess = '#50D2C2';
 
@@ -96,12 +98,12 @@ class CourseCharts extends Component {
                 this.setState({
                     usersRanking: jsonResponse.data.ranking.users, times: jsonResponse.data.ranking.times, 
                     medalRanking: jsonResponse.data.medal_ranking, advance: jsonResponse.data.advance, 
-                    approvalPercentage: jsonResponse.data.pie_chart, medals: jsonResponse.data.medals,
+                    approvalPercentage: jsonResponse.data.approval_percentage, medals: jsonResponse.data.medals,
                     course: jsonResponse.data.course,
                     achievements: jsonResponse.data.achievements, totalQuestions: jsonResponse.data.ranking.total_questions, ready: true
                   }, 
                   ()=>{
-                      console.log('CoursCharts Carga de elementos terminada')
+                      console.log('CoursCharts Carga de elementos terminada', this.state)
                   }
                 )
             }
@@ -116,13 +118,7 @@ class CourseCharts extends Component {
     this.loadData();
   }
 
-  init = false;
   render() {
-    // if(! this.init ){
-    //   this.loadData();
-    //   this.init = true;
-    // }
-    // console.log("CourseChart.js Overview")
     const { navigation, categoriesLoading, categories } = this.props;
     return (
       <Container>
@@ -159,8 +155,8 @@ class CourseCharts extends Component {
                   <CourseCarousel
                     categories={categories}
                     totalQuestions={this.state.totalQuestions}
-                    pieChart
-                    approvalPercentage={this.state.advance}
+                    approval
+                    approvalPercentage={this.state.approvalPercentage}
                     // barChart
                     // chashFlowChart
                     totalQuestions={this.state.totalQuestions}
@@ -179,17 +175,16 @@ class CourseCharts extends Component {
                   />
                 </Tab>
                 <Tab heading="Logros">
+                  <AchievementsList
+                    achievements={this.state.achievements}
+                  />
+                </Tab>
+                {/* <Tab heading="Tiempo">
                   <CourseCarousel
                     categories={categories}
                     navigation={navigation}
                   />
-                </Tab>
-                <Tab heading="Tiempo">
-                  <CourseCarousel
-                    categories={categories}
-                    navigation={navigation}
-                  />
-                </Tab>
+                </Tab> */}
               </Tabs>
             )}
         </ImageBackground>
