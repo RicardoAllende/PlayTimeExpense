@@ -35,7 +35,7 @@ import Notification from '@components/Notification';
 
 const logo = require('@assets/images/header-logo.png');
 const defaultNotificationTime = 1200 // 1000 equals a second
-const defaultDelayToShowQuestion = defaultNotificationTime + 6000
+const defaultDelayToShowQuestion = defaultNotificationTime + 0
 
 class Quizz extends Component {
 
@@ -372,9 +372,9 @@ class Quizz extends Component {
                         currentQuestion: nextQuestion
                     })
                 }else{
+                    console.log('Yendo a la página de resultados de la sesión')
                     this.goToSessionScreen()
                 }
-                
             }else{
                 // ToastAndroid.show("Cambio a siguiente pregunta", ToastAndroid.SHORT)
                 newQuestion = this.state.questions[currentIndex]

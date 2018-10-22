@@ -16,7 +16,7 @@ import {
   View,
 } from 'native-base';
 import { connect } from 'react-redux';
-import {session, getUserData} from '../../../api/session'
+import {session, getUserData, getCourses} from '../../../api/session'
 
 import ExpensesList from './ExpensesList';
 import AppHeader from '@components/AppHeader';
@@ -100,6 +100,26 @@ class Expenses extends Component {
     )
   }
 
+  loadData = async () => {
+    getCourses().then((courses) => {
+      courses = JSON.parse(courses)
+      // console.log('Expenses loadData stringify', courses)
+      this.setState({
+        courses: courses, coursesLoading: false
+      })
+      // console.log(courses);
+      // console.log(JSON.parse(courses))
+    });
+  }
+
+  // loadCoursesInAsyncStorage = async () => {
+  //   console.log('Consultando los cursos desde asyncstorage');
+  //   getCourses().then((courses) => {
+  //     console.log(JSON.parse(courses))
+  //     console.log(courses);
+  //   });
+  // }
+
   _showCourse = () => {
     navigation.navigate('NewExpense')
   }
@@ -108,7 +128,7 @@ class Expenses extends Component {
 
   render() {
     if( ! this.init ){
-      this.loadCourses();
+      this.loadData();
       this.init = true;
     }
     const { navigation, expenses, deleteExpense, expensesLoading } = this.props;

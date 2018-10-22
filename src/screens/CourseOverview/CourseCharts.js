@@ -95,6 +95,7 @@ class CourseCharts extends Component {
                 // console.log(jsonResponse)
                 // return
                 // console.log(jsonResponse)
+                // console.log(jsonResponse)s
                 this.setState({
                     usersRanking: jsonResponse.data.ranking.users, times: jsonResponse.data.ranking.times, 
                     medalRanking: jsonResponse.data.medal_ranking, advance: jsonResponse.data.advance, 

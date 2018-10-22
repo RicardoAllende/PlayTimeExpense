@@ -91,6 +91,7 @@
     "react-native-countdown-circle": "^3.0.0",
     "react-native-datepicker": "1.7.2",
     "react-native-easy-grid": "0.2.0",
+    "react-native-image-picker": "^0.27.1",
     "react-native-percentage-circle": "^1.0.7",
     "react-native-snap-carousel": "3.7.2",
     "react-navigation": "2.12.1",

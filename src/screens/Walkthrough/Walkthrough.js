@@ -34,6 +34,11 @@ class Walkthrough extends Component {
     this.renderSlide = this.renderSlide.bind(this);
   }
 
+  showImageDialog = () => {
+    openCameraDialog([], () => console.log('success') , () => console.log('error') )
+    console.log('showImageDialog');
+  }
+
   renderSlide({ item, index }) {
     // console.log("Item rendering")
     return (
@@ -59,6 +64,12 @@ class Walkthrough extends Component {
               <Text style={styles.slide.btnText}>Información del curso</Text>
             </Button>
           }
+          <Button
+            transparent
+            onPress={() => this.showImageDialog()}
+            style={styles.slide.btnWrapper}>
+            <Text style={styles.slide.btnText}>Image Picker</Text>
+          </Button>
         </View>
       </Card>
     );
@@ -92,7 +103,9 @@ class Walkthrough extends Component {
             .then((response) => response.json())
             .then((response) => {
                   this.setState( { courses: response.data.courses, coursesLength: response.data.courses.length - 1, ready: true}, () => {
-                }) 
+
+                  }) 
+                  session.setCourses(response.data.courses);
               }
             ).catch((error) => {
                 console.error(error);

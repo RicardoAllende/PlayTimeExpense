@@ -6,6 +6,7 @@ const firstnameDataName = "firstname";
 const lastnameDataName = "lastname";
 const usernameDataName = "email";
 const countdownSecondsDataName = "countdownSeconds"
+const coursesDataName = 'courses'
 // export default class Session 
 export const session = {
     bearerTokenName: bearerTokenName,
@@ -57,8 +58,18 @@ export const session = {
     // },
     unsetUserData: () => {
         AsyncStorage.removeItem(userDataName);
-    }
+    },
+
+    setCourses: (courses) => {
+        AsyncStorage.setItem(coursesDataName, JSON.stringify(courses));
+        console.log('Agregando cursos en AsyncStorage');
+    },
 };
+
+export async function getCourses() {
+    courses = await AsyncStorage.getItem(coursesDataName)
+    return courses;
+}
 
 export async function getBearerToken() {
     bearerToken = await AsyncStorage.getItem(session.bearerTokenName)
