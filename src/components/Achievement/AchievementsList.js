@@ -24,7 +24,7 @@ class AchievementsList extends Component {
   }
 
   render() {
-    console.log('AchievementsList this.props.achievements', this.props.achievements)
+    // console.log('AchievementsList this.props.achievements', this.props.achievements)
     return (
       <View
         showsVerticalScrollIndicator={false}

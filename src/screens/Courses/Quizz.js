@@ -35,7 +35,7 @@ import Notification from '@components/Notification';
 
 const logo = require('@assets/images/header-logo.png');
 const defaultNotificationTime = 1200 // 1000 equals a second
-const defaultDelayToShowQuestion = defaultNotificationTime + 0
+const defaultDelayToShowQuestion = defaultNotificationTime + 6000
 
 class Quizz extends Component {
 
@@ -61,22 +61,7 @@ class Quizz extends Component {
         }
     }
 
-    static propTypes = {
-        navigation: PropTypes.any,
-        getCategories: PropTypes.func.isRequired,
-        categoriesLoading: PropTypes.bool.isRequired,
-        categoriesError: PropTypes.bool.isRequired,
-        categories: PropTypes.array,
-    };
-
     optionIndex = 0
-
-
-    static defaultProps = {
-        categoriesLoading: false,
-        categoriesError: false,
-        categories: [],
-    };
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
@@ -88,10 +73,6 @@ class Quizz extends Component {
 
     handleBackPress = () => {
         this.goToSessionScreen();
-        return true;
-        // alert('Botón atrás presionado');
-        return true;
-        this.goBack(); // works best when the goBack is async
         return true;
     }
 
@@ -129,8 +110,6 @@ class Quizz extends Component {
         )
     }
 
-    init = false
-
     _askToEndQuizz = () => {
         // console.log("Función para finalizar el curso")
         Alert.alert(
@@ -166,20 +145,24 @@ class Quizz extends Component {
     }
 
     restartTimer = () => {
-        this.setState({seconds: 0}, () => { this.setState({ seconds: this.state.countdownSeconds }, 
+        this.setState({seconds: 0}, () => { this.setState({ timerVisibility: true, seconds: this.state.countdownSeconds }, 
                 () => {
                     // console.log('Quizz.js', 'Restarting timer', this.state.seconds)
                 }   
             ) // end setState this.state.countdownSeconds
         })
     }
+
+    componentDidMount(){
+        this.loadData();
+    }
     
+    init = false
     render() {
         const navigation = this.props.navigation;
-        if(!this.init){
-            this.init = true;   
-            this.loadData();
-        }
+        // if(!this.init){
+        //     this.init = true;   
+        // }
         if(this.state.ready){
             let notification;
             if(this.state.showSuccessNotification){
@@ -318,7 +301,6 @@ class Quizz extends Component {
     }
 
     goToSessionScreen = () => {
-        // this.getSessionStats(this.state.session, this.state.maxIndex, this.props.navigation.state.params.courseId)
         this.props.navigation.navigate('SessionResults', {
             session: this.state.session,
             num_questions_given: this.state.maxIndex,
@@ -331,36 +313,6 @@ class Quizz extends Component {
             course_id: this.props.navigation.state.params.courseId,
         })
     } 
-
-    getSessionStats = (session, numQuestions, courseId) => {
-        var data = JSON.stringify({
-            session: session,
-            num_questions_given: numQuestions,
-            course_id: courseId
-        })
-        // console.warn(this.props)
-        fetch(api.getSessionStats, {
-            method: 'POST',
-            headers: {
-                "Authorization": 'Bearer ' + this.state.bearerToken,
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: data
-        }).then(
-            // Enviando retroalimentación
-            response => {
-                // console.log('Quizz handleNextAnswer Response before json', response)
-                return response.json();
-                console.log("Retro")
-            }
-        ).then(
-            jsonResponse => console.log(jsonResponse)
-        ).catch(error => {
-            console.log("Error en la función getSessionStats", error);
-            console.log(data, api.getSessionStats);
-        });
-    }
 
     dropSkippedQuestion = (index) => {
         skippedQuestions = this.state.skippedQuestions
@@ -407,32 +359,33 @@ class Quizz extends Component {
         //         console.log('Segundos establecidos', this.state.seconds)
         currentIndex = this.state.index
         currentIndex++
-        if(currentIndex == this.state.maxIndex){
-            // ToastAndroid.show("Ya no hay más preguntas", ToastAndroid.SHORT)
-            this.setState({
-                timerVisibility: false,
-            })
-            if(this.isSkippedQuestionAvailable()){
-                console.log('Quizz handleNextAnswer showing skipped question')
-                nextQuestion = this.getNextSkippedQuestion()
-                this.showingSkippedQuestions = true;
-                this.setState({
-                    currentQuestion: nextQuestion
-                })
+        this.setState({
+            timerVisibility: false,
+        }, () => {
+            if(currentIndex == this.state.maxIndex){
+                // ToastAndroid.show("Ya no hay más preguntas", ToastAndroid.SHORT)
+                if(this.isSkippedQuestionAvailable()){
+                    console.log('Quizz handleNextAnswer showing skipped question')
+                    nextQuestion = this.getNextSkippedQuestion()
+                    this.showingSkippedQuestions = true;
+                    this.setState({
+                        currentQuestion: nextQuestion
+                    })
+                }else{
+                    this.goToSessionScreen()
+                }
+                
             }else{
-                this.goToSessionScreen()
+                // ToastAndroid.show("Cambio a siguiente pregunta", ToastAndroid.SHORT)
+                newQuestion = this.state.questions[currentIndex]
+                this.setState({
+                    index : currentIndex,
+                    currentQuestion: newQuestion,
+                    // seconds: this.state.countdownSeconds,
+                })
             }
-            
-        }else{
-            // ToastAndroid.show("Cambio a siguiente pregunta", ToastAndroid.SHORT)
-            newQuestion = this.state.questions[currentIndex]
-            this.setState({
-                index : currentIndex,
-                currentQuestion: newQuestion,
-                // seconds: this.state.countdownSeconds,
-            })
-        }
-        this.restartTimer()
+            this.restartTimer()
+        })
             // }
         // );
     }

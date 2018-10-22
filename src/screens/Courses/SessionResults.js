@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ImageBackground, StyleSheet, ScrollView } from 'react-native';
-import { Container, Tabs, Tab, Spinner, View, Text, Button } from 'native-base';
+import { ImageBackground, StyleSheet, ScrollView, Button } from 'react-native';
+import { Container, Tabs, Tab, Spinner, View, Text } from 'native-base';
 import { connect } from 'react-redux';
 import moment from 'moment/moment';
 
@@ -124,7 +124,18 @@ class CourseCharts extends Component {
                     <View style={stylesTabView.percentageCircle}>
                       <PercentageCircle style={stylesTabView.percentage} radius={50} percent={this.state.advance} color={brandSuccess}></PercentageCircle>
                       <Button
-                      style={styles.statsButton}
+                        style={{ padding: '5%' }}
+                        onPress={
+                          () => {
+                            navigation.navigate('CourseOverview', {
+                              courseId: this.props.navigation.state.params.course_id
+                            })
+                          }
+                        }
+                        title="Ver estadísticas del curso"
+                      />
+                      {/* <Button
+                      style={{ textAlign: 'center', 'padding': '5%', backgroundColor: 'blue' }}
                         onPress={
                           () => {
                             navigation.navigate('CourseOverview', {
@@ -133,8 +144,8 @@ class CourseCharts extends Component {
                           }
                         }
                       >
-                        <Text>Ver estadísticas del curso</Text>
-                      </Button>
+                        <Text style={stylesTabView.textDescription}>Ver estadísticas del curso</Text>
+                      </Button> */}
                     </View>
                     {/* <PercentageCircle style={stylesTabView.percentage} radius={35} percent={0} color={brandSuccess}></PercentageCircle> */}
 
@@ -191,7 +202,7 @@ class CourseCharts extends Component {
             num_questions: this.props.navigation.state.params.num_questions_given,
             course_id: this.props.navigation.state.params.course_id,
           });
-          console.log('SessionResults ', data);
+          // console.log('SessionResults ', data);
           fetch(url, {
             method: 'POST', 
             headers: {
@@ -206,7 +217,7 @@ class CourseCharts extends Component {
             }
           ).then(
             jsonResponse => {
-              console.log(jsonResponse)
+              // console.log(jsonResponse)
               this.setState({
                 numAnswers:  jsonResponse.data.num_answers, // Num questions the user answered
                 numQuestionsGiven: jsonResponse.data.num_questions_given, // Total questions in the quizz
@@ -248,6 +259,8 @@ const stylesTabView = StyleSheet.create({
   },
   percentageCircle: {
     alignItems: 'center',
+    alignContent: 'center',
+    padding: '3%',
   },
   statsButton: {
     paddingTop: "3%",

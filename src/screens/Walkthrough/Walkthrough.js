@@ -80,7 +80,7 @@ class Walkthrough extends Component {
     getUserData().then(
         (userData) => {this.setState({bearerToken: userData.bearerToken, bearerReady: true, userData: userData}, 
           () => { // bearerToken is setted
-            console.log("Waklthrough.js, imprimiendo bearerToken", this.state.bearerToken)
+            // console.log("Waklthrough.js, imprimiendo bearerToken", this.state.bearerToken)
             fetch(api.getCourses, { 
                 method: 'GET', 
                 headers: {
