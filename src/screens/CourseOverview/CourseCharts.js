@@ -104,7 +104,7 @@ class CourseCharts extends Component {
                     achievements: jsonResponse.data.achievements, totalQuestions: jsonResponse.data.ranking.total_questions, ready: true
                   }, 
                   ()=>{
-                      console.log('CoursCharts Carga de elementos terminada', this.state)
+                      // console.log('CoursCharts Carga de elementos terminada', this.state)
                   }
                 )
             }

@@ -43,5 +43,6 @@ export const api = {
     setHitsInCourse: (course_id) => {
         return app_url + 'courses/' + course_id + '/achievements/set-hits'
     },
+    setAvatar: app_url + 'users/avatar',
     getOverview: app_url + 'overview'
 }

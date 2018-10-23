@@ -6,7 +6,10 @@
     "version": "1.0.0",
     "privacy": "unlisted",
     "sdkVersion": "28.0.0",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "orientation": "portrait",
     "primaryColor": "#FF3366",
     "icon": "./assets/images/icon.png",
@@ -27,10 +30,17 @@
       "bundleIdentifier": "io.market.nativebase.craftman.myexpense"
     },
     "android": {
-      "package": "io.market.nativebase.craftman.myexpense"
+      "package": "io.market.nativebase.craftman.myexpense",
+      "publishBundlePath": "android\\app\\src\\main\\assets\\shell-app.bundle",
+      "publishManifestPath": "android\\app\\src\\main\\assets\\shell-app-manifest.json"
     },
     "androidStatusBar": {
       "translucent": true
-    }
+    },
+    "isDetached": true,
+    "detach": {
+      "androidExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/android-v2.6.4-sdk28.0.0-9ba3198a-7d95-4769-9e16-178a37a70cae.tar.gz"
+    },
+    "scheme": "exp104098cdfac84eefb47ec5623b9a8f45"
   }
 }

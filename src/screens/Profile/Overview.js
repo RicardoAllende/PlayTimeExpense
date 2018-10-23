@@ -16,7 +16,7 @@ export default class Overview extends React.Component {
   // }
 
   render(){
-    console.log('overview render this.props.data', this.props.data)
+    // console.log('overview render this.props.data', this.props.data)
     return (
       <View style={[styles.overview.container]}>
         <Grid>

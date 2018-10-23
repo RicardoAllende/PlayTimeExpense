@@ -61,6 +61,9 @@ export const session = {
         AsyncStorage.setItem(countdownSecondsDataName, "" + userData.settings.countdown_seconds);
         AsyncStorage.setItem(rememberTokenDataName, userData.access);
     },
+    setAvatar: (avatar) => {
+        AsyncStorage.setItem(avatarDataName, avatar);
+    },
     // getUserData: () => {
     //     value =  await AsyncStorage.getItem(userDataName);
     //     return value;
