@@ -64,12 +64,12 @@ class Walkthrough extends Component {
               <Text style={styles.slide.btnText}>Información del curso</Text>
             </Button>
           }
-          <Button
+          {/* <Button
             transparent
             onPress={() => this.showImageDialog()}
             style={styles.slide.btnWrapper}>
             <Text style={styles.slide.btnText}>Image Picker</Text>
-          </Button>
+          </Button> */}
         </View>
       </Card>
     );

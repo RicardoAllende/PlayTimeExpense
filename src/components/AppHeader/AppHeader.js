@@ -9,7 +9,9 @@ import HeaderDrawerButton from './HeaderDrawerButton';
 import SearchHeader from './SearchHeader';
 
 const logo = require('@assets/images/header-logo.png');
-const avatar = require('@assets/images/avatar1.png');
+const avatar = require('@assets/images/default_avatar.png');
+
+import {getAvatar} from '../../../api/session'
 import styles from './styles';
 import CountdownCircle from 'react-native-countdown-circle'
 
@@ -20,7 +22,8 @@ class AppHeader extends PureComponent {
     this.state = {
       displaySearchBar: false,
       seconds: this.props.seconds,
-      questionId: this.props.questionId
+      questionId: this.props.questionId,
+      avatarReady: false,
     };
   }
 
@@ -37,32 +40,21 @@ class AppHeader extends PureComponent {
     this.restartCountDown();
   }
 
+  componentDidMount = () => {
+    this.loadAvatar();
+  }
+
+  loadAvatar = () => {
+    // import {getAvatar} from '../../../api/session'
+    getAvatar().then((avatar) => {
+      this.setState({
+        avatar,
+        avatarReady: true,
+      })
+    });
+  }
+
   render() {
-    // let navLogo;
-    // // console.log('AppHeader.js', 'courseId', this.props.courseId)
-    // if(this.props.timer){ // Timer exists
-    //   if(this.props.timerVisibility){
-    //     // console.log('Número de segundos obtenidos en Appheader desde state', this.state.seconds)
-    //     navLogo = <CountdownCircle
-    //       seconds={this.state.seconds}
-    //       radius={25}
-    //       borderWidth={8}
-    //       color="#ff003f"
-    //       bgColor="#fff"
-    //       textStyle={{ fontSize: 20 }}
-    //       onTimeElapsed={this.restartCountDown}
-    //     />
-    //   }
-    // }else{
-    //   if(this.props.displayLogo){
-    //     navLogo = <TouchableOpacity
-    //       onPress={() => {
-    //         this.props.navigation.navigate('Expenses');
-    //       }}>
-    //       <Image source={logo} style={styles.logo} />
-    //     </TouchableOpacity>
-    //   }
-    // }
     return (
       <View style={this.props.style}>
         <Header transparent hasTabs>
@@ -85,7 +77,19 @@ class AppHeader extends PureComponent {
                 onPress={() => {
                   this.props.navigation.navigate('Profile');
                 }}>
-                <Thumbnail source={avatar} style={styles.avatar} />
+                {
+                  this.state.avatarReady &&
+                  (
+                    <Thumbnail 
+                    // source={avatar} 
+                    // source={require('@assets/images/default_avatar.png')}
+                    source={{
+                      uri: this.state.avatar,
+                      cache: 'only-if-cached',
+                    }}
+                    style={styles.avatar} />
+                  )
+                }
               </TouchableOpacity>
             )}
             {this.props.displaySearch && (

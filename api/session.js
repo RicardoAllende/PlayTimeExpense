@@ -1,4 +1,7 @@
 import { AsyncStorage } from "react-native"
+import {url} from './playTimeApi'
+
+// const defaultImage = 
 
 const bearerTokenName= "bearerToken";
 const userDataName= "userData";
@@ -7,6 +10,8 @@ const lastnameDataName = "lastname";
 const usernameDataName = "email";
 const countdownSecondsDataName = "countdownSeconds"
 const coursesDataName = 'courses'
+const rememberTokenDataName = 'access'
+const avatarDataName = 'avatar'
 // export default class Session 
 export const session = {
     bearerTokenName: bearerTokenName,
@@ -14,6 +19,8 @@ export const session = {
     firstnameDataName: firstnameDataName,
     lastnameDataName: lastnameDataName,
     usernameDataName: usernameDataName,
+    rememberTokenDataName,
+    avatarDataName,
     countdownSecondsDataName: countdownSecondsDataName,
 
     setUserName: (username) => {
@@ -46,11 +53,13 @@ export const session = {
     },
     setUserData: (userData) => {
         // console.log('Session.js, setUserData, userData', userData)
+        AsyncStorage.setItem(avatarDataName, userData.avatar);
         AsyncStorage.setItem(bearerTokenName, userData.access_token);
         AsyncStorage.setItem(firstnameDataName, userData.firstname)
         AsyncStorage.setItem(lastnameDataName, userData.lastname)
         AsyncStorage.setItem(usernameDataName, userData.username)
         AsyncStorage.setItem(countdownSecondsDataName, "" + userData.settings.countdown_seconds);
+        AsyncStorage.setItem(rememberTokenDataName, userData.access);
     },
     // getUserData: () => {
     //     value =  await AsyncStorage.getItem(userDataName);
@@ -65,6 +74,15 @@ export const session = {
         console.log('Agregando cursos en AsyncStorage');
     },
 };
+
+export async function getRememberToken(){
+    return await AsyncStorage.getItem(rememberTokenDataName);
+}
+
+export async function getAvatar(){
+    avatar = await AsyncStorage.getItem(avatarDataName);
+    return url + avatar;
+}
 
 export async function getCourses() {
     courses = await AsyncStorage.getItem(coursesDataName)
@@ -91,14 +109,19 @@ export async function getBearerTokenCountdownSeconds() {
 export async function getUserData() {
     firstname = await AsyncStorage.getItem(session.firstnameDataName)
     lastname = await AsyncStorage.getItem(session.lastnameDataName)
-    username = await AsyncStorage.getItem(session.userDataName)
+    username = await AsyncStorage.getItem(session.usernameDataName)
     bearerToken = await AsyncStorage.getItem(session.bearerTokenName)
+    access = await AsyncStorage.getItem(session.rememberTokenDataName)
     userData = {
-      firstname: firstname,
-      lastname: lastname,
-      username: username,
-      bearerToken: bearerToken, 
+        firstname: firstname,
+        lastname: lastname,
+        username: username,
+        bearerToken: bearerToken, 
+        email: username,
+        mobile: '+33 345 678 901',
+        phone: '+33 123 456 789',
+        access,
     }
-    // console.log("Generando User data", userData);
+    // console.log("Recuperando User data", userData);
     return userData
   }

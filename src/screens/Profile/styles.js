@@ -18,7 +18,7 @@ export default {
   profile: {
     container: {
       alignSelf: 'center',
-      paddingTop: 10,
+      // paddingTop: 10,
       marginBottom: 15,
     },
     avatar: {

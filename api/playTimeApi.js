@@ -1,12 +1,17 @@
-const url = "http://192.168.0.102:8000/api/v1/"
+export const url = "http://192.168.0.102:8000/"
+const api_url = "http://192.168.0.102:8000/api/v1/"
 
-const app_url = url + "app/"
+const app_url = api_url + "app/"
 
 export const api = {
     url: url,
+    loginWithRememberToken: (token) => {
+        return url + "login?remember_token=" + token
+    },
+    api_url: api_url,
     app_url: app_url,
-    auth: url + 'auth', // POST request if user has email and password, GET request if user has a token
-    checkUser: url + 'check-user-by-token',
+    auth: api_url + 'auth', // POST request if user has email and password, GET request if user has a token
+    checkUser: api_url + 'check-user-by-token',
     getCourses: app_url + 'courses',
     getCoursesWithoutRandom: app_url + 'courses?no-random=1',
     sendAnswers: app_url + 'questions', //post
@@ -38,4 +43,5 @@ export const api = {
     setHitsInCourse: (course_id) => {
         return app_url + 'courses/' + course_id + '/achievements/set-hits'
     },
+    getOverview: app_url + 'overview'
 }

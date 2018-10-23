@@ -21,11 +21,11 @@ export const routes = [
   //   route: 'ExpensesCalendar',
   //   icon: 'ios-calendar-outline',
   // },
-  {
-    title: 'Gráficas',
-    route: 'ExpensesCharts',
-    icon: 'ios-stats-outline',
-  },
+  // {
+  //   title: 'Gráficas',
+  //   route: 'ExpensesCharts',
+  //   icon: 'ios-stats-outline',
+  // },
   // {
   //   title: 'Búsqueda y exportación',
   //   route: 'Search',

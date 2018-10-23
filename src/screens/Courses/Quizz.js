@@ -7,7 +7,7 @@ import {
 } from 'native-base';
 
 import HeaderDrawerButton from '../../components/AppHeader/HeaderDrawerButton';
-const avatar = require('@assets/images/avatar1.png');
+const avatar = require('@assets/images/default_avatar.png');
 import CountdownCircle from 'react-native-countdown-circle'
 
 import { connect } from 'react-redux';
@@ -24,12 +24,11 @@ import styles from './styles';
 import headerStyles from '@components/AppHeader/styles'
 import theme from '@theme/variables/myexpense';
 
-const url = "http://192.168.0.111:8000/categories"
 const defaultTime = 10;
 const num_questions_per_medal = 12
 
 import {api} from './../../../api/playTimeApi'
-import {session, getBearerTokenCountdownSeconds} from './../../../api/session'
+import {session, getBearerTokenCountdownSeconds, getAvatar} from './../../../api/session'
 import { AsyncStorage } from "react-native"
 import Notification from '@components/Notification';
 
@@ -51,7 +50,7 @@ class Quizz extends Component {
             seconds: defaultTime,
             skippedQuestions: [],
             timerVisibility: true,
-            // optionIndex: 0, 
+            avatarReady: false,
             currentIndex: 0,
             showSuccessNotification: false,
             showErrorNotification: false, 
@@ -65,6 +64,17 @@ class Quizz extends Component {
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+        this.loadAvatar();
+    }
+
+    loadAvatar = () => {
+        // import {getAvatar} from '../../../api/session'
+        getAvatar().then((avatar) => {
+          this.setState({
+            avatar,
+            avatarReady: true,
+          })
+        });
     }
 
     componentWillUnmount() {
@@ -224,7 +234,19 @@ class Quizz extends Component {
                                 onPress={() => {
                                 this.props.navigation.navigate('Profile');
                                 }}>
-                                <Thumbnail source={avatar} style={styles.avatar} />
+                                {
+                                    this.state.avatarReady &&
+                                    (
+                                        <Thumbnail 
+                                          // source={avatar} 
+                                          // source={require('@assets/images/default_avatar.png')}
+                                          source={{
+                                            uri: this.state.avatar,
+                                            cache: 'only-if-cached',
+                                          }}
+                                        style={styles.avatar} />
+                                    )
+                                }
                             </TouchableOpacity>
                             )}
                             {this.props.displaySearch && (

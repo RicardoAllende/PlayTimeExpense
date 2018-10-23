@@ -15,11 +15,12 @@ import MenuItem from './MenuItem';
 import styles from './styles';
 import { routes } from './config';
 
-import { session } from '../../../api/session'
+import { session, getAvatar } from '../../../api/session'
 
 class SideBar extends Component {
   state = {
     selected: '',
+    ready: false,
   };
   onPressItem = route => {
     if(route == 'SignIn'){
@@ -39,6 +40,21 @@ class SideBar extends Component {
       icon={item.icon}
     />
   );
+
+  componentDidMount = () => {
+    this.loadAvatar();
+  }
+
+  loadAvatar = () => {
+    // import {getAvatar} from '../../../api/session'
+    getAvatar().then((avatar) => {
+      this.setState({
+        avatar,
+        avatarReady: true,
+      })
+    });
+  }
+
   render() {
     const navigation = this.props.navigation;
     return (
@@ -63,10 +79,19 @@ class SideBar extends Component {
               onPress={() => {
                 navigation.navigate('Profile');
               }}>
-              <Thumbnail
-                source={require('@assets/images/avatar1.png')}
-                style={styles.header.avatar}
-              />
+              {
+                this.state.avatarReady &&
+                (
+                  <Thumbnail 
+                  // source={avatar} 
+                  // source={require('@assets/images/default_avatar.png')}
+                  source={{
+                    uri: this.state.avatar,
+                    cache: 'only-if-cached',
+                  }}
+                  style={styles.avatar} />
+                )
+              }
             </TouchableOpacity>
           </Right>
         </Header>
