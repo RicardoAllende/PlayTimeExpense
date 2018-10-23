@@ -122,20 +122,8 @@ class Walkthrough extends Component {
   render() {
     if(this.loadingUserData){
       this.loadUserData()
-      // getUserData().then(response => this.setState({userData: response, bearerReady: true}));
-      // console.log('Recuperando la información', getUserData())
       this.loadingUserData = false;
     }
-    // if(this.loadingBearer){
-    //   this.loadUserData();
-    //   this.loadingBearer = false;
-    // }
-    // if(this.state.bearerReady){
-      // if(this.loadingQuestions){
-      //   this.loadCourses()
-      //   this.loadingQuestions = false;
-      // }
-      // if(this.state.ready){
         return (
           <Container>
             <StatusBar
@@ -168,23 +156,13 @@ class Walkthrough extends Component {
                   onPress={() => this.props.navigation.navigate('Drawer', {
                     userData: this.state.userData
                   })}
-                  // onPress={() => this.props.navigation.navigate('Quizz', {
-                  //   courseId: -1
-                  // })}
                   >
-                  {/* <Text> Get Started </Text> */}
                   <Text> Saltar </Text>
                 </Button>
               </Footer>
             </ImageBackground>
           </Container>
-        );
-      // }
-      
-    // }
-    // return (
-    //   <AppLoading />
-    // );    
+        );  
   }
 }
 

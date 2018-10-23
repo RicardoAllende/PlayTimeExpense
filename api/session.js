@@ -124,4 +124,30 @@ export async function getUserData() {
     }
     // console.log("Recuperando User data", userData);
     return userData
-  }
+}
+
+export function queueImageUpdate(){
+    AsyncStorage.setItem('update_image', true);
+}
+
+export async function getQueueImageUpdate(){
+    avatar = getAvatar()
+    fetch(api.getCourses, {
+        method: 'GET',
+        headers: {
+            "Authorization": 'Bearer ' + this.state.bearerToken,
+            Accept: 'application/json',
+            "Content-Type": "application/json"
+        }
+    })
+        .then((response) => response.json())
+        .then((response) => {
+            this.setState({ courses: response.data.courses, coursesLength: response.data.courses.length - 1, ready: true }, () => {
+
+            })
+            session.setCourses(response.data.courses);
+        }
+        ).catch((error) => {
+            console.error(error);
+        })
+}
