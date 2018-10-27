@@ -30,6 +30,7 @@ class Walkthrough extends Component {
     this.state ={
       bearerReady: false,
       ready: false,
+      showTutorial: true,
     }
     this.renderSlide = this.renderSlide.bind(this);
   }
@@ -41,38 +42,42 @@ class Walkthrough extends Component {
 
   renderSlide({ item, index }) {
     // console.log("Item rendering")
-    return (
-      <Card style={styles.slide.container}>
-        <View>
-          <Image source={illustration} style={styles.slide.illustration} />
-          <Text style={styles.slide.title}>{item.name}</Text>
-          <Text numberOfLines={4} style={styles.slide.subtitle}>
-            {item.description}
-          </Text>
-          <Button
-            transparent
-            onPress={() => this._goToCourse(item.id)}
-            style={styles.slide.btnWrapper}>
-            <Text style={styles.slide.btnText}>Jugar</Text>
-          </Button>
-          {
-            item.id != -1 &&
+    if(this.state.showTutorial){
+
+    }else{
+      return (
+        <Card style={styles.slide.container}>
+          <View>
+            <Image source={illustration} style={styles.slide.illustration} />
+            <Text style={styles.slide.title}>{item.name}</Text>
+            <Text numberOfLines={4} style={styles.slide.subtitle}>
+              {item.description}
+            </Text>
             <Button
               transparent
-              onPress={() => this._goToCourseOverview(item.id)}
+              onPress={() => this._goToCourse(item.id)}
               style={styles.slide.btnWrapper}>
-              <Text style={styles.slide.btnText}>Información del curso</Text>
+              <Text style={styles.slide.btnText}>Jugar</Text>
             </Button>
-          }
-          {/* <Button
-            transparent
-            onPress={() => this.showImageDialog()}
-            style={styles.slide.btnWrapper}>
-            <Text style={styles.slide.btnText}>Image Picker</Text>
-          </Button> */}
-        </View>
-      </Card>
-    );
+            {
+              item.id != -1 &&
+              <Button
+                transparent
+                onPress={() => this._goToCourseOverview(item.id)}
+                style={styles.slide.btnWrapper}>
+                <Text style={styles.slide.btnText}>Información del curso</Text>
+              </Button>
+            }
+            {/* <Button
+              transparent
+              onPress={() => this.showImageDialog()}
+              style={styles.slide.btnWrapper}>
+              <Text style={styles.slide.btnText}>Image Picker</Text>
+            </Button> */}
+          </View>
+        </Card>
+      );
+    }
   }
 
   _goToCourse = (courseId) => {

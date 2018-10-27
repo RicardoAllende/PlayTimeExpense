@@ -19,6 +19,7 @@ import Quizz from '@screens/Courses/Quizz'
 import Ranking from '@screens/Ranking'
 import CourseOverView from '@screens/CourseOverview'
 import SessionResults from '@screens/Courses/SessionResults'
+import HowItWorks from '@screens/HowItWorks'
 
 const Drawer = createDrawerNavigator(
   {
@@ -34,9 +35,11 @@ const Drawer = createDrawerNavigator(
     Ranking: { screen: Ranking },
     CourseOverview: { screen: CourseOverView },
     SessionResults: { screen: SessionResults },
+    HowItWorks: { screen: HowItWorks},
   },
   {
-    initialRouteName: 'Profile',
+    initialRouteName: 'HowItWorks',
+    // initialRouteName: 'Profile',
     drawerBackgroundColor: 'rgba(255, 255, 255, 0.3)',
     contentComponent: props => <SideBar {...props} />,
   }

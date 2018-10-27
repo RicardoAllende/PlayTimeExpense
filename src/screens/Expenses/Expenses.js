@@ -76,33 +76,17 @@ class Expenses extends Component {
     this.setState({ headerTitle: title, headerTitleSuffix: period });
   }
 
-  // loadCourses = () => {
-  //   getUserData().then( (userData) => this.setState({ userData: userData}, () => {
-  //       fetch(api.getCoursesWithoutRandom, { 
-  //           method: 'GET', 
-  //           headers: {
-  //               "Authorization": 'Bearer ' + this.state.userData.bearerToken,
-  //               Accept: 'application/json',
-  //               "Content-Type": "application/json"
-  //           }
-  //       })
-  //       .then((response) => response.json())
-  //       .then((response) => {
-  //             this.setState( { courses: response.data.courses, coursesLoading: false}, () => {
-  //               console.log('');
-  //               // console.log('Se terminó la carga de los cursos');
-  //             })
-  //         }
-  //       ).catch((error) => {
-  //           console.error(error);
-  //       })
-  //     })
-  //   )
-  // }
-
   loadData = async () => {
     getCourses().then((courses) => {
       courses = JSON.parse(courses)
+      nuevoArreglo = [];
+      console.log('Antes del map', courses.length)
+      courses.forEach(course => {
+        if(course.id != -1){
+          return course;
+        }
+      });
+      console.log('Después del map', courses.length);
       // console.log('Expenses loadData stringify', courses)
       this.setState({
         courses: courses, coursesLoading: false
