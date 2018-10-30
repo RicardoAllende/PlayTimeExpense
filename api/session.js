@@ -62,6 +62,8 @@ export const session = {
         AsyncStorage.setItem(rememberTokenDataName, userData.access);
     },
     setAvatar: (avatar) => {
+        // avatar = url + avatar;
+        // alert(avatar);
         AsyncStorage.setItem(avatarDataName, avatar);
     },
     // getUserData: () => {
@@ -133,6 +135,10 @@ export function queueImageUpdate(){
     AsyncStorage.setItem('update_image', true);
 }
 
+export function changeAvatar(){
+
+}
+
 export async function getQueueImageUpdate(){
     avatar = getAvatar()
     fetch(api.getCourses, {
@@ -153,4 +159,19 @@ export async function getQueueImageUpdate(){
         ).catch((error) => {
             console.error(error);
         })
+}
+
+const tutorialShowedDataName = 'tutorial_showed'
+
+export async function shouldShowTutorial(){
+    response = await AsyncStorage.getItem(tutorialShowedDataName)
+    if(response !== null){
+        return true;
+    }
+    return false;
+    // if(response == 1)
+}
+
+export function setTutorialShowed(){
+    AsyncStorage.setItem(tutorialShowedDataName, 'viewed')
 }

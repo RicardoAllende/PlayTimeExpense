@@ -1,5 +1,5 @@
-export const url = "http://192.168.0.102:8000/"
-const api_url = "http://192.168.0.102:8000/api/v1/"
+export const url = "http://192.168.0.109:8000/"
+const api_url = "http://192.168.0.109:8000/api/v1/"
 
 const app_url = api_url + "app/"
 

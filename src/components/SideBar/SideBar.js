@@ -46,7 +46,6 @@ class SideBar extends Component {
   }
 
   loadAvatar = () => {
-    // import {getAvatar} from '../../../api/session'
     getAvatar().then((avatar) => {
       this.setState({
         avatar,

@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 
-const styles = StyleSheet.create({
+const tutorialStyles = StyleSheet.create({
     image: {
         width: 320,
         height: 320,
@@ -15,7 +15,7 @@ const slides = [
         title: 'Title s1',
         text: 'Description.\nSay something cool',
         image: require('@assets/images/Tutorial/1.jpg'),
-        imageStyle: styles.image,
+        imageStyle: tutorialStyles.image,
         backgroundColor: '#59b2ab',
     },
     {
@@ -23,7 +23,7 @@ const slides = [
         title: 'Title 2',
         text: 'Other cool stuff',
         image: require('@assets/images/Tutorial/2.jpg'),
-        imageStyle: styles.image,
+        imageStyle: tutorialStyles.image,
         backgroundColor: '#febe29',
     },
     {
@@ -31,7 +31,7 @@ const slides = [
         title: 'Rocket guy',
         text: 'I\'m already out of descriptions\n\nLorem ipsum bla bla bla',
         image: require('@assets/images/Tutorial/3.jpg'),
-        imageStyle: styles.image,
+        imageStyle: tutorialStyles.image,
         backgroundColor: '#22bcb5',
     }
 ];

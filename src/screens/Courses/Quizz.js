@@ -68,7 +68,6 @@ class Quizz extends Component {
     }
 
     loadAvatar = () => {
-        // import {getAvatar} from '../../../api/session'
         getAvatar().then((avatar) => {
           this.setState({
             avatar,

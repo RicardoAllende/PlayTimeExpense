@@ -45,7 +45,6 @@ class AppHeader extends PureComponent {
   }
 
   loadAvatar = () => {
-    // import {getAvatar} from '../../../api/session'
     getAvatar().then((avatar) => {
       this.setState({
         avatar,

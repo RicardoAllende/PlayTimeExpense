@@ -5,9 +5,13 @@ import {
   Image,
   ImageBackground,
   StatusBar,
+  StyleSheet,
 } from 'react-native';
 import { Container, Content, Text, Button, Card, Footer } from 'native-base';
 import Carousel from 'react-native-snap-carousel';
+
+import {shouldShowTutorial} from '../../../api/session'
+import AppIntroSlider from 'react-native-app-intro-slider';
 
 import {api} from './../../../api/playTimeApi'
 
@@ -33,6 +37,18 @@ class Walkthrough extends Component {
       showTutorial: true,
     }
     this.renderSlide = this.renderSlide.bind(this);
+  }
+
+  shouldShowTutorial = () => {
+    shouldShowTutorial().then((viewed) => {
+      if(viewed){
+        this.setState({
+          showTutorial: true,
+        })
+      }else{
+
+      }
+    })
   }
 
   showImageDialog = () => {
@@ -121,54 +137,106 @@ class Walkthrough extends Component {
     );
   }
 
+  componentDidMount(){
+    this.loadUserData();
+  }
+
+  _onDone = () => {
+    // alert('Cambiando el estado');
+    this.setState({
+      showTutorial: false,
+    })
+  }
+
   loadingQuestions = true;
   loadingBearer = true;
-  loadingUserData = true;
   render() {
-    if(this.loadingUserData){
-      this.loadUserData()
-      this.loadingUserData = false;
+    if(this.state.showTutorial){
+      return <AppIntroSlider slides={slides} onDone={this._onDone} />;
+    }else{
+      return (
+        <Container>
+          <StatusBar
+            barStyle="light-content"
+            translucent={true}
+            backgroundColor={'transparent'}
+          />
+          <ImageBackground
+            source={require('@assets/images/background2.png')}
+            style={styles.background}>
+            <Content>
+              { this.state.ready &&
+                <Carousel
+                  ref={c => (this.carousel = c)}
+                  data={this.state.courses}
+                  renderItem={this.renderSlide}
+                  sliderWidth={deviceWidth}
+                  itemWidth={deviceWidth - 50}
+                  hasParallaxImages={true}
+                  containerCustomStyle={styles.slider}
+                />
+              }
+            </Content>
+            <Footer>
+              <Button
+                large
+                primary
+                block
+                style={styles.skipBtn}
+                onPress={() => this.props.navigation.navigate('Drawer', {
+                  userData: this.state.userData
+                })}
+                >
+                <Text> Saltar </Text>
+              </Button>
+            </Footer>
+          </ImageBackground>
+        </Container>
+      );  
     }
-        return (
-          <Container>
-            <StatusBar
-              barStyle="light-content"
-              translucent={true}
-              backgroundColor={'transparent'}
-            />
-            <ImageBackground
-              source={require('@assets/images/background2.png')}
-              style={styles.background}>
-              <Content>
-                { this.state.ready &&
-                  <Carousel
-                    ref={c => (this.carousel = c)}
-                    data={this.state.courses}
-                    renderItem={this.renderSlide}
-                    sliderWidth={deviceWidth}
-                    itemWidth={deviceWidth - 50}
-                    hasParallaxImages={true}
-                    containerCustomStyle={styles.slider}
-                  />
-                }
-              </Content>
-              <Footer>
-                <Button
-                  large
-                  primary
-                  block
-                  style={styles.skipBtn}
-                  onPress={() => this.props.navigation.navigate('Drawer', {
-                    userData: this.state.userData
-                  })}
-                  >
-                  <Text> Saltar </Text>
-                </Button>
-              </Footer>
-            </ImageBackground>
-          </Container>
-        );  
   }
 }
+
+const tutorialStyles = StyleSheet.create({
+  image: {
+      width: 320,
+      height: 320,
+  }
+});
+
+const slides = [
+  {
+      key: 'tut_1',
+      title: '¿Qué es Playtime?',
+      text: 'Playtime es una aplicación que le ayudará a asimilar sus conocimientos...',
+      image: require('@assets/images/Tutorial/1.jpg'),
+      imageStyle: tutorialStyles.image,
+      backgroundColor: '#59b2ab',
+  },
+  {
+      key: 'tut_2',
+      title: 'Selecciona un curso',
+      text: 'Navegue entre los distintos cursos a los cuales está inscrito, de clic en jugar para comenzar, o en estadísticas para conocer quiénes son los mejores en el juego',
+      image: require('@assets/images/Tutorial/2.jpg'),
+      imageStyle: tutorialStyles.image,
+      backgroundColor: '#febe29',
+  },
+  {
+      key: 'tut_3',
+      title: '¿Cómo jugar?',
+      text: 'Una vez comenzado el curso, usted debe seleccionar la respuesta correcta',
+      image: require('@assets/images/Tutorial/3.jpg'),
+      imageStyle: tutorialStyles.image,
+      backgroundColor: '#22bcb5',
+  },
+  {
+    key: 'tut_4',
+    title: 'Terminar el intento',
+    text: 'Para terminar el intento, presione el botón',
+    image: require('@assets/images/Tutorial/3.jpg'),
+    imageStyle: tutorialStyles.image,
+    backgroundColor: '#22bcb5',
+}
+];
 
 export default Walkthrough;

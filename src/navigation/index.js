@@ -38,8 +38,8 @@ const Drawer = createDrawerNavigator(
     HowItWorks: { screen: HowItWorks},
   },
   {
-    initialRouteName: 'HowItWorks',
-    // initialRouteName: 'Profile',
+    // initialRouteName: 'HowItWorks',
+    initialRouteName: 'Profile',
     drawerBackgroundColor: 'rgba(255, 255, 255, 0.3)',
     contentComponent: props => <SideBar {...props} />,
   }
