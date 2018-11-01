@@ -6,6 +6,7 @@ import {
   ImageBackground,
   StatusBar,
   StyleSheet,
+  TextInput,
 } from 'react-native';
 import { Container, Content, Text, Button, Card, Footer } from 'native-base';
 import Carousel from 'react-native-snap-carousel';
@@ -24,9 +25,19 @@ import styles from './styles';
 import {session, getUserData} from './../../../api/session'
 import { AsyncStorage } from "react-native"
 
+import ModalSelector from 'react-native-modal-selector'
+
 const deviceWidth = Dimensions.get('window').width;
 
 const illustration = require('@assets/images/walkthrough3.png');
+
+const modalSelectorData = [
+  { key: 0, section: true, label: 'Escoja el nivel a jugar' },
+  { key: 1, label: 'Fácil', value: 1 },
+  { key: 2, label: 'Medio', value: 2 },
+  { key: 3, label: 'Difícil', value: 3 },
+  { key: 4, label: 'Aleatorio', value: 'random' }
+]
 
 class Walkthrough extends Component {
   constructor(props) {
@@ -34,7 +45,7 @@ class Walkthrough extends Component {
     this.state ={
       bearerReady: false,
       ready: false,
-      showTutorial: true,
+      showTutorial: false,
     }
     this.renderSlide = this.renderSlide.bind(this);
   }
@@ -69,12 +80,32 @@ class Walkthrough extends Component {
             <Text numberOfLines={4} style={styles.slide.subtitle}>
               {item.description}
             </Text>
-            <Button
+            {/* <Button
               transparent
               onPress={() => this._goToCourse(item.id)}
               style={styles.slide.btnWrapper}>
               <Text style={styles.slide.btnText}>Jugar</Text>
-            </Button>
+            </Button> */}
+            <ModalSelector
+                key={'mdlStr' + index}
+                data={modalSelectorData}
+                initValue="Select something yummy!"
+                supportedOrientations={['landscape']}
+                accessible={true}
+                childrenContainerStyle={ styles.slide.btnWrapper }
+                // styles={}
+                scrollViewAccessibilityLabel={'Scrollable options'}
+                cancelButtonAccessibilityLabel={'Cancel Button'}
+                onChange={(option)=>{ this._goToCourse( item.id, option.value ) }}>
+              {/* <View  > */}
+                <Text
+                  style={styles.slide.btnText}
+                  >
+                  Jugar
+                </Text>
+              {/* </View> */}
+
+            </ModalSelector>
             {
               item.id != -1 &&
               <Button
@@ -96,10 +127,13 @@ class Walkthrough extends Component {
     }
   }
 
-  _goToCourse = (courseId) => {
-    this.props.navigation.navigate('Quizz', {
-      courseId: courseId
-    })
+  _goToCourse = (courseId, level) => {
+    let props = {
+      courseId,
+      level
+    }
+    console.log(props);
+    this.props.navigation.navigate('Quizz', props)
   }
 
   _goToCourseOverview = (courseId) => {
@@ -183,9 +217,14 @@ class Walkthrough extends Component {
                 primary
                 block
                 style={styles.skipBtn}
-                onPress={() => this.props.navigation.navigate('Drawer', {
-                  userData: this.state.userData
-                })}
+                onPress={
+                  () => {
+                    this.props.navigation.navigate('ModalPickerExample')
+                  }
+                }
+                // onPress={() => this.props.navigation.navigate('Drawer', {
+                //   userData: this.state.userData
+                // })}
                 >
                 <Text> Saltar </Text>
               </Button>

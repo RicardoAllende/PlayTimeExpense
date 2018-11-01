@@ -20,6 +20,7 @@ import Ranking from '@screens/Ranking'
 import CourseOverView from '@screens/CourseOverview'
 import SessionResults from '@screens/Courses/SessionResults'
 import HowItWorks from '@screens/HowItWorks'
+import ModalPickerExample from '@screens/Walkthrough/ModalPickerExample'
 
 const Drawer = createDrawerNavigator(
   {
@@ -36,9 +37,10 @@ const Drawer = createDrawerNavigator(
     CourseOverview: { screen: CourseOverView },
     SessionResults: { screen: SessionResults },
     HowItWorks: { screen: HowItWorks},
+    ModalPickerExample: { screen: ModalPickerExample },
   },
   {
-    // initialRouteName: 'HowItWorks',
+    // initialRouteName: 'ModalPickerExample',
     initialRouteName: 'Profile',
     drawerBackgroundColor: 'rgba(255, 255, 255, 0.3)',
     contentComponent: props => <SideBar {...props} />,

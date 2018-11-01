@@ -169,25 +169,19 @@ class Quizz extends Component {
     init = false
     render() {
         const navigation = this.props.navigation;
-        // if(!this.init){
-        //     this.init = true;   
-        // }
         if(this.state.ready){
             let notification;
             if(this.state.showSuccessNotification){
                 notification = <Notification
                     message="¡Respuesta correcta!"
-                    // buttonText="_"
                     duration={defaultNotificationTime}
                     position="bottom"
                     type="success"
                   />
             }
             if(this.state.showErrorNotification){
-                // console.log("Mostrando notificación de error");
                 notification = <Notification
                     message={this.state.retro}
-                    // buttonText="_"
                     duration={defaultNotificationTime}
                     position="bottom"
                     type="danger"
@@ -206,8 +200,6 @@ class Quizz extends Component {
                         </Left>
                         <Body style={{ flex: 1, alignItems: 'center' }}>
                             {
-                                // this.state.timerVisibility 
-                                // ? 
                                 this.state.timerVisibility &&
                                     <CountdownCircle
                                       seconds={this.state.seconds}
@@ -218,13 +210,6 @@ class Quizz extends Component {
                                       textStyle={{ fontSize: 20 }}
                                       onTimeElapsed={ this.handleNextAnswerByTime }
                                     />
-                                // :
-                                // <TouchableOpacity
-                                //     onPress={() => {
-                                //         this.props.navigation.navigate('Expenses');
-                                //     }}>
-                                //     <Image source={logo} style={headerStyles.logo} />
-                                // </TouchableOpacity>
                             }
                         </Body>
                         <Right style={{ flex: 1 }}>
@@ -237,8 +222,6 @@ class Quizz extends Component {
                                     this.state.avatarReady &&
                                     (
                                         <Thumbnail 
-                                          // source={avatar} 
-                                          // source={require('@assets/images/default_avatar.png')}
                                           source={{
                                             uri: this.state.avatar,
                                             cache: 'only-if-cached',
@@ -537,10 +520,11 @@ class Quizz extends Component {
     next = false;
 
     loadData = async () => {
+        alert(this.props.navigation.state.params.level);
         getBearerTokenCountdownSeconds().then(
             (data) => {this.setState({bearerToken: data.bearerToken, bearerReady: true, countdownSeconds: data.countdownSeconds, seconds: data.countdownSeconds}, 
                     ()=>{
-                        url = api.getQuestions(this.props.navigation.state.params.courseId);
+                        url = api.getQuestions(this.props.navigation.state.params.courseId, this.props.navigation.state.params.level);
                         fetch(url, { 
                             method: 'GET', 
                             headers: {
@@ -552,6 +536,7 @@ class Quizz extends Component {
                         .then((response) => response.json())
                         .then((response) => {
                             if(response.data.questions.length == 0){
+                                alert('No existen Preguntas')
                                 this.goToCourseOverview()
                             }
                             this.setState( {

@@ -15,8 +15,8 @@ export const api = {
     getCourses: app_url + 'courses',
     getCoursesWithoutRandom: app_url + 'courses?no-random=1',
     sendAnswers: app_url + 'questions', //post
-    getQuestions: (course_id) => { 
-        return app_url + 'courses/' + course_id + '/questions'
+    getQuestions: (course_id, level) => { 
+        return app_url + 'courses/' + course_id + '/questions?level=' + level
     },
     getCompletedAchievements: app_url + '/achievements',
     getSettings: app_url + '/settings',
