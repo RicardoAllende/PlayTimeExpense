@@ -27,17 +27,19 @@ import { AsyncStorage } from "react-native"
 
 import ModalSelector from 'react-native-modal-selector'
 
-const deviceWidth = Dimensions.get('window').width;
+// import { levels } from '@components/ModalSelector/levels'
 
-const illustration = require('@assets/images/walkthrough3.png');
-
-const modalSelectorData = [
+const levels = [
   { key: 0, section: true, label: 'Escoja el nivel a jugar' },
   { key: 1, label: 'Fácil', value: 1 },
   { key: 2, label: 'Medio', value: 2 },
   { key: 3, label: 'Difícil', value: 3 },
-  { key: 4, label: 'Aleatorio', value: 'random' }
-]
+  { key: 4, label: 'Todos los niveles', value: '' }
+];
+
+const deviceWidth = Dimensions.get('window').width;
+
+const illustration = require('@assets/images/walkthrough3.png');
 
 class Walkthrough extends Component {
   constructor(props) {
@@ -88,15 +90,16 @@ class Walkthrough extends Component {
             </Button> */}
             <ModalSelector
                 key={'mdlStr' + index}
-                data={modalSelectorData}
+                data={levels}
                 initValue="Select something yummy!"
                 supportedOrientations={['landscape']}
                 accessible={true}
                 childrenContainerStyle={ styles.slide.btnWrapper }
-                // styles={}
+                // overlayStyle={{ backgroundColor:'blue' }}
+                touchableActiveOpacity={1}
                 scrollViewAccessibilityLabel={'Scrollable options'}
                 cancelButtonAccessibilityLabel={'Cancel Button'}
-                onChange={(option)=>{ this._goToCourse( item.id, option.value ) }}>
+                onChange={(level)=>{ this._goToCourse( 1, level.value ) }}>
               {/* <View  > */}
                 <Text
                   style={styles.slide.btnText}
@@ -132,7 +135,6 @@ class Walkthrough extends Component {
       courseId,
       level
     }
-    console.log(props);
     this.props.navigation.navigate('Quizz', props)
   }
 
@@ -219,7 +221,7 @@ class Walkthrough extends Component {
                 style={styles.skipBtn}
                 onPress={
                   () => {
-                    this.props.navigation.navigate('ModalPickerExample')
+                    this.props.navigation.navigate('Profile')
                   }
                 }
                 // onPress={() => this.props.navigation.navigate('Drawer', {

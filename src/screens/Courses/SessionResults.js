@@ -256,6 +256,7 @@ const stylesTabView = StyleSheet.create({
   },
   percentage: {
     textAlign: 'center',
+    padding: '5%',
   },
   percentageCircle: {
     alignItems: 'center',

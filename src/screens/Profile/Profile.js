@@ -146,15 +146,7 @@ class Profile extends Component {
               <View style={styles.separator} />
               <Contact type="email" name={'Personal'} number={(this.state.ready) ? profile.email : '_'} />
               <View style={styles.separator} />
-              {/* <Button
-                style={{ alignItems: 'center' }}
-                onPress={
-                  this.showImagePicker
-                }
-              >
-                <Text>Image Picker</Text>
-              </Button> */}
-              <Thumbnail source={{ uri: this.state.img }} />
+              {/* <Thumbnail source={{ uri: this.state.img }} /> */}
               <Social />
             </View>
           </ScrollView>
@@ -209,48 +201,12 @@ class Profile extends Component {
             session.setAvatar(jsonResponse.data.url);
             this.props.navigation.navigate('Walkthrough');
           }
-          /*
-          Respuesta exitosa
-          {
-            "data": {
-              "size": 652067,
-              "url": "storage/profile_images/HYiOf5mNE4evZuO4LFIRLiDGXp2PyLmT0e7euJYk.jpeg",
-            },
-            "response": {
-              "http_code": 200,
-              "message": "",
-              "status": "ok",
-            },
-          }
-
-
-          Respuesta de error
-          {
-            "data": Array [],
-            "response": {
-              "http_code": 500,
-              "message": "",
-              "status": "error",
-            },
-          }
-          */
           alert('Su imagen ha sido actualizada');
         } 
       ).catch(error => {
         console.log("error Profile", error)
       });
     })
-
-    
-    // console.log(formData)
-    // if (!result.cancelled) {
-    //   this.setState({ image: result.uri }, () => {
-        
-    //   });
-    // }
-    
-
-
   }
 
 }

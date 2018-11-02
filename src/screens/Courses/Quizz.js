@@ -226,7 +226,8 @@ class Quizz extends Component {
                                             uri: this.state.avatar,
                                             cache: 'only-if-cached',
                                           }}
-                                        style={styles.avatar} />
+                                        // style={styles.avatar} 
+                                        />
                                     )
                                 }
                             </TouchableOpacity>
@@ -335,15 +336,9 @@ class Quizz extends Component {
 
     getNextSkippedQuestion = () => {
         return this.state.skippedQuestions[0];
-        if(this.state.currentIndex == this.state){
-
-        }
     }
 
     isSkippedQuestionAvailable = () => {
-        // if(this.state.currentIndex + 1 < this.state.maxIndex){
-        //     return true;
-        // }
         if(this.state.skippedQuestions.length == 0){
             return false;
         }

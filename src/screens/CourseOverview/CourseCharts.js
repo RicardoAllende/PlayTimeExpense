@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ImageBackground } from 'react-native';
-import { Container, Tabs, Tab, Spinner, View, Text } from 'native-base';
+import { ImageBackground, TouchableOpacity, AsyncStorage } from 'react-native';
+import HeaderDrawerButton from '../../components/AppHeader/HeaderDrawerButton'
+import { Container, Tabs, Tab, Spinner, View, Text, Header, Body, Right, Left, Icon } from 'native-base';
 import { connect } from 'react-redux';
 import moment from 'moment/moment';
 
@@ -10,7 +11,6 @@ import AppHeader from '@components/AppHeader';
 import * as actions from './behaviors';
 import * as categoriesSelectors from './selectors';
 import theme from '@theme/variables/myexpense';
-import { AsyncStorage } from "react-native"
 import {api} from './../../../api/playTimeApi'
 import {session, getUserData} from './../../../api/session'
 import {
@@ -22,6 +22,19 @@ import Ranking from './Ranking'
 import styles from './styles';
 
 import AchievementsList from '@components/Achievement/AchievementsList'
+
+import headerStyles from '@components/AppHeader/styles'
+
+import ModalSelector from 'react-native-modal-selector'
+
+// import { levels } from '@components/ModalSelector/levels'
+const levels = [
+  { key: 0, section: true, label: 'Escoja el nivel a jugar' },
+  { key: 1, label: 'Fácil', value: 1 },
+  { key: 2, label: 'Medio', value: 2 },
+  { key: 3, label: 'Difícil', value: 3 },
+  { key: 4, label: 'Todos los niveles', value: '' }
+];
 
 import PercentageCircle from 'react-native-percentage-circle';
 const brandSuccess = '#50D2C2';
@@ -54,23 +67,6 @@ class CourseCharts extends Component {
   initialize = () => {
     this.props.getCategories();
   };
-
-  switchPeriod(i) {
-    let period = '';
-    switch (i) {
-      case 0:
-        period = getFormattedCurrentWeek();
-        break;
-      case 1:
-        period = getFormattedCurrentMonth();
-        break;
-      case 2:
-        period = moment().format('YYYY');
-        break;
-    }
-
-    this.setState({ currentPeriod: period });
-  }
 
   loadData = () => {
     console.log('CourseCharts.js Cargando preguntas')
@@ -126,11 +122,85 @@ class CourseCharts extends Component {
         <ImageBackground
           source={require('@assets/images/header-bg.png')}
           style={styles.container}>
-          <AppHeader
-            navigation={this.props.navigation}
-            title={ this.state.course ? this.state.course.name : "_"}
-            titleSuffix='_'
-          />
+          
+          { /* Inicia Appheader */ }
+                <View>
+                    <Header transparent hasTabs>
+                        <Left style={{ flex: 1 }}>
+                            <HeaderDrawerButton navigation={navigation} />
+                        </Left>
+                        <Body style={{ flex: 1, alignItems: 'center' }}>
+
+                        <ModalSelector
+                          // key={'mdlStr'}
+                          data={levels}
+                          initValue="Select something yummy!"
+                          supportedOrientations={['landscape']}
+                          accessible={true}
+                          // childrenContainerStyle={ styles.slide.btnWrapper }
+                          // overlayStyle={{ backgroundColor:'blue' }}
+                          touchableActiveOpacity={1}
+                          scrollViewAccessibilityLabel={'Scrollable options'}
+                          cancelButtonAccessibilityLabel={'Cancel Button'}
+                          onChange={(level)=>{ this._goToCourse( item.id, level.value ) }}>
+                        {/* <View  > */}
+                        <Icon active name="ios-play" style={{ fontSize: 35, color: 'white' }} />                          
+                        {/* </View> */}
+                      </ModalSelector>
+
+                            {/* <TouchableOpacity
+                            onPress={
+                              () => {
+                                navigation.navigate('Quizz');
+                              }
+                            }
+                            >
+                                <Icon active name="ios-play" style={{ fontSize: 35, color: 'white' }} />
+                            </TouchableOpacity> */}
+                        </Body>
+                        <Right style={{ flex: 1 }}>
+                            {this.props.displayAvatar && (
+                            <TouchableOpacity
+                                onPress={() => {
+                                this.props.navigation.navigate('Profile');
+                                }}>
+                                {
+                                    this.state.avatarReady &&
+                                    (
+                                        this.state.avatarReady &&
+                                        (
+                                            <Thumbnail 
+                                              source={{
+                                                uri: this.state.avatar,
+                                                cache: 'only-if-cached',
+                                              }}
+                                            // style={styles.avatar} 
+                                            />
+                                        )
+                                    )
+                                }
+                            </TouchableOpacity>
+                            )}
+                            {this.props.displaySearch && (
+                            <Button
+                                transparent
+                                onPress={() => {
+                                this.setState(() => ({
+                                    displaySearchBar: !this.state.displaySearchBar,
+                                }));
+                                }}>
+                                <Icon active name="ios-search" style={{ fontSize: 34 }} />
+                            </Button>
+                            )}
+                        </Right>
+                    </Header>
+                    
+                    <View style={headerStyles.titles.container}>
+                        <View style={headerStyles.titles.content}>
+                        <Text style={headerStyles.titles.text}>Nombre de la pregunta</Text>
+                        </View>
+                    </View>
+                </View>
           { ! this.state.ready && (
             <View style={styles.emptyContainer}>
               <Spinner color={theme.brandPrimary} />
@@ -149,9 +219,10 @@ class CourseCharts extends Component {
                   elevation: 0,
                 }}
                 locked
-                onChangeTab={({ i, ref, from }) =>
-                  this.switchPeriod(i, ref, from)
-                }>
+                // onChangeTab={({ i, ref, from }) =>
+                //   this.switchPeriod(i, ref, from)
+                // }
+                >
                 <Tab heading="Avances">
                   <CourseCarousel
                     categories={categories}
