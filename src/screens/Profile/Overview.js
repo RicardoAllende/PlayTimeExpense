@@ -16,7 +16,7 @@ export default class Overview extends React.Component {
   // }
 
   render(){
-    // console.log('overview render this.props.data', this.props.data)
+    console.log('overview render this.props.data', this.props.data)
     return (
       <View style={[styles.overview.container]}>
         <Grid>
@@ -24,10 +24,10 @@ export default class Overview extends React.Component {
             <TouchableOpacity onPress={() => this.props.navigation.navigate('Categories')}>
               <View>
                 <View style={styles.overview.column}>
-                  <Text style={styles.overview.title}>15</Text>
+                  <Text style={styles.overview.title}>{ this.props.data.num_completed_courses }</Text>
                 </View>
                 <View style={styles.overview.column}>
-                  <Text style={styles.overview.subtitle}>Cursos</Text>
+                  <Text style={styles.overview.subtitle}>Cursos inscritos</Text>
                   <View
                     style={[
                       styles.overview.marker,
@@ -42,7 +42,7 @@ export default class Overview extends React.Component {
             <TouchableOpacity onPress={() => this.props.navigation.navigate('Overview')}>
               <View>
                 <View style={styles.overview.column}>
-                  <Text style={styles.overview.title}>11K</Text>
+                  <Text style={styles.overview.title}>{ this.props.data.num_enrolled_courses }</Text>
                 </View>
                 <View style={styles.overview.column}>
                   <Text style={styles.overview.subtitle}>Cursos terminados</Text>

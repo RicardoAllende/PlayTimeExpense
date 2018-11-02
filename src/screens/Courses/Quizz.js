@@ -520,16 +520,21 @@ class Quizz extends Component {
             (data) => {this.setState({bearerToken: data.bearerToken, bearerReady: true, countdownSeconds: data.countdownSeconds, seconds: data.countdownSeconds}, 
                     ()=>{
                         url = api.getQuestions(this.props.navigation.state.params.courseId, this.props.navigation.state.params.level);
-                        fetch(url, { 
-                            method: 'GET', 
-                            headers: {
+                        alert(url);
+                        console.log('Url de donde se obtiene la información', url)
+                        uriHeaders = {
                                 "Authorization": 'Bearer ' + this.state.bearerToken,
                                 Accept: 'application/json',
                                 "Content-Type": "application/json"
                             }
+                        console.log('Uri headers', uriHeaders);
+                        fetch(url, { 
+                            method: 'GET', 
+                            headers: uriHeaders
                         })
                         .then((response) => response.json())
                         .then((response) => {
+                            console.log('Quizz response', response)
                             if(response.data.questions.length == 0){
                                 alert('No existen Preguntas')
                                 this.goToCourseOverview()
