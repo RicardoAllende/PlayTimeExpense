@@ -20,6 +20,11 @@ const avatar = require('@assets/images/default_avatar.png');
 // import ImagePicker from 'react-native-image-picker';
 import { ImagePicker } from 'expo';
 
+const defaultOverview = {
+  num_achievements: 0,
+  num_completed_courses: 0,
+  num_enrolled_courses: 0,
+}
 
 class Profile extends Component {
   constructor(props) {
@@ -67,6 +72,7 @@ class Profile extends Component {
           overviewReady: true
         },
           () => {
+            console.log(this.state.overview)
             // console.log('CoursCharts Carga de elementos terminada', this.state)
           }
         )
@@ -134,10 +140,10 @@ class Profile extends Component {
           <ScrollView style={styles.content}>
             <View style={styles.container}>
               {
-                this.state.overviewReady &&
-                (
-                  <Overview navigation={navigation} data={this.state.overview} />
-                )
+                this.state.overviewReady ?
+                  (<Overview navigation={navigation} data={this.state.overview} />)
+                :
+                  (<Overview navigation={navigation} data={defaultOverview} />)
               }
               <View style={styles.separator} />
               <Contact type="phone" name={'Mobile'} number={(this.state.ready) ? profile.mobile : '_'} />
@@ -155,15 +161,17 @@ class Profile extends Component {
     );
   }
 
-  // showImagePicker = () => {
   showImagePicker = async () => {
 
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
     });
+    if(result.cancelled){
+      return false;
+    }
 
-    console.log(result);
+    // console.log(result);
     this.setState({
       img: result.uri
     }, () => {
@@ -199,7 +207,9 @@ class Profile extends Component {
           if(jsonResponse.response.status == 'ok'){
             alert('La imagen se ha actualizado con la siguiente ruta: ' + jsonResponse.data.url);
             session.setAvatar(jsonResponse.data.url);
-            this.props.navigation.navigate('Walkthrough');
+            this.props.navigation.navigate('Walkthrough', {
+              reload: true,
+            });
           }
           alert('Su imagen ha sido actualizada');
         } 

@@ -1,3 +1,3 @@
-import CourseCharts from './CourseCharts';
+import CourseOverview from './CourseOverview';
 
-export default CourseCharts;
+export default CourseOverview;

@@ -11,7 +11,7 @@ import * as actions from './behaviors';
 import * as categoriesSelectors from './selectors';
 import theme from '@theme/variables/myexpense';
 import { AsyncStorage } from "react-native"
-import {api} from './../../../api/playTimeApi'
+import {api, getLevelName, getLevelIndex} from './../../../api/playTimeApi'
 import {session, getBearerToken, getUserData} from './../../../api/session'
 import RankingList from '../CourseOverview/RankingList'
 
@@ -68,11 +68,6 @@ class CourseCharts extends Component {
 
   init = false;
   render() {
-    // if(! this.init ){
-    //   this.loadData();
-    //   this.init = true;
-    // }
-    // console.log("CourseChart.js Overview")
     const { navigation, categoriesLoading, categories } = this.props;
     return (
       <Container>
@@ -107,6 +102,7 @@ class CourseCharts extends Component {
                 }>
                 <Tab heading="Resultados">
                   <ScrollView style={stylesTabView.container}>
+                    <Text style={stylesTabView.textDescription} >Nivel de complejidad: { this.state.level }</Text>
                     <Text style={stylesTabView.textDescription} >Usted contestó { this.state.numAnswers } preguntas</Text>
                     <Text style={stylesTabView.textDescription} >De las cuales, tuvo { this.state.numCorrectAnswers } correctas</Text>
                     <Text style={stylesTabView.textDescription} >Total de preguntas restantes en el curso: { this.state.numQuestionsGiven }</Text>
@@ -196,7 +192,7 @@ class CourseCharts extends Component {
     getBearerToken().then(
       (bearerToken) => {
         this.setState({ bearerToken }, () => {
-          url = api.getSessionStats;
+          url = api.getSessionResults;
           data = JSON.stringify({
             session: this.props.navigation.state.params.session,
             num_questions: this.props.navigation.state.params.num_questions_given,
@@ -217,10 +213,10 @@ class CourseCharts extends Component {
             }
           ).then(
             jsonResponse => {
-              // console.log(jsonResponse)
+              level = getLevelName(this.props.navigation.state.params.level);
               this.setState({
                 numAnswers:  jsonResponse.data.num_answers, // Num questions the user answered
-                numQuestionsGiven: jsonResponse.data.num_questions_given, // Total questions in the quizz
+                numQuestionsGiven: this.props.navigation.state.params.num_questions_given, // Total questions in the quizz
                 numCorrectAnswers: jsonResponse.data.num_correct_answers,
                 finishedInASession: jsonResponse.data.finished_in_a_session,
                 randomMode: jsonResponse.data.random_mode,
@@ -230,6 +226,7 @@ class CourseCharts extends Component {
                 achievements: jsonResponse.data.achievements,
                 advance: jsonResponse.data.advance,
                 ready: true,
+                level,
               }, () => console.log("Elementos cargados en el estado") )
             }
           )

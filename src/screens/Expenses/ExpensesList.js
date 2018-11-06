@@ -1,3 +1,4 @@
+// Listado de cursos
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList } from 'react-native';

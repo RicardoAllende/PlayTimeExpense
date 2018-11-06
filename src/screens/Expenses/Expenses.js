@@ -147,8 +147,8 @@ class Expenses extends Component {
                   navigation={navigation}
                   handleDelete={deleteExpense}
                   _onPress={
-                    (courseId, courseName) => navigation.navigate('Quizz', {
-                      courseId: courseId, courseName
+                    (courseId, level) => navigation.navigate('Quizz', {
+                      courseId, level
                     })
                   }
                 />

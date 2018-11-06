@@ -16,6 +16,9 @@ export const api = {
     getCoursesWithoutRandom: app_url + 'courses?no-random=1',
     sendAnswers: app_url + 'questions', //post
     getQuestions: (course_id, level) => { 
+        if(level == 0){
+            return app_url + 'courses/' + course_id + '/questions'
+        }
         return app_url + 'courses/' + course_id + '/questions?level=' + level
     },
     getCompletedAchievements: app_url + '/achievements',
@@ -39,10 +42,30 @@ export const api = {
         return app_url + 'courses/' + course_id + '/overview'
     },
     getCompleteRanking: app_url + 'ranking',
-    getSessionStats: app_url + 'sessions/results', // POST 
+    getSessionResults: app_url + 'sessions/results', // POST 
     setHitsInCourse: (course_id) => {
         return app_url + 'courses/' + course_id + '/achievements/set-hits'
     },
     setAvatar: app_url + 'users/avatar',
     getOverview: app_url + 'overview'
+}
+const levels = ['Aleatorio', 'Fácil', 'Medio', 'Difícil'];
+
+export const modalLevels = [
+    { key: 8, section: true, label: 'Escoja el nivel a jugar' },
+    { key: 1, label: getLevelName(1), value: 1 },
+    { key: 2, label: getLevelName(2), value: 2 },
+    { key: 3, label: getLevelName(3), value: 3 },
+    { key: 0, label: getLevelName(0), value: 0 },
+]
+
+export function getLevelName(index){
+    if(index > -1 && index < levels.length ){
+        return levels[index];
+    }
+    return "_";
+}
+
+export function getLevelIndex(levelName){
+    return levels.indexOf(levelName);
 }

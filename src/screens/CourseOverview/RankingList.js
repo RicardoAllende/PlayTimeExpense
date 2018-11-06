@@ -10,14 +10,6 @@ import categoryColors from '@theme/categoryColors';
 import styles from '../Expenses/styles';
 
 class RankingList extends Component {
-  // static propTypes = {
-  //   expensesList: PropTypes.array,
-  //   handleDelete: PropTypes.func,
-  // };
-
-  static defaultProps = {
-    expensesList: [],
-  };
 
   deleteItem(itemId) {
     this.props.handleDelete(itemId);
@@ -60,7 +52,7 @@ class RankingList extends Component {
                   onPress={
                     () => console.log('Tap en elemento')
                   }>
-                  <Icon active name="ios-play" style={{ fontSize: 35 }} />
+                  <Icon active name="ios-mail" style={{ fontSize: 35 }} />
                 </Button>
               }
             />

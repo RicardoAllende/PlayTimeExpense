@@ -14,7 +14,7 @@ import Carousel from 'react-native-snap-carousel';
 import {shouldShowTutorial} from '../../../api/session'
 import AppIntroSlider from 'react-native-app-intro-slider';
 
-import {api} from './../../../api/playTimeApi'
+import {api, modalLevels} from './../../../api/playTimeApi'
 
 import { Asset, AppLoading, Font } from 'expo';
 
@@ -27,15 +27,9 @@ import { AsyncStorage } from "react-native"
 
 import ModalSelector from 'react-native-modal-selector'
 
-// import { levels } from '@components/ModalSelector/levels'
+import LevelModalSelector from '../../components/ModalSelector/LevelModalSelector'
 
-const levels = [
-  { key: 0, section: true, label: 'Escoja el nivel a jugar' },
-  { key: 1, label: 'Fácil', value: 1 },
-  { key: 2, label: 'Medio', value: 2 },
-  { key: 3, label: 'Difícil', value: 3 },
-  { key: 4, label: 'Todos los niveles', value: '' }
-];
+// import LevelModalSelector from '@components/ModalSector/LevelModalSelector'
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -70,10 +64,9 @@ class Walkthrough extends Component {
   }
 
   renderSlide({ item, index }) {
-    // console.log("Item rendering")
-    if(this.state.showTutorial){
+    // if(this.state.showTutorial){
 
-    }else{
+    // }else{
       return (
         <Card style={styles.slide.container}>
           <View>
@@ -82,33 +75,21 @@ class Walkthrough extends Component {
             <Text numberOfLines={4} style={styles.slide.subtitle}>
               {item.description}
             </Text>
-            {/* <Button
-              transparent
-              onPress={() => this._goToCourse(item.id)}
-              style={styles.slide.btnWrapper}>
-              <Text style={styles.slide.btnText}>Jugar</Text>
-            </Button> */}
-            <ModalSelector
-                key={'mdlStr' + index}
-                data={levels}
-                initValue="Select something yummy!"
-                supportedOrientations={['landscape']}
-                accessible={true}
-                childrenContainerStyle={ styles.slide.btnWrapper }
-                // overlayStyle={{ backgroundColor:'blue' }}
-                touchableActiveOpacity={1}
-                scrollViewAccessibilityLabel={'Scrollable options'}
-                cancelButtonAccessibilityLabel={'Cancel Button'}
-                onChange={(level)=>{ this._goToCourse( 1, level.value ) }}>
-              {/* <View  > */}
+            <LevelModalSelector
+              childrenContainerStyle={ styles.slide.btnWrapper }
+              content={
                 <Text
                   style={styles.slide.btnText}
                   >
                   Jugar
                 </Text>
-              {/* </View> */}
-
-            </ModalSelector>
+              }
+              courseId={ item.id }
+              onPress={
+                this._goToCourse
+              }
+              key={'mdl' + index}
+            ></LevelModalSelector>
             {
               item.id != -1 &&
               <Button
@@ -127,7 +108,7 @@ class Walkthrough extends Component {
           </View>
         </Card>
       );
-    }
+    // }
   }
 
   _goToCourse = (courseId, level) => {
@@ -174,18 +155,33 @@ class Walkthrough extends Component {
   }
 
   componentDidMount(){
+    // // if(this.props.navigation.state.params){
+    // try {
+    //   let shouldRedirect = this.props.navigation.state.params.reload
+    //   this.props.navigation.navigate('Profile')
+    //   // if(){
+    //   //   this.props.navigation.navigate('Profile')
+    //   // }else{
+    //   //   alert('Fuera del segundo if')
+    //   // }
+    //   // console.log('Terminó componentDidMount try')
+    // } catch (error) {
+    //   // console.log(error)
+    //   console.log('Ocurrió un error');
+    //   // alert('Ocurrió un error')
+    // }
+    // // }else{
+    // //   alert('Fuera del primer if')
+    // // }
     this.loadUserData();
   }
 
   _onDone = () => {
-    // alert('Cambiando el estado');
     this.setState({
       showTutorial: false,
     })
   }
 
-  loadingQuestions = true;
-  loadingBearer = true;
   render() {
     if(this.state.showTutorial){
       return <AppIntroSlider slides={slides} onDone={this._onDone} />;

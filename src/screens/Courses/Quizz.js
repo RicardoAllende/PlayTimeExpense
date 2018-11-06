@@ -97,11 +97,6 @@ class Quizz extends Component {
         })
     }
 
-    initialize = () => {
-        this.props.getCategories();
-    };
-
-
     itemSeparatorComponent = () => {
         return (<View style = {{height: 10,width: '100%',}} />)
     }
@@ -166,7 +161,6 @@ class Quizz extends Component {
         this.loadData();
     }
     
-    init = false
     render() {
         const navigation = this.props.navigation;
         if(this.state.ready){
@@ -310,12 +304,13 @@ class Quizz extends Component {
             session: this.state.session,
             num_questions_given: this.state.maxIndex,
             course_id: this.props.navigation.state.params.courseId,
+            level: this.props.navigation.state.params.level,
         });
     }
 
     goToCourseOverview = () =>{
-        this.props.navigation.navigation.navigate('CourseOverview', {
-            course_id: this.props.navigation.state.params.courseId,
+        this.props.navigation.navigate('CourseOverview', {
+            courseId: this.props.navigation.state.params.courseId,
         })
     } 
 
@@ -447,6 +442,7 @@ class Quizz extends Component {
                 option_id: optionId,
                 course_id: this.props.navigation.state.params.courseId,
                 session: this.state.session,
+                level: this.props.navigation.state.params.level,
             })
         fetch(api.sendAnswers, {
             method: 'POST',
@@ -459,8 +455,8 @@ class Quizz extends Component {
         }).then(
             // Enviando retroalimentación
             response => {
-                return response.json();
-                console.log("Retro")
+                // return response.json();
+                // console.log("Retro")
             }
         ).then(
             // jsonResponse => console.log(jsonResponse)
@@ -491,7 +487,6 @@ class Quizz extends Component {
             }, defaultDelayToShowQuestion)
         }else{
             this.setState({retro: this.state.currentQuestion.feedback, hits: 0}, () => {
-                // console.log('Estableciendo la retroalimentación en: ', this.state.retro)
                 this.showErrorNotification()
                 this.next = true
                 setTimeout(() => {
@@ -501,52 +496,43 @@ class Quizz extends Component {
                     }
                 }, defaultDelayToShowQuestion)
             })
-            // Alert.alert(
-            //     this.state.currentQuestion.feedback,
-            //     '¿Deseas continuar?',
-            //     [
-            //         {text: 'Terminar', onPress: () => this._goToResults() , style: 'cancel'},
-            //         {text: 'Siguiente', onPress: () => this.handleNextAnswer(), style: 'default' },
-            //     ]
-            // )
         }
     }
 
     next = false;
 
     loadData = async () => {
-        alert(this.props.navigation.state.params.level);
         getBearerTokenCountdownSeconds().then(
             (data) => {this.setState({bearerToken: data.bearerToken, bearerReady: true, countdownSeconds: data.countdownSeconds, seconds: data.countdownSeconds}, 
                     ()=>{
                         url = api.getQuestions(this.props.navigation.state.params.courseId, this.props.navigation.state.params.level);
-                        alert(url);
-                        console.log('Url de donde se obtiene la información', url)
                         uriHeaders = {
                                 "Authorization": 'Bearer ' + this.state.bearerToken,
                                 Accept: 'application/json',
                                 "Content-Type": "application/json"
                             }
-                        console.log('Uri headers', uriHeaders);
+                        // console.log('Uri headers', uriHeaders)
                         fetch(url, { 
                             method: 'GET', 
                             headers: uriHeaders
                         })
                         .then((response) => response.json())
                         .then((response) => {
-                            console.log('Quizz response', response)
+                            // console.log('Quizz response', response)
+                            console.log('Quizz response lenght', response.data.questions.length)
                             if(response.data.questions.length == 0){
-                                alert('No existen Preguntas')
+                                // alert('No existen Preguntas')
                                 this.goToCourseOverview()
+                            }else{
+                                this.setState( {
+                                    questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length, 
+                                    currentQuestion: response.data.questions[0], ready: true}, 
+                                    ()=>{
+                                        console.log('Quizz.js session', this.state.session)
+                                        console.log('');
+                                    }
+                                )
                             }
-                            this.setState( {
-                                questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length, 
-                                currentQuestion: response.data.questions[0], ready: true}, 
-                                ()=>{
-                                    console.log('Quizz.js session', this.state.session)
-                                    console.log('');
-                                }
-                            )
                         }
                         ).catch((error) => { console.error(error); })
                     }
@@ -557,13 +543,4 @@ class Quizz extends Component {
 
 }
 
-const mapStateToProps = state => ({
-  categories: categoriesSelectors.getCategories(state),
-  categoriesLoading: categoriesSelectors.getCategoriesLoadingState(state),
-  categoriesError: categoriesSelectors.getCategoriesErrorState(state),
-});
-
-export default connect(
-  mapStateToProps,
-  actions
-)(Quizz);
+export default Quizz;

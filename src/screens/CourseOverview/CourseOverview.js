@@ -11,7 +11,7 @@ import AppHeader from '@components/AppHeader';
 import * as actions from './behaviors';
 import * as categoriesSelectors from './selectors';
 import theme from '@theme/variables/myexpense';
-import {api} from './../../../api/playTimeApi'
+import {api, modalLevels} from './../../../api/playTimeApi'
 import {session, getUserData} from './../../../api/session'
 import {
   getFormattedCurrentWeek,
@@ -27,71 +27,49 @@ import headerStyles from '@components/AppHeader/styles'
 
 import ModalSelector from 'react-native-modal-selector'
 
-// import { levels } from '@components/ModalSelector/levels'
-const levels = [
-  { key: 0, section: true, label: 'Escoja el nivel a jugar' },
-  { key: 1, label: 'Fácil', value: 1 },
-  { key: 2, label: 'Medio', value: 2 },
-  { key: 3, label: 'Difícil', value: 3 },
-  { key: 4, label: 'Todos los niveles', value: '' }
-];
+// import { modalLevels } from '@components/ModalSelector/modalLevels'
+// const modalLevels = [
+//   { key: 0, section: true, label: 'Escoja el nivel a jugar' },
+//   { key: 1, label: 'Fácil', value: 1 },
+//   { key: 2, label: 'Medio', value: 2 },
+//   { key: 3, label: 'Difícil', value: 3 },
+//   { key: 4, label: 'Todos los niveles', value: '' }
+// ];
 
 import PercentageCircle from 'react-native-percentage-circle';
 const brandSuccess = '#50D2C2';
 
-class CourseCharts extends Component {
-  static propTypes = {
-    navigation: PropTypes.any,
-    getCategories: PropTypes.func.isRequired,
-    categoriesLoading: PropTypes.bool.isRequired,
-    categoriesError: PropTypes.bool.isRequired,
-    categories: PropTypes.array,
-  };
-
-  static defaultProps = {
-    categoriesLoading: false,
-    categoriesError: false,
-    categories: [],
-  };
-
+class CourseOverview extends Component {
   state = {
     currentPeriod: getFormattedCurrentWeek(),
     showPieChart: false,
     ready: false,
   };
 
-  componentDidMount() {
-    this.initialize();
-  }
-
-  initialize = () => {
-    this.props.getCategories();
-  };
-
   loadData = () => {
-    console.log('CourseCharts.js Cargando preguntas')
+    // console.log('CourseOverview.js Cargando preguntas')
     getUserData().then(
       (userData) => {
         this.setState({ bearerToken: userData.bearerToken, bearerReady: true, userData: userData }, () => {
           // () => { // BearerToken ready
           console.log("Loading questions");
           url = api.getCourseOverView(this.props.navigation.state.params.courseId);
+          headers = {
+            "Authorization": 'Bearer ' + this.state.bearerToken,
+            Accept: 'application/json',
+            "Content-Type": "application/json"
+          }
+          // console.log(headers);
+          // console.log(url)
           // console.log(url)
           // console.log(this.state.bearerToken, url);
             fetch(url, { 
                 method: 'GET', 
-                headers: {
-                    "Authorization": 'Bearer ' + this.state.bearerToken,
-                    Accept: 'application/json',
-                    "Content-Type": "application/json"
-                }
+                headers,
             })
             .then((response) => response.json())
             .then((jsonResponse) => {
-                // console.log(jsonResponse)
-                // return
-                // console.log(jsonResponse)
-                // console.log(jsonResponse)s
+                // console.log('CourseChart jsonResponse courseoverview', jsonResponse, url)
                 this.setState({
                     usersRanking: jsonResponse.data.ranking.users, times: jsonResponse.data.ranking.times, 
                     medalRanking: jsonResponse.data.medal_ranking, advance: jsonResponse.data.advance, 
@@ -133,7 +111,7 @@ class CourseCharts extends Component {
 
                         <ModalSelector
                           // key={'mdlStr'}
-                          data={levels}
+                          data={modalLevels}
                           initValue="Select something yummy!"
                           supportedOrientations={['landscape']}
                           accessible={true}
@@ -197,7 +175,7 @@ class CourseCharts extends Component {
                     
                     <View style={headerStyles.titles.container}>
                         <View style={headerStyles.titles.content}>
-                        <Text style={headerStyles.titles.text}>Nombre de la pregunta</Text>
+                        <Text style={headerStyles.titles.text}> {this.state.ready ? this.state.course.name : '_' } </Text>
                         </View>
                     </View>
                 </View>
@@ -265,13 +243,14 @@ class CourseCharts extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  categories: categoriesSelectors.getCategories(state),
-  categoriesLoading: categoriesSelectors.getCategoriesLoadingState(state),
-  categoriesError: categoriesSelectors.getCategoriesErrorState(state),
-});
+// const mapStateToProps = state => ({
+//   categories: categoriesSelectors.getCategories(state),
+//   categoriesLoading: categoriesSelectors.getCategoriesLoadingState(state),
+//   categoriesError: categoriesSelectors.getCategoriesErrorState(state),
+// });
 
-export default connect(
-  mapStateToProps,
-  actions
-)(CourseCharts);
+// export default connect(
+//   mapStateToProps,
+//   actions
+// )(CourseOverview);
+export default CourseOverview;
