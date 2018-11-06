@@ -21,6 +21,7 @@ import CourseOverView from '@screens/CourseOverview'
 import SessionResults from '@screens/Courses/SessionResults'
 import HowItWorks from '@screens/HowItWorks'
 import ModalPickerExample from '@screens/Walkthrough/ModalPickerExample'
+import CompletedCourses from '@screens/CompletedCourses';
 
 const Drawer = createDrawerNavigator(
   {
@@ -38,6 +39,7 @@ const Drawer = createDrawerNavigator(
     SessionResults: { screen: SessionResults },
     HowItWorks: { screen: HowItWorks},
     ModalPickerExample: { screen: ModalPickerExample },
+    CompletedCourses: { screen: CompletedCourses }
   },
   {
     // initialRouteName: 'ModalPickerExample',

@@ -11,6 +11,11 @@ export const routes = [
     route: 'Expenses',
     icon: 'ios-cash-outline',
   },
+  {
+    title: 'Cursos completos',
+    route: 'CompletedCourses',
+    icon: 'ios-cash-outline',
+  },
   // {
   //   title: 'Categorías',
   //   route: 'Categories',

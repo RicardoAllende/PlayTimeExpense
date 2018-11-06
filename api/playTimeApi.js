@@ -13,6 +13,7 @@ export const api = {
     auth: api_url + 'auth', // POST request if user has email and password, GET request if user has a token
     checkUser: api_url + 'check-user-by-token',
     getCourses: app_url + 'courses',
+    getCompletedCourses: app_url + 'courses/completed',
     getCoursesWithoutRandom: app_url + 'courses?no-random=1',
     sendAnswers: app_url + 'questions', //post
     getQuestions: (course_id, level) => { 

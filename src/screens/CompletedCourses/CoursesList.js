@@ -10,7 +10,16 @@ import categoryColors from '@theme/categoryColors';
 
 import styles from './styles';
 
-class ExpensesList extends Component {
+class CoursesList extends Component {
+  // static propTypes = {
+  //   expensesList: PropTypes.array,
+  //   handleDelete: PropTypes.func,
+  // };
+
+  static defaultProps = {
+    expensesList: [],
+  };
+
   deleteItem(itemId) {
     this.props.handleDelete(itemId);
   }
@@ -34,11 +43,11 @@ class ExpensesList extends Component {
               style={styles.item.container}
               body={
                 <ExpenseItem
-                  item={item}
-                  style={{}}
-                  color={categoryColors[index % categoryColors.length]}
-                  _onPress={this.props._onPress}
-                  finished={false}
+                item={item}
+                style={{}}
+                color={categoryColors[index % categoryColors.length]}
+                _onPress={this.props._onPress}
+                finished={true}
                 />
               }
               right={
@@ -62,4 +71,4 @@ class ExpensesList extends Component {
   }
 }
 
-export default ExpensesList;
+export default CoursesList;
