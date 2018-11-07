@@ -64,10 +64,10 @@ class CompletedCourses extends Component {
                   coursesLoading: false,
                 },
                 () => {
-                  console.log('CompletedCourses this.state.coures')
+                  // console.log('CompletedCourses this.state.coures')
                 }
               );
-              session.setCourses(response.data.courses);
+              // session.setCourses(response.data.courses);
             })
             .catch(error => {
               console.error(error);

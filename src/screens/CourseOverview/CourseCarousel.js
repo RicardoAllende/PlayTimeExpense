@@ -108,7 +108,7 @@ export class CourseCarousel extends React.Component {
               </View> 
               :
               <View pointerEvents="none" style={styles.slides}>
-                <Text style={styles.chartTitle}>Porcentaje de aprovación del curso</Text>              
+                <Text style={styles.chartTitle}>Porcentaje de aprobación del curso</Text>              
                 <Text>No se han obtenido respuestas correctas</Text>
               </View>
 

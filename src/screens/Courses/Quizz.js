@@ -408,6 +408,7 @@ class Quizz extends Component {
         console.log("Quizz sendMaxHits: maxHits", maxHits, ' -- Course_id', courseId, ' Url', url)
         var data = JSON.stringify({
             max_hits: maxHits,
+            level: this.props.navigation.state.params.level,
         })
         fetch(url, {
             method: 'POST',
@@ -502,6 +503,7 @@ class Quizz extends Component {
     next = false;
 
     loadData = async () => {
+        console.log('Ingresando a Quizz.js')
         getBearerTokenCountdownSeconds().then(
             (data) => {this.setState({bearerToken: data.bearerToken, bearerReady: true, countdownSeconds: data.countdownSeconds, seconds: data.countdownSeconds}, 
                     ()=>{
@@ -528,8 +530,8 @@ class Quizz extends Component {
                                     questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length, 
                                     currentQuestion: response.data.questions[0], ready: true}, 
                                     ()=>{
-                                        console.log('Quizz.js session', this.state.session)
-                                        console.log('');
+                                        // console.log('Quizz.js session', this.state.session)
+                                        // console.log('');
                                     }
                                 )
                             }

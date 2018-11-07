@@ -11,7 +11,7 @@ import {
 import { Container, Content, Text, Button, Card, Footer } from 'native-base';
 import Carousel from 'react-native-snap-carousel';
 
-import {shouldShowTutorial} from '../../../api/session'
+import {shouldShowTutorial, shouldRestart} from '../../../api/session'
 import AppIntroSlider from 'react-native-app-intro-slider';
 
 import {api, modalLevels} from './../../../api/playTimeApi'
@@ -41,7 +41,7 @@ class Walkthrough extends Component {
     this.state ={
       bearerReady: false,
       ready: false,
-      showTutorial: false,
+      showTutorial: true,
     }
     this.renderSlide = this.renderSlide.bind(this);
   }
@@ -174,6 +174,13 @@ class Walkthrough extends Component {
     // //   alert('Fuera del primer if')
     // // }
     this.loadUserData();
+    // this.redirectToApp();
+  }
+
+  redirectToApp = async () => {
+    if(shouldRestart()){
+      this.props.navigation.navigate('Profile')
+    }
   }
 
   _onDone = () => {
@@ -184,7 +191,17 @@ class Walkthrough extends Component {
 
   render() {
     if(this.state.showTutorial){
-      return <AppIntroSlider slides={slides} onDone={this._onDone} />;
+      return <AppIntroSlider
+       slides={slides} 
+       onDone={this._onDone} 
+       onSkip={this.onDone}
+       skipLabel="Saltar tutorial"
+       doneLabel="Comenzar"
+       nextLabel="Siguiente"
+       prevLabel="Anterior"
+      //  showSkipButton={true}
+      //  showPrevButton={true}
+       />;
     }else{
       return (
         <Container>
@@ -236,8 +253,8 @@ class Walkthrough extends Component {
 
 const tutorialStyles = StyleSheet.create({
   image: {
-      width: 320,
-      height: 320,
+      width: 240,
+      height: 240,
   }
 });
 
@@ -245,7 +262,7 @@ const slides = [
   {
       key: 'tut_1',
       title: '¿Qué es Playtime?',
-      text: 'Playtime es una aplicación que le ayudará a asimilar sus conocimientos...',
+      text: 'Playtime es una aplicación que le ayudará a reforzar los conocimientos adquiridos en su capacitación...',
       image: require('@assets/images/Tutorial/1.jpg'),
       imageStyle: tutorialStyles.image,
       backgroundColor: '#59b2ab',
@@ -253,7 +270,7 @@ const slides = [
   {
       key: 'tut_2',
       title: 'Selecciona un curso',
-      text: 'Navegue entre los distintos cursos a los cuales está inscrito, de clic en jugar para comenzar, o en estadísticas para conocer quiénes son los mejores en el juego',
+      text: 'Seleccione un curso en el que esté inscrito, de clic en <jugar> para comenzar, o en <estadísticas> para conocer quiénes son los mejores en el juego',
       image: require('@assets/images/Tutorial/2.jpg'),
       imageStyle: tutorialStyles.image,
       backgroundColor: '#febe29',
@@ -270,10 +287,18 @@ const slides = [
     key: 'tut_4',
     title: 'Terminar el intento',
     text: 'Para terminar el intento, presione el botón',
-    image: require('@assets/images/Tutorial/3.jpg'),
+    image: require('@assets/images/Tutorial/2.jpg'),
     imageStyle: tutorialStyles.image,
-    backgroundColor: '#22bcb5',
-}
+    backgroundColor: '#febe29',
+  },
+  {
+    key: 'tut_5',
+    title: '¿Estás listo?',
+    text: '',
+    image: require('@assets/images/play-button.png'),
+    imageStyle: tutorialStyles.image,
+    backgroundColor: '#FF3366',
+  }
 ];
 
 export default Walkthrough;

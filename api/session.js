@@ -166,12 +166,28 @@ const tutorialShowedDataName = 'tutorial_showed'
 export async function shouldShowTutorial(){
     response = await AsyncStorage.getItem(tutorialShowedDataName)
     if(response !== null){
+        AsyncStorage.removeItem(tutorialShowedDataName)
         return true;
     }
     return false;
-    // if(response == 1)
 }
 
 export function setTutorialShowed(){
     AsyncStorage.setItem(tutorialShowedDataName, 'viewed')
+}
+
+export async function shouldRestart(){
+    // alert('entrando en la función')
+    // bearerToken = await AsyncStorage.getItem(session.bearerTokenName)
+    restart = await AsyncStorage.getItem('restart')
+    if(restart !== null){
+        AsyncStorage.removeItem('restart')
+        return true
+    }
+    // alert('Terminó la función')
+    return false
+}
+
+export function restartApp(){
+    AsyncStorage.setItem('restart', '00')
 }

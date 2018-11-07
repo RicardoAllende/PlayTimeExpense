@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ImageBackground, ScrollView, TouchableOpacity, Linking } from 'react-native';
+import { ImageBackground, ScrollView, TouchableOpacity, Linking, Alert } from 'react-native';
 import { Container, Thumbnail, View, Text, Button } from 'native-base';
 import { connect } from 'react-redux';
 import FormData from 'form-data'
@@ -13,7 +13,7 @@ import * as profileSelectors from './selectors';
 import styles from './styles';
 
 import { api } from './../../../api/playTimeApi'
-import { session, getBearerToken, getUserData, getAvatar } from './../../../api/session'
+import { session, getBearerToken, getUserData, getAvatar, restartApp } from './../../../api/session'
 
 const avatar = require('@assets/images/default_avatar.png');
 
@@ -111,12 +111,7 @@ class Profile extends Component {
           />
           <View style={styles.profile.container}>
             <TouchableOpacity
-              onPress={() => {
-                this.showImagePicker()
-                // Linking.openURL(api.loginWithRememberToken(this.state.profile.access))
-                // alert(this.state.profile.access)
-                // Linking.openURL('');
-              }}
+              onPress={this.onTapImage}
             >
               {
                 this.state.avatarReady &&
@@ -159,6 +154,20 @@ class Profile extends Component {
         </ImageBackground>
       </Container>
     );
+  }
+
+  onTapImage = () => {
+    Alert.alert(
+      '¿Desea Cambiar su imagen?',
+      // '¿Desea cambiar su imagen?',
+      '',
+      [
+        // {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+        {text: 'No ahora', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: 'Sí', onPress: () => {this.showImagePicker()}},
+      ],
+      { cancelable: false }
+    )
   }
 
   showImagePicker = async () => {
@@ -205,13 +214,15 @@ class Profile extends Component {
             alert('Imagen no actulizada por tamaño del archivo');
           }
           if(jsonResponse.response.status == 'ok'){
-            alert('La imagen se ha actualizado con la siguiente ruta: ' + jsonResponse.data.url);
+            // alert('La imagen se ha actualizado con la siguiente ruta: ' + jsonResponse.data.url);
             session.setAvatar(jsonResponse.data.url);
+            restartApp()
             this.props.navigation.navigate('Walkthrough', {
               reload: true,
             });
           }
-          alert('Su imagen ha sido actualizada');
+          // alert('Su imagen ha sido actualizada');
+          console.log('Su imagen ha sido actualizada')
         } 
       ).catch(error => {
         console.log("error Profile", error)
