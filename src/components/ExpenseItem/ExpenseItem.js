@@ -15,11 +15,16 @@ const ExpenseItem = ({ item, style, color, _onPress }) => {
   const borderColor = color ? color : item.color;
   courseId = 0;
 
-  _onPressButton = (courseId, name, level) => {
-    // console.log('Se presionó el elemento:', courseId)
-    this.courseId = courseId;
-    alert(courseId + name)
-    // this.selector.open();
+  _onPressButton = (courseId, level) => {
+    // // console.log('Se presionó el elemento:', courseId)
+    // this.courseId = courseId;
+    // alert(courseId + name)
+    // // this.selector.open();
+    if(typeof(level) == undefined){
+      
+    }
+    _onPress(courseId, level)
+
   }
 
   if(item.finished){
@@ -58,7 +63,7 @@ const ExpenseItem = ({ item, style, color, _onPress }) => {
     // console.log('No se ha terminado este curso')
     return (
       <View style={[styles.item.content, { borderColor: borderColor }, style]}>
-        {/* <TouchableOpacity onPress={() => _onPressButton(item.id, item.name) }> */}
+        {/* <TouchableOpacity onPress={() => _onPressButton(item.id) }> */}
         {/* <TouchableOpacity onPress={() => _onPress(item.id, item.name) }> */}
         <Grid>
           <Col size={7} style={{ flexDirection: 'row' }}>
@@ -81,7 +86,8 @@ const ExpenseItem = ({ item, style, color, _onPress }) => {
               // onChange={(option)=>{ alert(`${option.label} (${option.key}) nom nom nom`) }} 
               onChange={(level)=>{
                   // alert(`${option.label} (${option.key}) nom nom nom`) 
-                  _onPress(item.id, level.value)
+                  _onPressButton(item.id, level.value)
+                  // _onPress(item.id, level.value)
                 }} 
               >
                 <Icon active name="ios-play" style={{ fontSize: 35 }} 
@@ -93,6 +99,7 @@ const ExpenseItem = ({ item, style, color, _onPress }) => {
             </ModalSelector>
           </Col>
         </Grid>
+        {/* </TouchableOpacity> */}
       </View>
     );
   }
