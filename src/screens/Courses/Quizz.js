@@ -32,7 +32,6 @@ import {session, getBearerTokenCountdownSeconds, getAvatar} from './../../../api
 import { AsyncStorage } from "react-native"
 import Notification from '@components/Notification';
 
-const logo = require('@assets/images/header-logo.png');
 const defaultNotificationTime = 1200 // 1000 equals a second
 const defaultDelayToShowQuestion = defaultNotificationTime + 0
 
@@ -184,7 +183,8 @@ class Quizz extends Component {
             return (
             <Container>
                 <ImageBackground
-                source={require('@assets/images/header-bg.png')}
+                // source={require('@assets/images/header-bg.png')}
+                source={{ uri: 'http://192.168.0.113:8000/storage/default_images/default_background.png' }}
                 style={styles.background}>
                 { /* Inicia Appheader */ }
                 <View>

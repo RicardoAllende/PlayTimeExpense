@@ -8,9 +8,6 @@ import {
 import HeaderDrawerButton from './HeaderDrawerButton';
 import SearchHeader from './SearchHeader';
 
-const logo = require('@assets/images/header-logo.png');
-const avatar = require('@assets/images/default_avatar.png');
-
 import {getAvatar} from '../../../api/session'
 import styles from './styles';
 import CountdownCircle from 'react-native-countdown-circle'
@@ -61,17 +58,17 @@ class AppHeader extends PureComponent {
             <HeaderDrawerButton navigation={this.props.navigation} />
           </Left>
           <Body style={{ flex: 1, alignItems: 'center' }}>
-            {this.props.displayLogo && (
+            {/* {this.props.displayLogo && (
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate('Expenses');
                 }}>
                 <Image source={logo} style={styles.logo} />
               </TouchableOpacity>
-            )}
+            )} */}
           </Body>
           <Right style={{ flex: 1 }}>
-            {this.props.displayAvatar && (
+            {/* {this.props.displayAvatar && (
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate('Profile');
@@ -90,7 +87,7 @@ class AppHeader extends PureComponent {
                   )
                 }
               </TouchableOpacity>
-            )}
+            )} */}
             {this.props.displaySearch && (
               <Button
                 transparent

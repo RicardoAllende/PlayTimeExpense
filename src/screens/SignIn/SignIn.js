@@ -155,7 +155,7 @@ class SignIn extends Component {
             <View style={{ flex: 1 }}>
               <View style={styles.header.wrapper}>
                 <Image
-                  source={require('@assets/images/logo.png')}
+                  source={require('@assets/images/logo-subitus.png')}
                   style={styles.header.logo}
                 />
                 {loginError && (
@@ -186,7 +186,7 @@ class SignIn extends Component {
                   secureTextEntry={true}
                   validate={[required]}
                 />
-                <Button
+                {/* <Button
                   small
                   transparent
                   style={{ alignSelf: 'flex-end' }}
@@ -194,7 +194,7 @@ class SignIn extends Component {
                   // onPress={this.checkSession}
                   >
                   <Text style={styles.resetPwdBtn}>¿Olvidaste tu contraseña?</Text>
-                </Button>
+                </Button> */}
               </Form>
             </View>
           </Content>
@@ -208,7 +208,7 @@ class SignIn extends Component {
                 onPress={handleSubmit(this.handleSubmit)}>
                 {loginStarted ? <Spinner color="#fff" /> : <Text>Ingresar</Text>}
               </Button>
-              <Button
+              {/* <Button
                 transparent
                 full
                 onPress={() => navigation.navigate('SignUp')}
@@ -218,7 +218,7 @@ class SignIn extends Component {
                   ¿Aún no tiene cuenta?
                 </Text>
                 <Text style={styles.signup.linkBtn}>Registro</Text>
-              </Button>
+              </Button> */}
             </View>
           </Footer>
         </ImageBackground>

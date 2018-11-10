@@ -41,7 +41,7 @@ class Walkthrough extends Component {
     this.state ={
       bearerReady: false,
       ready: false,
-      showTutorial: true,
+      showTutorial: false,
     }
     this.renderSlide = this.renderSlide.bind(this);
   }

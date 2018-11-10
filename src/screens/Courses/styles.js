@@ -10,7 +10,7 @@ export default {
     height: null,
   },
   content: {
-    backgroundColor: '#FFF',
+    // backgroundColor: '#FFF',
   },
   emptyContainer: {
     flex: 1,

@@ -184,12 +184,6 @@ class CourseOverview extends Component {
               <Spinner color={theme.brandPrimary} />
             </View>
           )}
-          {/* { this.state.ready &&
-            categories.length === 0 && (
-              <View style={styles.emptyContainer}>
-                <Text style={styles.emptyMsg}>Error al cargar las estadísticas del curso</Text>
-              </View>
-            )} */}
 
           { this.state.ready &&(
               <Tabs

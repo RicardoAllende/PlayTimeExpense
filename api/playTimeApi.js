@@ -1,5 +1,5 @@
-export const url = "http://192.168.0.109:8000/"
-const api_url = "http://192.168.0.109:8000/api/v1/"
+export const url = "http://192.168.0.113:8000/"
+const api_url = "http://192.168.0.113:8000/api/v1/"
 
 const app_url = api_url + "app/"
 
@@ -47,7 +47,7 @@ export const api = {
     setHitsInCourse: (course_id) => {
         return app_url + 'courses/' + course_id + '/achievements/set-hits'
     },
-    setAvatar: app_url + 'users/avatar',
+    setAvatar: app_url + 'users/avatar?app=1',
     getOverview: app_url + 'overview'
 }
 const levels = ['Aleatorio', 'Fácil', 'Medio', 'Difícil'];

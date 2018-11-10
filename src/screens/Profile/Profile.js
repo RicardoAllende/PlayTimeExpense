@@ -171,7 +171,6 @@ class Profile extends Component {
   }
 
   showImagePicker = async () => {
-
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
@@ -179,20 +178,23 @@ class Profile extends Component {
     if(result.cancelled){
       return false;
     }
+    console.log(result)
+    // return true;
 
     // console.log(result);
-    this.setState({
-      img: result.uri
-    }, () => {
+    // this.setState({
+    //   img: result.uri
+    // }, () => {
       formData = new FormData();
       formData.append('file', {
-        uri: this.state.img,
+        uri: result.uri,
         type: 'image/*',
         name: 'profile'
       });
+      console.log(formData)
+      // return true
   
       url = api.setAvatar;
-      // alert(url)
       fetch(api.setAvatar, {
         method: 'POST',
         headers: {
@@ -202,14 +204,14 @@ class Profile extends Component {
         },
         body: formData
       }).then(
-        // Enviando retroalimentación
         response => {
           return response.json();
           console.log("Retro")
         }
       ).then(
         jsonResponse => {
-          console.log(jsonResponse);
+          console.log('Satisfactorio', jsonResponse);
+          alert('Terminó la función');
           if(jsonResponse.response.status == 'error'){
             alert('Imagen no actulizada por tamaño del archivo');
           }
@@ -227,7 +229,7 @@ class Profile extends Component {
       ).catch(error => {
         console.log("error Profile", error)
       });
-    })
+    // })
   }
 
 }
