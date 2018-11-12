@@ -11,7 +11,17 @@ import java.util.List;
 import host.exp.exponent.generated.DetachBuildConstants;
 import host.exp.exponent.experience.DetachActivity;
 
+import com.zmxv.RNSound.RNSoundPackage;
+
 public class MainActivity extends DetachActivity {
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState){
+    mReactInstanceManager = ReactInstanceManager.builder()
+      .setApplication(getApplication())
+      .addPackage(new MainReactPackage())
+      .addPackage(new RNSoundPackage()); // <-- New
+  }
 
   @Override
   public String publishedUrl() {

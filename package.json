@@ -97,6 +97,7 @@
     "react-native-modal-selector": "0.0.29",
     "react-native-percentage-circle": "^1.0.7",
     "react-native-snap-carousel": "3.7.2",
+    "react-native-sound": "^0.10.9",
     "react-navigation": "2.12.1",
     "react-redux": "5.0.7",
     "redux": "4.0.0",

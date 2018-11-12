@@ -8,6 +8,11 @@ import {
   StyleSheet,
   TextInput,
 } from 'react-native';
+
+// import Sound from 'react-native-sound'
+// const correctSoundPath = './dobne3.mp3'
+// const errorSoundPath = ''
+
 import { Container, Content, Text, Button, Card, Footer } from 'native-base';
 import Carousel from 'react-native-snap-carousel';
 
@@ -120,6 +125,8 @@ class Walkthrough extends Component {
   }
 
   _goToCourseOverview = (courseId) => {
+    // this.playCorrectSound()
+    // return false;
     this.props.navigation.navigate('CourseOverview', {
       courseId: courseId
     })
@@ -175,6 +182,33 @@ class Walkthrough extends Component {
     // // }
     this.loadUserData();
     // this.redirectToApp();
+    // this.loadDefaultCorrect();
+  }
+
+  correctSound = false
+  loadCorrectSound = () => {
+    this.correctSound = new Sound(correctSoundPath, Sound.MAIN_BUNDLE, error => {
+      if (error) {
+        console.log('failed to load the sound', error);
+        return;
+      }
+      // loaded successfully
+      console.log('duration in seconds: ' + whoosh.getDuration() + 'number of channels: ' + whoosh.getNumberOfChannels());    
+    })
+
+  }
+
+  playCorrectSound = () => {
+    this.correctSound.play((success) => {
+      if (success) {
+        console.log('successfully finished playing');
+      } else {
+        console.log('playback failed due to audio decoding errors');
+        // reset the player to its uninitialized state (android only)
+        // this is the only option to recover after an error occured and use the player again
+        whoosh.reset();
+      }
+    })
   }
 
   redirectToApp = async () => {

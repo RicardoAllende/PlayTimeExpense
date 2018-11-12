@@ -10,6 +10,7 @@ import expolib_v1.okhttp3.OkHttpClient;
 
 // Needed for `react-native link`
 // import com.facebook.react.ReactApplication;
+import com.zmxv.RNSound.RNSoundPackage;
 import com.imagepicker.ImagePickerPackage;
 
 public class MainApplication extends ExpoApplication {
@@ -27,6 +28,7 @@ public class MainApplication extends ExpoApplication {
 
         // Needed for `react-native link`
         // new MainReactPackage(),
+            new RNSoundPackage(),
             new ImagePickerPackage()
     );
   }
