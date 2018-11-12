@@ -11,6 +11,7 @@ import Overview from './Overview';
 import Social from './Social';
 import * as profileSelectors from './selectors';
 import styles from './styles';
+import {getExtension} from '@utils/helpers'
 
 import { api } from './../../../api/playTimeApi'
 import { session, getBearerToken, getUserData, getAvatar, restartApp } from './../../../api/session'
@@ -179,6 +180,7 @@ class Profile extends Component {
       return false;
     }
     console.log(result)
+    extension = getExtension(result.uri)
     // return true;
 
     // console.log(result);
@@ -189,7 +191,7 @@ class Profile extends Component {
       formData.append('file', {
         uri: result.uri,
         type: 'image/*',
-        name: 'profile'
+        name: 'profile.' + extension
       });
       console.log(formData)
       // return true
@@ -234,8 +236,9 @@ class Profile extends Component {
 
 }
 
-const mapStateToProps = state => ({
-  profile: profileSelectors.getUserProfile(state),
-});
+export default Profile
+// const mapStateToProps = state => ({
+//   profile: profileSelectors.getUserProfile(state),
+// });
 
-export default connect(mapStateToProps)(Profile);
+// export default connect(mapStateToProps)(Profile);
