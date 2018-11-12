@@ -1,8 +1,6 @@
 import { AsyncStorage } from "react-native"
 import {url} from './playTimeApi'
 
-// const defaultImage = 
-
 const bearerTokenName= "bearerToken";
 const userDataName= "userData";
 const firstnameDataName = "firstname";
@@ -12,7 +10,8 @@ const countdownSecondsDataName = "countdownSeconds"
 const coursesDataName = 'courses'
 const rememberTokenDataName = 'access'
 const avatarDataName = 'avatar'
-// export default class Session 
+const avatarThumbnail = 'thumbnail_avatar'
+
 export const session = {
     bearerTokenName: bearerTokenName,
     userDataName: userDataName,
@@ -41,18 +40,15 @@ export const session = {
     },
 
     setBearerToken: (bearerToken) => {
-        // console.log("setBearerToken:", bearerToken);
         AsyncStorage.setItem(bearerTokenName, bearerToken);    
     },
-    // getBearerToken: async() => {
-    //     value = await AsyncStorage.getItem(bearerTokenName);
-    //     return value;
-    // },
     unsetBearerToken: () => {
         AsyncStorage.removeItem(bearerTokenName);
     },
     setUserData: (userData) => {
-        // console.log('Session.js, setUserData, userData', userData)
+        // session.setAvatar(userData.avatar)
+        AsyncStorage.setItem(avatarDataName, userData.avatar.original)
+        AsyncStorage.setItem(avatarThumbnail, userData.avatar.thumbnail)
         AsyncStorage.setItem(avatarDataName, userData.avatar);
         AsyncStorage.setItem(bearerTokenName, userData.access_token);
         AsyncStorage.setItem(firstnameDataName, userData.firstname)
@@ -61,15 +57,11 @@ export const session = {
         AsyncStorage.setItem(countdownSecondsDataName, "" + userData.settings.countdown_seconds);
         AsyncStorage.setItem(rememberTokenDataName, userData.access);
     },
-    setAvatar: (avatar) => {
-        // avatar = url + avatar;
-        // alert(avatar);
-        AsyncStorage.setItem(avatarDataName, avatar);
+    setAvatar: async (avatar) => {
+        console.log('setting avatar', avatar)
+        AsyncStorage.setItem(avatarDataName, avatar.original)
+        AsyncStorage.setItem(avatarThumbnail, avatar.thumbnail)
     },
-    // getUserData: () => {
-    //     value =  await AsyncStorage.getItem(userDataName);
-    //     return value;
-    // },
     unsetUserData: () => {
         AsyncStorage.removeItem(userDataName);
     },
@@ -84,8 +76,16 @@ export async function getRememberToken(){
     return await AsyncStorage.getItem(rememberTokenDataName);
 }
 
-export async function getAvatar(){
-    avatar = await AsyncStorage.getItem(avatarDataName);
+export async function getAvatar(original){
+    if(typeof(original) === 'undefined'){
+        avatar = await AsyncStorage.getItem(avatarDataName);
+    }else{
+        if(original){
+            avatar = await AsyncStorage.getItem(avatarDataName);
+        }else{
+            avatar = await AsyncStorage.getItem(avatarThumbnail);
+        }
+    }
     return url + avatar;
 }
 
