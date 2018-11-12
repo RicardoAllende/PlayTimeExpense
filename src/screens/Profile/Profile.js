@@ -181,64 +181,52 @@ class Profile extends Component {
     }
     console.log(result)
     extension = getExtension(result.uri)
-    // return true;
 
-    // console.log(result);
-    // this.setState({
-    //   img: result.uri
-    // }, () => {
-      formData = new FormData();
-      formData.append('file', {
-        uri: result.uri,
-        type: 'image/*',
-        name: 'profile.' + extension
-      });
-      console.log(formData)
-      // return true
-  
-      url = api.setAvatar;
-      fetch(api.setAvatar, {
-        method: 'POST',
-        headers: {
-          "Authorization": 'Bearer ' + this.state.profile.bearerToken,
-          Accept: 'application/json',
-          'Content-Type': 'multipart/form-data'
-        },
-        body: formData
-      }).then(
-        response => {
-          return response.json();
-          console.log("Retro")
+    formData = new FormData();
+    formData.append('file', {
+      uri: result.uri,
+      type: 'image/*',
+      name: 'profile.' + extension
+    });
+    console.log(formData)
+
+    url = api.setAvatar;
+    fetch(api.setAvatar, {
+      method: 'POST',
+      headers: {
+        "Authorization": 'Bearer ' + this.state.profile.bearerToken,
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data'
+      },
+      body: formData
+    }).then(
+      response => {
+        return response.json();
+        console.log("Retro")
+      }
+    ).then(
+      jsonResponse => {
+        console.log('Satisfactorio', jsonResponse);
+        alert('Terminó la función');
+        if(jsonResponse.response.status == 'error'){
+          alert('Imagen no actulizada por tamaño del archivo');
         }
-      ).then(
-        jsonResponse => {
-          console.log('Satisfactorio', jsonResponse);
-          alert('Terminó la función');
-          if(jsonResponse.response.status == 'error'){
-            alert('Imagen no actulizada por tamaño del archivo');
-          }
-          if(jsonResponse.response.status == 'ok'){
-            // alert('La imagen se ha actualizado con la siguiente ruta: ' + jsonResponse.data.url);
-            session.setAvatar(jsonResponse.data.url);
-            restartApp()
-            this.props.navigation.navigate('Walkthrough', {
-              reload: true,
-            });
-          }
-          // alert('Su imagen ha sido actualizada');
-          console.log('Su imagen ha sido actualizada')
-        } 
-      ).catch(error => {
-        console.log("error Profile", error)
-      });
-    // })
+        if(jsonResponse.response.status == 'ok'){
+          // alert('La imagen se ha actualizado con la siguiente ruta: ' + jsonResponse.data.url);
+          session.setAvatar(jsonResponse.data.url);
+          restartApp()
+          this.props.navigation.navigate('Walkthrough', {
+            reload: true,
+          });
+        }
+        // alert('Su imagen ha sido actualizada');
+        console.log('Su imagen ha sido actualizada')
+      } 
+    ).catch(error => {
+      console.log("error Profile", error)
+    });
   }
 
 }
 
 export default Profile
-// const mapStateToProps = state => ({
-//   profile: profileSelectors.getUserProfile(state),
-// });
-
-// export default connect(mapStateToProps)(Profile);
