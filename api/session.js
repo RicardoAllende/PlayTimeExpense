@@ -49,7 +49,7 @@ export const session = {
         // session.setAvatar(userData.avatar)
         AsyncStorage.setItem(avatarDataName, userData.avatar.original)
         AsyncStorage.setItem(avatarThumbnail, userData.avatar.thumbnail)
-        AsyncStorage.setItem(avatarDataName, userData.avatar);
+        // AsyncStorage.setItem(avatarDataName, userData.avatar);
         AsyncStorage.setItem(bearerTokenName, userData.access_token);
         AsyncStorage.setItem(firstnameDataName, userData.firstname)
         AsyncStorage.setItem(lastnameDataName, userData.lastname)

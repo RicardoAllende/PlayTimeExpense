@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, ImageBackground, Alert, ToastAndroid, Image, BackHandler } from 'react-native';
+import { FlatList, ImageBackground, Alert, ToastAndroid, Image, BackHandler, StyleSheet } from 'react-native';
 import { Asset, AppLoading, Font } from 'expo';
 import {
   Container, Content, Fab, Icon,  Text,  View,  Spinner, TouchableOpacity, Left, Right, Thumbnail, Body, Button, Header
 } from 'native-base';
 
 import HeaderDrawerButton from '../../components/AppHeader/HeaderDrawerButton';
-const avatar = require('@assets/images/default_avatar.png');
+const correctImage = "http://www.pngmart.com/files/7/Check-PNG-Transparent-Image.png"
 import CountdownCircle from 'react-native-countdown-circle'
 
 import { connect } from 'react-redux';
@@ -183,8 +183,8 @@ class Quizz extends Component {
             return (
             <Container>
                 <ImageBackground
-                // source={require('@assets/images/header-bg.png')}
-                source={{ uri: 'http://192.168.0.113:8000/storage/default_images/default_background.png' }}
+                source={require('@assets/images/header-bg.png')}
+                // source={{ uri: 'http://192.168.0.106:8000/storage/default_images/default_background.png' }}
                 style={styles.background}>
                 { /* Inicia Appheader */ }
                 <View>
@@ -286,6 +286,10 @@ class Quizz extends Component {
                     onPress={ this.goToSessionScreen }>
                     <Icon type="Ionicons" name="exit" />
                 </Fab>
+                <Image 
+                    style={ retroStyles.imageRetro }
+                    source={{ uri: correctImage }}
+                />
                 {notification}
                 </ImageBackground>
             </Container>
@@ -431,6 +435,14 @@ class Quizz extends Component {
         });
     }
 
+    showFinalRetro = () => {
+
+    }
+
+    showCorrectRetro = () => {
+
+    }
+
     gradeAnswer = (questionId, optionId, is_correct) => {
         // console.warn(apiSendAnswers)
         currentAnswers = this.state.answers + 1
@@ -521,7 +533,7 @@ class Quizz extends Component {
                         .then((response) => response.json())
                         .then((response) => {
                             // console.log('Quizz response', response)
-                            console.log('Quizz response lenght', response.data.questions.length)
+                            // console.log('Quizz response lenght', response.data.questions.length)
                             if(response.data.questions.length == 0){
                                 // alert('No existen Preguntas')
                                 this.goToCourseOverview()
@@ -544,5 +556,18 @@ class Quizz extends Component {
     }
 
 }
+
+const retroStyles = StyleSheet.create({
+    imageRetro: {
+        position: 'absolute',
+        bottom:0,
+        left:0,
+        width: 50,
+        height: 50,
+        // zIndex: 12,
+        // bottom: '3%',
+        // right: 0,
+    },
+})
 
 export default Quizz;
