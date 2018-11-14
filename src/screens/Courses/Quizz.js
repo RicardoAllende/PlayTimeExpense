@@ -162,7 +162,8 @@ class Quizz extends Component {
         this._continueTimer()
     }
 
-    restartTimer = () => {
+    restartTimer = (seconds) => {
+        if(typeof(seconds) == 'number'){ seconds = seconds } else { this.state.countdownSeconds }
         this.setState({seconds: 0}, () => { this.setState({ timerVisibility: true, seconds: this.state.countdownSeconds }, 
                 () => {
                     // console.log('Quizz.js', 'Restarting timer', this.state.seconds)
@@ -174,7 +175,7 @@ class Quizz extends Component {
     componentDidMount(){
         this.loadData();
     }
-    
+
     render() {
         const navigation = this.props.navigation;
         if(this.state.ready){
@@ -298,7 +299,7 @@ class Quizz extends Component {
                     containerStyle={{}}
                     style={{ backgroundColor: theme.brandPrimary }}
                     position="bottomRight"
-                    onPress={ this.goToSessionScreen }>
+                    onPress={ this.shouldGoToSessionScreen }>
                     <Icon type="Ionicons" name="exit" />
                 </Fab>
                 <Image 
@@ -316,6 +317,28 @@ class Quizz extends Component {
 
     turnOffCountdownTimer = () => {
         this.setState({ seconds: 0 });
+    }
+
+    currentSecond = 0
+    shouldGoToSessionScreen = () => {
+        this.setState({
+            timerVisibility: false
+        }, () => {
+            Alert.alert(
+                'Saliendo del curso',
+                '¿Desea terminar el intento?',
+                [
+                    {text: 'Continuar', onPress: () => this.continueQuizz()},
+                    {text: 'Salir', onPress: () => this.goToSessionScreen(), style: 'cancel'},
+                    // {text: 'OK', onPress: () => console.log('OK Pressed')},
+                ],
+                { cancelable: false }
+            )
+        })
+    }
+
+    continueQuizz = () => {
+        this.restartTimer()
     }
 
     goToSessionScreen = () => {

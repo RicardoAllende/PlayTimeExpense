@@ -245,8 +245,8 @@ class CourseCharts extends Component {
                 numAvailableQuestions: jsonResponse.data.num_available_questions,
               },
               () => {
-                console.log(this.state)
-                console.log("Elementos cargados en el estado");
+                // console.log(this.state)
+                // console.log("Elementos cargados en el estado");
               }
             );
           });
