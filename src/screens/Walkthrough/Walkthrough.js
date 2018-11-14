@@ -250,39 +250,6 @@ class Walkthrough extends Component {
                   containerCustomStyle={styles.slider}
                 />
               }
-              <Modal
-                    isVisible={this.state.exampleNotification}
-                    animationIn="slideInLeft"
-                    animationOut="slideOutRight"
-                >
-                    <View
-                     style={{
-                        backgroundColor: "white",
-                        padding: 22,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        borderRadius: 4,
-                        borderColor: "rgba(0, 0, 0, 0.1)"
-                    }}
-                    >
-                        <Text>Hello!</Text>
-                        <TouchableOpacity>
-                            <View 
-                            style={{
-                                backgroundColor: "lightblue",
-                                padding: 12,
-                                margin: 16,
-                                justifyContent: "center",
-                                alignItems: "center",
-                                borderRadius: 4,
-                                borderColor: "rgba(0, 0, 0, 0.1)"
-                            }}
-                            >
-                                <Text>Cerrar modal</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </Modal>
             </Content>
             <Footer>
               <Button
@@ -292,13 +259,8 @@ class Walkthrough extends Component {
                 style={styles.skipBtn}
                 onPress={
                   () => {
-                    this.setState({
-                      exampleNotification: true
-                    })
+                    this.props.navigation.navigate('Profile')
                   }
-                  // () => {
-                  //   this.props.navigation.navigate('Profile')
-                  // }
                 }
                 // onPress={() => this.props.navigation.navigate('Drawer', {
                 //   userData: this.state.userData
