@@ -94,6 +94,7 @@
     "react-native-datepicker": "1.7.2",
     "react-native-easy-grid": "0.2.0",
     "react-native-image-picker": "^0.27.1",
+    "react-native-modal": "^7.0.0",
     "react-native-modal-selector": "0.0.29",
     "react-native-percentage-circle": "^1.0.7",
     "react-native-snap-carousel": "3.7.2",

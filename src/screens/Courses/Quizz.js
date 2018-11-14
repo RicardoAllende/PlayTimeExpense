@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, ImageBackground, Alert, ToastAndroid, Image, BackHandler, StyleSheet } from 'react-native';
+import { FlatList, ImageBackground, Alert, View, ToastAndroid, Image, BackHandler, StyleSheet, TouchableOpacity, } from 'react-native';
 import { Asset, AppLoading, Font, Audio } from 'expo';
 import {
-  Container, Content, Fab, Icon,  Text,  View,  Spinner, TouchableOpacity, Left, Right, Thumbnail, Body, Button, Header
+  Container, Content, Fab, Icon,  Text,  Spinner, Left, Right, Thumbnail, Body, Button, Header
 } from 'native-base';
 
 import HeaderDrawerButton from '../../components/AppHeader/HeaderDrawerButton';
@@ -31,6 +31,7 @@ import {api} from './../../../api/playTimeApi'
 import {session, getBearerTokenCountdownSeconds, getAvatar} from './../../../api/session'
 import { AsyncStorage } from "react-native"
 import Notification from '@components/Notification';
+import Modal from 'react-native-modal'
 
 const defaultNotificationTime = 1200 // 1000 equals a second
 const defaultDelayToShowQuestion = defaultNotificationTime + 0
@@ -58,7 +59,8 @@ class Quizz extends Component {
             currentIndex: 0,
             showSuccessNotification: false,
             showErrorNotification: false, 
-            retro: "",
+            feedback: "",
+            exampleNotification: true,
             hits: 0,
             maxHits: 0,
         }
@@ -95,6 +97,18 @@ class Quizz extends Component {
         })
     }
 
+    showExampleNotification = () => {
+        this.setState({
+            exampleNotification: true,
+        }, () => {
+            // setTimeout(() => {
+            //     this.setState({
+            //         exampleNotification: false,
+            //     })
+            // }, defaultNotificationTime);
+        })
+    }
+
     showErrorNotification = () => {
         this.setState({ showErrorNotification: false, showSuccessNotification: false }, () => {
             this.setState({ showErrorNotification: true, showSuccessNotification: false })
@@ -128,21 +142,6 @@ class Quizz extends Component {
         }
     }
 
-    _askToEndQuizz = () => {
-        // console.log("Función para finalizar el curso")
-        Alert.alert(
-            '¿Desea terminar intento?',
-            '¿Desea terminar el intento actual?',
-            [
-            // {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-            {text: 'Continuar', onPress: () => this._continueQuizz, style: 'cancel'},
-            {text: 'Sí, terminar', onPress: () => this._goToResults },
-            ],
-            { cancelable: false }
-        )
-    }
-
-
     _goToResults = () => {
         console.log("Yendo a los resultados del curso")
         Alert.alert(
@@ -157,14 +156,9 @@ class Quizz extends Component {
         )
     }
 
-    _continueQuizz = () => {
-        console.log("Se eligió continuar con el curso");
-        this._continueTimer()
-    }
-
-    restartTimer = (seconds) => {
-        if(typeof(seconds) == 'number'){ seconds = seconds } else { this.state.countdownSeconds }
-        this.setState({seconds: 0}, () => { this.setState({ timerVisibility: true, seconds: this.state.countdownSeconds }, 
+    restartTimer = (restart) => {
+        if(typeof(restart) === 'boolean'){ restart = this.currentSecond; console.log('Quizz restartTimer, restart:', restart) } else { restart = this.state.countdownSeconds; console.log('Quizz restartTimer, no existe la variable de segundos'); }
+        this.setState({seconds: 0}, () => { this.setState({ timerVisibility: true, seconds: restart }, 
                 () => {
                     // console.log('Quizz.js', 'Restarting timer', this.state.seconds)
                 }   
@@ -176,8 +170,19 @@ class Quizz extends Component {
         this.loadData();
     }
 
+    currentSecond = 0
+    _updateText = (elapsedSecs, totalSecs) => {
+        current = totalSecs-elapsedSecs
+        if(current != totalSecs){
+            console.log('Segundos actuales', current)
+            this.currentSecond = current
+        }
+        return (totalSecs - elapsedSecs).toString()
+    } 
+
     render() {
         const navigation = this.props.navigation;
+        console.log('exampleNotification', this.state.exampleNotification)
         if(this.state.ready){
             let notification;
             if(this.state.showSuccessNotification){
@@ -190,7 +195,7 @@ class Quizz extends Component {
             }
             if(this.state.showErrorNotification){
                 notification = <Notification
-                    message={this.state.retro}
+                    message={this.state.feedback}
                     duration={defaultNotificationTime}
                     position="bottom"
                     type="danger"
@@ -217,6 +222,7 @@ class Quizz extends Component {
                                       borderWidth={8}
                                       color="#ff003f"
                                       bgColor="#fff"
+                                      updateText={this._updateText}
                                       textStyle={{ fontSize: 20 }}
                                       onTimeElapsed={ this.handleNextAnswerByTime }
                                     />
@@ -302,11 +308,59 @@ class Quizz extends Component {
                     onPress={ this.shouldGoToSessionScreen }>
                     <Icon type="Ionicons" name="exit" />
                 </Fab>
-                <Image 
-                    style={ retroStyles.imageRetro }
-                    source={{ uri: correctImage }}
-                />
                 {notification}
+                    <Modal
+                        isVisible={this.state.exampleNotification}
+                        animationIn="slideInLeft"
+                        animationOut="slideOutRight"
+                    >
+                        <View
+                        style={{
+                            backgroundColor: "white",
+                            padding: 22,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            borderRadius: 4,
+                            borderColor: "rgba(0, 0, 0, 0.1)",
+                            flexDirection: "column",
+                        }}
+                        >
+                        <Text>Acertaste en tu respuesta</Text>
+                            <Image style={ retroStyles.imageRetro } source={{ uri: correctImage }} />
+                            <View style={{ flexDirection: 'row' }} >
+                                <TouchableOpacity>
+                                    <View 
+                                    style={{
+                                        backgroundColor: "lightblue",
+                                        padding: 12,
+                                        margin: 16,
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        borderRadius: 4,
+                                        borderColor: "rgba(0, 0, 0, 0.1)"
+                                    }}
+                                    >
+                                        <Text>Continuar</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity>
+                                    <View 
+                                    style={{
+                                        backgroundColor: "lightblue",
+                                        padding: 12,
+                                        margin: 16,
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        borderRadius: 4,
+                                        borderColor: "rgba(0, 0, 0, 0.1)"
+                                    }}
+                                    >
+                                        <Text>Terminar</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
                 </ImageBackground>
             </Container>
             );
@@ -315,11 +369,6 @@ class Quizz extends Component {
         }
     }
 
-    turnOffCountdownTimer = () => {
-        this.setState({ seconds: 0 });
-    }
-
-    currentSecond = 0
     shouldGoToSessionScreen = () => {
         this.setState({
             timerVisibility: false
@@ -338,7 +387,7 @@ class Quizz extends Component {
     }
 
     continueQuizz = () => {
-        this.restartTimer()
+        this.restartTimer(true)
     }
 
     goToSessionScreen = () => {
@@ -538,7 +587,7 @@ class Quizz extends Component {
                 }
             }, defaultDelayToShowQuestion)
         }else{
-            this.setState({retro: this.state.currentQuestion.feedback, hits: 0}, () => {
+            this.setState({feedback: this.state.currentQuestion.feedback, hits: 0}, () => {
                 this.showErrorNotification()
                 this.next = true
                 setTimeout(() => {
@@ -581,6 +630,7 @@ class Quizz extends Component {
                                     questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length, 
                                     currentQuestion: response.data.questions[0], ready: true}, 
                                     ()=>{
+                                        this.showExampleNotification()
                                         // console.log('Quizz.js session', this.state.session)
                                         // console.log('');
                                     }
@@ -598,11 +648,11 @@ class Quizz extends Component {
 
 const retroStyles = StyleSheet.create({
     imageRetro: {
-        position: 'absolute',
-        bottom:0,
-        left:0,
-        width: 50,
-        height: 50,
+        // position: 'absolute',
+        // bottom:0,
+        // left:0,
+        width: 100,
+        height: 100,
         // zIndex: 12,
         // bottom: '3%',
         // right: 0,

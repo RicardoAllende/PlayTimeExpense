@@ -156,8 +156,8 @@ class Profile extends Component {
                       uri: this.state.avatar,
                       cache: 'only-if-cached',
                     }}
-                    style={styles.profile.avatar} >
-                    <Icon type="MaterialIcons" style={{alignSelf: 'flex-end' }} name="edit" />
+                    style={[styles.profile.avatar, { borderRadius: 100, }]} >
+                    <Icon type="MaterialIcons" style={{alignSelf: 'flex-end', bottom: 0, color: 'white'}} name="edit" />
                     {/* <Image source={logo} /> */}
                   </ImageBackground>
                 )
@@ -173,7 +173,7 @@ class Profile extends Component {
             </Text>
           </View>
 
-          <Fab
+          {/* <Fab
             direction="up"
             containerStyle={{}}
             // style={{ backgroundColor: theme.brandPrimary }}
@@ -185,7 +185,7 @@ class Profile extends Component {
             }
           >
             <Icon type="MaterialIcons" name="edit" />
-          </Fab>
+          </Fab> */}
 
           <ScrollView style={styles.content}>
             <View style={styles.container}>

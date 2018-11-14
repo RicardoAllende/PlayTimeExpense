@@ -7,6 +7,7 @@ import {
   StatusBar,
   StyleSheet,
   TextInput,
+  TouchableOpacity,
 } from 'react-native';
 
 import { Container, Content, Text, Button, Card, Footer } from 'native-base';
@@ -16,6 +17,8 @@ import {shouldShowTutorial, shouldRestart} from '../../../api/session'
 import AppIntroSlider from 'react-native-app-intro-slider';
 
 import {api, modalLevels} from './../../../api/playTimeApi'
+
+import Modal from 'react-native-modal'
 
 import { entries } from './config';
 
@@ -48,6 +51,7 @@ class Walkthrough extends Component {
       bearerReady: false,
       ready: false,
       showTutorial: false,
+      exampleNotification: false,
     }
     this.renderSlide = this.renderSlide.bind(this);
   }
@@ -183,7 +187,7 @@ class Walkthrough extends Component {
     // //   alert('Fuera del primer if')
     // // }
     this.loadUserData();
-    this.playBackgroundMusic()
+    // this.playBackgroundMusic()
   }
   
   playBackgroundMusic = async () => {
@@ -198,17 +202,6 @@ class Walkthrough extends Component {
     } catch (error) {
       console.log('Error al cargar sonido, Walkthrough', error)
     }  
-  }
-
-  playSound = async (correct) => {
-    var sound = new Expo.Audio.Sound()
-    if(correct){
-      await sound.loadAsync(correctSoundPath)
-    }else{
-      await sound.loadAsync(wrongSoundPath)
-    }
-    sound.setVolumeAsync(mediumVolume)
-    await sound.playAsync()
   }
 
   redirectToApp = async () => {
@@ -257,6 +250,39 @@ class Walkthrough extends Component {
                   containerCustomStyle={styles.slider}
                 />
               }
+              <Modal
+                    isVisible={this.state.exampleNotification}
+                    animationIn="slideInLeft"
+                    animationOut="slideOutRight"
+                >
+                    <View
+                     style={{
+                        backgroundColor: "white",
+                        padding: 22,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderRadius: 4,
+                        borderColor: "rgba(0, 0, 0, 0.1)"
+                    }}
+                    >
+                        <Text>Hello!</Text>
+                        <TouchableOpacity>
+                            <View 
+                            style={{
+                                backgroundColor: "lightblue",
+                                padding: 12,
+                                margin: 16,
+                                justifyContent: "center",
+                                alignItems: "center",
+                                borderRadius: 4,
+                                borderColor: "rgba(0, 0, 0, 0.1)"
+                            }}
+                            >
+                                <Text>Cerrar modal</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </Modal>
             </Content>
             <Footer>
               <Button
@@ -266,8 +292,13 @@ class Walkthrough extends Component {
                 style={styles.skipBtn}
                 onPress={
                   () => {
-                    this.props.navigation.navigate('Profile')
+                    this.setState({
+                      exampleNotification: true
+                    })
                   }
+                  // () => {
+                  //   this.props.navigation.navigate('Profile')
+                  // }
                 }
                 // onPress={() => this.props.navigation.navigate('Drawer', {
                 //   userData: this.state.userData
