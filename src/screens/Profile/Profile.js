@@ -5,7 +5,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Linking,
-  Alert
+  Alert, 
+  Image
 } from "react-native";
 import theme from '@theme/variables/myexpense';
 import { Container, Thumbnail, View, Text, Button, Fab, Icon } from "native-base";
@@ -148,14 +149,17 @@ class Profile extends Component {
               {
                 this.state.avatarReady &&
                 (
-                  <Thumbnail
+                  <ImageBackground
                     // source={avatar} 
                     // source={require('@assets/images/default_avatar.png')}
                     source={{
                       uri: this.state.avatar,
                       cache: 'only-if-cached',
                     }}
-                    style={styles.profile.avatar} />
+                    style={styles.profile.avatar} >
+                    <Icon type="MaterialIcons" style={{alignSelf: 'flex-end' }} name="edit" />
+                    {/* <Image source={logo} /> */}
+                  </ImageBackground>
                 )
               }
             </TouchableOpacity>

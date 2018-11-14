@@ -9,10 +9,6 @@ import {
   TextInput,
 } from 'react-native';
 
-// import Sound from 'react-native-sound'
-// const correctSoundPath = './dobne3.mp3'
-// const errorSoundPath = ''
-
 import { Container, Content, Text, Button, Card, Footer } from 'native-base';
 import Carousel from 'react-native-snap-carousel';
 
@@ -20,8 +16,6 @@ import {shouldShowTutorial, shouldRestart} from '../../../api/session'
 import AppIntroSlider from 'react-native-app-intro-slider';
 
 import {api, modalLevels} from './../../../api/playTimeApi'
-
-import { Asset, AppLoading, Font } from 'expo';
 
 import { entries } from './config';
 
@@ -40,6 +34,13 @@ const deviceWidth = Dimensions.get('window').width;
 
 const illustration = require('@assets/images/walkthrough3.png');
 
+import { Asset, AppLoading, Font, Audio, Video } from 'expo';
+const introSoundPath = require('@assets/sounds/intro.mp3')
+const correctSoundPath = require('@assets/sounds/correct.mp3')
+const wrongSoundPath = require('@assets/sounds/wrong.mp3')
+const lowVolume = 0.25
+const mediumVolume  = 0.5
+
 class Walkthrough extends Component {
   constructor(props) {
     super(props);
@@ -51,7 +52,7 @@ class Walkthrough extends Component {
     this.renderSlide = this.renderSlide.bind(this);
   }
 
-  shouldShowTutorial = () => {
+  shouldShowTutorial = async () => {
     shouldShowTutorial().then((viewed) => {
       if(viewed){
         this.setState({
@@ -162,6 +163,7 @@ class Walkthrough extends Component {
   }
 
   componentDidMount(){
+    // this.shouldShowTutorial()
     // // if(this.props.navigation.state.params){
     // try {
     //   let shouldRedirect = this.props.navigation.state.params.reload
@@ -181,34 +183,32 @@ class Walkthrough extends Component {
     // //   alert('Fuera del primer if')
     // // }
     this.loadUserData();
-    // this.redirectToApp();
-    // this.loadDefaultCorrect();
+    this.playBackgroundMusic()
+  }
+  
+  playBackgroundMusic = async () => {
+    appMusic = new Expo.Audio.Sound();
+    try { // Playing app music
+      await appMusic.loadAsync( introSoundPath, {
+        volume: lowVolume,
+        isLooping: true,
+        shouldPlay: true,
+      })
+      console.log('Se terminó de cargar la canción')
+    } catch (error) {
+      console.log('Error al cargar sonido, Walkthrough', error)
+    }  
   }
 
-  correctSound = false
-  loadCorrectSound = () => {
-    this.correctSound = new Sound(correctSoundPath, Sound.MAIN_BUNDLE, error => {
-      if (error) {
-        console.log('failed to load the sound', error);
-        return;
-      }
-      // loaded successfully
-      console.log('duration in seconds: ' + whoosh.getDuration() + 'number of channels: ' + whoosh.getNumberOfChannels());    
-    })
-
-  }
-
-  playCorrectSound = () => {
-    this.correctSound.play((success) => {
-      if (success) {
-        console.log('successfully finished playing');
-      } else {
-        console.log('playback failed due to audio decoding errors');
-        // reset the player to its uninitialized state (android only)
-        // this is the only option to recover after an error occured and use the player again
-        whoosh.reset();
-      }
-    })
+  playSound = async (correct) => {
+    var sound = new Expo.Audio.Sound()
+    if(correct){
+      await sound.loadAsync(correctSoundPath)
+    }else{
+      await sound.loadAsync(wrongSoundPath)
+    }
+    sound.setVolumeAsync(mediumVolume)
+    await sound.playAsync()
   }
 
   redirectToApp = async () => {
@@ -233,8 +233,6 @@ class Walkthrough extends Component {
        doneLabel="Comenzar"
        nextLabel="Siguiente"
        prevLabel="Anterior"
-      //  showSkipButton={true}
-      //  showPrevButton={true}
        />;
     }else{
       return (

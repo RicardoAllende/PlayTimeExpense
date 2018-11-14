@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, ImageBackground, Alert, ToastAndroid, Image, BackHandler, StyleSheet } from 'react-native';
-import { Asset, AppLoading, Font } from 'expo';
+import { Asset, AppLoading, Font, Audio } from 'expo';
 import {
   Container, Content, Fab, Icon,  Text,  View,  Spinner, TouchableOpacity, Left, Right, Thumbnail, Body, Button, Header
 } from 'native-base';
@@ -34,6 +34,11 @@ import Notification from '@components/Notification';
 
 const defaultNotificationTime = 1200 // 1000 equals a second
 const defaultDelayToShowQuestion = defaultNotificationTime + 0
+
+const correctSoundPath = require('@assets/sounds/correct.mp3')
+const wrongSoundPath = require('@assets/sounds/wrong.mp3')
+const lowVolume = 0.15
+const mediumVolume  = 0.5
 
 class Quizz extends Component {
 
@@ -111,6 +116,16 @@ class Quizz extends Component {
             ],
             { cancelable: false }
         )
+    }
+
+    playSound = async (correct) => {
+        var sound = new Expo.Audio.Sound()
+        var playStatus = { volume: mediumVolume, shouldPlay: true, }
+        if(correct){
+            await sound.loadAsync(correctSoundPath, playStatus)
+        }else{
+            await sound.loadAsync(wrongSoundPath, playStatus)
+        }
     }
 
     _askToEndQuizz = () => {
@@ -444,6 +459,7 @@ class Quizz extends Component {
     }
 
     gradeAnswer = (questionId, optionId, is_correct) => {
+        this.playSound(is_correct)
         // console.warn(apiSendAnswers)
         currentAnswers = this.state.answers + 1
         this.setState({
