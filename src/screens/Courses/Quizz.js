@@ -35,6 +35,7 @@ import {session, getBearerTokenCountdownSeconds, getAvatar} from './../../../api
 import { AsyncStorage } from "react-native"
 import Notification from '@components/Notification';
 import Modal from 'react-native-modal'
+import ConfirmModal from '@components/ConfirmModal'
 
 const defaultNotificationTime = 1200 // 1000 equals a second
 const defaultDelayToShowQuestion = defaultNotificationTime + 0
@@ -68,6 +69,7 @@ class Quizz extends Component {
             errors: 0,
             showFeedback: false,
             loadDataReady: false,
+            showConfirmModal: false,
         }
     }
 
@@ -147,13 +149,8 @@ class Quizz extends Component {
     }
 
     restartTimer = (restart) => {
-        if(typeof(restart) === 'boolean'){ restart = this.currentSecond; console.log('Quizz restartTimer, restart:', restart) } else { restart = this.state.countdownSeconds; console.log('Quizz restartTimer, no existe la variable de segundos'); }
-        this.setState({seconds: 0}, () => { this.setState({ timerVisibility: true, seconds: restart }, 
-                () => {
-                    // console.log('Quizz.js', 'Restarting timer', this.state.seconds)
-                }   
-            ) // end setState this.state.countdownSeconds
-        })
+        if(typeof(restart) === 'boolean'){ restart = this.currentSecond; } else { restart = this.state.countdownSeconds; }
+        this.setState({seconds: 0}, () => { this.setState({ timerVisibility: true, seconds: restart }) })
     }
 
     componentDidMount(){
@@ -172,17 +169,6 @@ class Quizz extends Component {
 
     render() {
         const navigation = this.props.navigation;
-        // if(this.state.loadDataReady){
-        //     return (
-        //         <CountDown
-        //             until={3}
-        //             onFinish={() => this.setState({ready: true})}
-        //             onPress={() => alert('hello')}
-        //             size={20}
-        //             timeToShow={['S']}
-        //         />
-        //     )
-        // }
         if(this.state.loadDataReady){
             let notification, feedbackImage
             if(this.state.showSuccessNotification){    
@@ -210,7 +196,7 @@ class Quizz extends Component {
                                       seconds={this.state.seconds}
                                       radius={25}
                                       borderWidth={8}
-                                      color="#ff003f"
+                                      color={theme.brandPrimary}
                                       bgColor="#fff"
                                       updateText={this._updateText}
                                       textStyle={{ fontSize: 20 }}
@@ -269,12 +255,14 @@ class Quizz extends Component {
                             alignItems: 'center',
                             flex: 1,
                           }}>
-                            <CountDown
-                                until={5}
-                                onFinish={() => this.setState({ready: true, timerVisibility: true, })}
-                                // onPress={() => alert('hello')}
-                                size={20}
-                                timeToShow={['S']}
+                            <CountdownCircle
+                                seconds={3}
+                                radius={50}
+                                borderWidth={8}
+                                color={theme.brandPrimary}
+                                bgColor="#fff"
+                                textStyle={{ fontSize: 20 }}
+                                onTimeElapsed={() => this.setState({ready: true, timerVisibility: true,})}
                             />
                         </View>
                     )
@@ -326,29 +314,25 @@ class Quizz extends Component {
                         <Icon type="Ionicons" name="exit" />
                     </Fab>
                 }
+                <ConfirmModal
+                    confirmText="Continuar"
+                    message="¿Desea terminar el curso?"
+                    onConfirm={this.continueQuizz}
+                    cancelText="Terminar"
+                    onCancel={this.goToSessionScreen}
+                    isVisible={this.state.showConfirmModal}
+                />
                     <Modal
                         isVisible={this.state.showFeedback}
-                        animationIn="slideInLeft"
-                        animationOut="slideOutRight"
-                        // isVisible={this.state.showFeedback}
-                        // animationIn="zoomInDown"
-                        // animationOut="zoomOutUp"
-                        // animationInTiming={1000}
-                        // animationOutTiming={1000}
-                        // backdropTransitionInTiming={1000}
-                        // backdropTransitionOutTiming={1000}
+                        // animationIn="slideInLeft"
+                        // animationOut="slideOutRight"
+                        animationIn="zoomInDown"
+                        animationOut="zoomOutUp"
+                        animationInTiming={1000}
+                        animationOutTiming={1000}
+                        backdropTransitionInTiming={1000}
+                        backdropTransitionOutTiming={1000}
                     >
-                        {/* <View
-                        style={{
-                            backgroundColor: "white",
-                            padding: 22,
-                            justifyContent: "center",
-                            alignItems: "center",
-                            borderRadius: 4,
-                            borderColor: "rgba(0, 0, 0, 0.1)",
-                            flexDirection: "column",
-                        }}
-                        > */}
                         <ImageBackground
                             source={yellowPostIt}
                             style={{
@@ -403,7 +387,6 @@ class Quizz extends Component {
                                 </TouchableOpacity>
                             </View>
                         </ImageBackground>
-                        {/* </View> */}
                     </Modal>
                 </ImageBackground>
             </Container>
@@ -415,26 +398,19 @@ class Quizz extends Component {
 
     shouldGoToSessionScreen = () => {
         this.setState({
-            timerVisibility: false
-        }, () => {
-            Alert.alert(
-                'Saliendo del curso',
-                '¿Desea terminar el intento?',
-                [
-                    {text: 'Continuar', onPress: () => this.continueQuizz()},
-                    {text: 'Salir', onPress: () => this.goToSessionScreen(), style: 'cancel'},
-                    // {text: 'OK', onPress: () => console.log('OK Pressed')},
-                ],
-                { cancelable: false }
-            )
-        })
+            timerVisibility: false, showConfirmModal: true,
+        }, 
+        )
     }
 
     continueQuizz = () => {
-        this.restartTimer(true)
+        this.setState({ showConfirmModal: false }, () => { this.restartTimer(true); })
     }
 
     goToSessionScreen = () => {
+        this.setState({
+            showConfirmModal: false,
+        })
         this.props.navigation.navigate('SessionResults', {
             session: this.state.session,
             num_questions_given: this.state.maxIndex,
@@ -672,15 +648,9 @@ class Quizz extends Component {
 
 const retroStyles = StyleSheet.create({
     imageRetro: {
-        // position: 'absolute',
-        // bottom:0,
-        // left:0,
         width: 100,
         height: 100,
         padding: "2%",
-        // zIndex: 12,
-        // bottom: '3%',
-        // right: 0,
     },
 })
 

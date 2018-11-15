@@ -48,14 +48,7 @@ class Expenses extends Component {
   loadData = async () => {
     getCourses().then((courses) => {
       courses = JSON.parse(courses)
-      nuevoArreglo = [];
-      console.log('Antes del map', courses.length)
-      courses.forEach(course => {
-        if(course.id != -1){
-          return course;
-        }
-      });
-      console.log('Después del map', courses.length);
+      courses.pop()
       this.setState({
         courses: courses, coursesLoading: false
       })
@@ -85,7 +78,7 @@ class Expenses extends Component {
             {!this.state.coursesLoading &&
               this.state.courses.length === 0 && (
                 <View style={styles.emptyContainer}>
-                  <Text style={styles.emptyMsg}>No expenses found</Text>
+                  <Text style={styles.emptyMsg}>Aún no está inscrito a ningún curso, espere indicaciones de su administrador</Text>
                 </View>
               )}
             {!this.state.coursesLoading &&
