@@ -282,10 +282,14 @@ class Quizz extends Component {
                 {
                     this.state.loadDataReady && ! this.state.ready &&
                     (
-                        <Content
+                        <View
                           showsVerticalScrollIndicator={false}
                           contentContainerStyle={{ flex: 1 }}
-                          style={styles.content}>
+                          style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flex: 1,
+                          }}>
                             <CountDown
                                 until={5}
                                 onFinish={() => this.setState({ready: true, timerVisibility: true, })}
@@ -293,7 +297,7 @@ class Quizz extends Component {
                                 size={20}
                                 timeToShow={['S']}
                             />
-                        </Content>
+                        </View>
                     )
                 }
                 {
@@ -310,7 +314,7 @@ class Quizz extends Component {
                         {this.state.ready &&
                         this.state.questions.length > 0 && (
                             <FlatList
-                            style={{justifyContent: 'center', alignItems: 'center',}}
+                            style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column', justifyContent: 'space-between', flex: 1, backgroundColor: 'blue'}}
                             data={ this.state.currentQuestion.options }
                             renderItem={ ({ ...props }) => {
                                 if(this.optionIndex == 4){
@@ -368,8 +372,8 @@ class Quizz extends Component {
                             flexDirection: "column",
                         }}
                         >
-                        <Text>Acertaste en tu respuesta</Text>
-                            
+                        <Text style={{ padding: '2%', }}>Acertaste en tu respuesta</Text>
+                            {feedbackImage}
                             <View style={{ flexDirection: 'row' }} >
                                 <TouchableOpacity
                                 onPress={this.handleNextAnswer}
@@ -682,6 +686,7 @@ const retroStyles = StyleSheet.create({
         // left:0,
         width: 100,
         height: 100,
+        padding: "2%",
         // zIndex: 12,
         // bottom: '3%',
         // right: 0,
