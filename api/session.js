@@ -58,7 +58,7 @@ export const session = {
         AsyncStorage.setItem(rememberTokenDataName, userData.access);
     },
     setAvatar: async (avatar) => {
-        console.log('setting avatar', avatar)
+        // console.log('setting avatar', avatar)
         AsyncStorage.setItem(avatarDataName, avatar.original)
         AsyncStorage.setItem(avatarThumbnail, avatar.thumbnail)
     },
@@ -137,11 +137,11 @@ export async function shouldShowTutorial(){
     response = await AsyncStorage.getItem(tutorialShowedDataName)
     console.log('shouldShowTutorial', response)
     if(response === null){
-        console.log('No xistía la variable en asyncstorage')
+        console.log('Mostrando el tutorial')
         return true
     }else{
         AsyncStorage.removeItem(tutorialShowedDataName)
-        console.log('No existía el tutorial')
+        console.log('No Mostrar tutorial')
         return false
     }
 }

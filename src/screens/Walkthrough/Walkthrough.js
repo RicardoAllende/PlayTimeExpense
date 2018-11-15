@@ -174,7 +174,7 @@ class Walkthrough extends Component {
         showTutorial: true,
       })
     }
-    this.playBackgroundMusic()
+    // this.playBackgroundMusic()
   }
   
   playBackgroundMusic = async () => {

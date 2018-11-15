@@ -10,6 +10,7 @@ import {
 import HeaderDrawerButton from '../../components/AppHeader/HeaderDrawerButton';
 const correctFeedback = require('@assets/images/feedback/correct.gif') // "http://www.pngmart.com/files/7/Check-PNG-Transparent-Image.png"
 const wrongFeedback = require('@assets/images/feedback/wrong.png')
+const yellowPostIt = require('@assets/images/feedback/yellow-post-it-medium.png')
 import CountdownCircle from 'react-native-countdown-circle'
 
 import { connect } from 'react-redux';
@@ -61,8 +62,7 @@ class Quizz extends Component {
             currentIndex: 0,
             showSuccessNotification: false,
             showErrorNotification: false, 
-            feedback: "",
-            exampleNotification: true,
+            feedback: "Retroalimentación por default",
             hits: 0,
             maxHits: 0,
             errors: 0,
@@ -97,32 +97,12 @@ class Quizz extends Component {
     }
 
     showFeedbackView = (is_correct) => {
+        feedback = "Respuesta contestada correctatemente"
         if(is_correct){
-            this.setState({ showSuccessNotification: true, showErrorNotification: false, showFeedback: true })
+            this.setState({ showSuccessNotification: true, showErrorNotification: false, showFeedback: true, feedback })
         }else{
             this.setState({ showSuccessNotification: false, showErrorNotification: true, feedback: this.state.currentQuestion.feedback, hits: 0, showFeedback: true })
         }
-
-        // this.setState({ showSuccessNotification: false, showErrorNotification: false, timerVisibility: false, }, () => {
-        //     if(is_correct){
-        //         this.setState({ showSuccessNotification: true, showErrorNotification: false })
-        //     }else{
-        //         // this.setState({feedback: this.state.currentQuestion.feedback, hits: 0}, () => {
-        //         this.setState({ showSuccessNotification: false, showErrorNotification: true, feedback: this.state.currentQuestion.feedback, hits: 0 })
-        //     }
-        // })
-    }
-
-    showExampleNotification = () => {
-        this.setState({
-            exampleNotification: true,
-        }, () => {
-            // setTimeout(() => {
-            //     this.setState({
-            //         exampleNotification: false,
-            //     })
-            // }, defaultNotificationTime);
-        })
     }
 
     itemSeparatorComponent = () => {
@@ -192,7 +172,6 @@ class Quizz extends Component {
 
     render() {
         const navigation = this.props.navigation;
-        console.log('exampleNotification', this.state.exampleNotification)
         // if(this.state.loadDataReady){
         //     return (
         //         <CountDown
@@ -348,11 +327,9 @@ class Quizz extends Component {
                     </Fab>
                 }
                     <Modal
-                        
                         isVisible={this.state.showFeedback}
                         animationIn="slideInLeft"
                         animationOut="slideOutRight"
-
                         // isVisible={this.state.showFeedback}
                         // animationIn="zoomInDown"
                         // animationOut="zoomOutUp"
@@ -361,7 +338,7 @@ class Quizz extends Component {
                         // backdropTransitionInTiming={1000}
                         // backdropTransitionOutTiming={1000}
                     >
-                        <View
+                        {/* <View
                         style={{
                             backgroundColor: "white",
                             padding: 22,
@@ -371,27 +348,25 @@ class Quizz extends Component {
                             borderColor: "rgba(0, 0, 0, 0.1)",
                             flexDirection: "column",
                         }}
+                        > */}
+                        <ImageBackground
+                            source={yellowPostIt}
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                // backgroundColor: "white",
+                                // padding: 22,
+                                justifyContent: "center",
+                                alignItems: "center",
+                                borderRadius: 4,
+                                // borderColor: "rgba(0, 0, 0, 0.1)",
+                                flexDirection: "column",
+                                flex: 1,
+                            }}
                         >
-                        <Text style={{ padding: '2%', }}>Acertaste en tu respuesta</Text>
+                        <Text style={{ padding: '2%', }}>{this.state.feedback}</Text>
                             {feedbackImage}
                             <View style={{ flexDirection: 'row' }} >
-                                <TouchableOpacity
-                                onPress={this.handleNextAnswer}
-                                >
-                                    <View 
-                                    style={{
-                                        backgroundColor: "lightblue",
-                                        padding: 12,
-                                        margin: 16,
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        borderRadius: 4,
-                                        borderColor: "rgba(0, 0, 0, 0.1)"
-                                    }}
-                                    >
-                                        <Text>Continuar</Text>
-                                    </View>
-                                </TouchableOpacity>
                                 <TouchableOpacity
                                 onPress={this.goToSessionScreen}
                                 >
@@ -409,8 +384,26 @@ class Quizz extends Component {
                                         <Text>Terminar</Text>
                                     </View>
                                 </TouchableOpacity>
+                                <TouchableOpacity
+                                onPress={this.handleNextAnswer}
+                                >
+                                    <View 
+                                    style={{
+                                        backgroundColor: "lightblue",
+                                        padding: 12,
+                                        margin: 16,
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        borderRadius: 4,
+                                        borderColor: "rgba(0, 0, 0, 0.1)"
+                                    }}
+                                    >
+                                        <Text>Continuar</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
-                        </View>
+                        </ImageBackground>
+                        {/* </View> */}
                     </Modal>
                 </ImageBackground>
             </Container>
@@ -658,8 +651,6 @@ class Quizz extends Component {
                                     questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length, 
                                     currentQuestion: response.data.questions[0], loadDataReady: true}, 
                                     ()=>{
-                                        
-                                        // this.showExampleNotification()
                                         // console.log('Quizz.js session', this.state.session)
                                         // console.log('');
                                     }
