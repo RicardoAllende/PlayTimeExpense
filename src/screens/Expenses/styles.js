@@ -12,6 +12,7 @@ export default {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#e9e9e9'
   },
   emptyMsg: {
     color: '#777',

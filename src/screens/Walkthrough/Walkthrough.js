@@ -1,3 +1,130 @@
+// import React, { Component } from "react";
+// import {
+//   ProgressBarAndroid,
+//   AppRegistry,
+//   StyleSheet,
+//   View
+// } from "react-native";
+
+// export default class App extends Component {
+//   render() {
+//     return (
+//       <View style={styles.container}>
+//         <ProgressBarAndroid />
+//         <ProgressBarAndroid styleAttr="Horizontal" />
+//         <ProgressBarAndroid styleAttr="Horizontal" color="#2196F3" />
+//         <ProgressBarAndroid
+//           // style={{ backgroundColor: '#e9e9e9', color: 'black' }}
+//           style={{ 
+//             height: '50%',
+//             width: '50%',
+//            }}
+//           color='green'
+//           styleAttr="Horizontal"
+//           indeterminate={false}
+//           progress={0.8}
+//         />
+//       </View>
+//     );
+//   }
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: "space-evenly",
+//     padding: 10
+//   }
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { Component } from 'react';
+
+// import { StyleSheet, Text, View } from 'react-native';
+
+// import * as Progress from 'react-native-progress';
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: '#fff',
+//     paddingVertical: 20,
+//   },
+//   welcome: {
+//     fontSize: 20,
+//     textAlign: 'center',
+//     margin: 10,
+//   },
+//   circles: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//   },
+//   progress: {
+//     margin: 10,
+//   },
+// });
+
+// export default class Example extends Component {
+//   constructor(props) {
+//     super(props);
+
+//     this.state = {
+//       progress: 0,
+//       indeterminate: true,
+//     };
+//   }
+
+//   componentDidMount() {
+//     this.animate()
+//   }
+
+//   animate() {
+//     setInterval(() => {
+//       progress = this.state.progress + .10
+//       if(progress <= 1){
+//         this.setState({
+//           progress
+//         })
+//       }
+//     }, 500)
+//   }
+
+//   render() {
+//     return (
+//       <View style={styles.container}>
+//         <Text style={styles.welcome}>Progress Example</Text>
+//         <Progress.Bar
+//           style={styles.progress}
+//           progress={this.state.progress}
+//         />
+//       </View>
+//     );
+//   }
+// }
+
+
 // /**
 //  * Example usage of react-native-modal
 //  * @format
@@ -195,6 +322,12 @@
 //     justifyContent: "center"
 //   }
 // });
+
+
+
+
+
+
 
 import React, { Component } from 'react';
 import {

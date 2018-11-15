@@ -35,7 +35,7 @@ import {session, getBearerTokenCountdownSeconds, getAvatar} from './../../../api
 import { AsyncStorage } from "react-native"
 import Notification from '@components/Notification';
 import Modal from 'react-native-modal'
-import ConfirmModal from '@components/ConfirmModal'
+import ConfirmModal from '@components/Modals/ConfirmModal'
 
 const defaultNotificationTime = 1200 // 1000 equals a second
 const defaultDelayToShowQuestion = defaultNotificationTime + 0
@@ -43,6 +43,7 @@ const defaultDelayToShowQuestion = defaultNotificationTime + 0
 const correctSoundPath = require('@assets/sounds/correct.mp3')
 const wrongSoundPath = require('@assets/sounds/wrong.mp3')
 const lowVolume = 0.15
+import * as Progress from 'react-native-progress';
 const mediumVolume  = 0.5
 
 class Quizz extends Component {
@@ -50,26 +51,11 @@ class Quizz extends Component {
     constructor(props){
         super(props)
         this.state = {
-            ready: false,
-            categories: [],
-            corrects: 0,
-            answers: 0,
-            questions: [],
-            currentQuestion: false,
-            seconds: defaultTime,
-            skippedQuestions: [],
-            timerVisibility: false,
-            avatarReady: false,
-            currentIndex: 0,
-            showSuccessNotification: false,
-            showErrorNotification: false, 
-            feedback: "Retroalimentación por default",
-            hits: 0,
-            maxHits: 0,
-            errors: 0,
-            showFeedback: false,
-            loadDataReady: false,
-            showConfirmModal: false,
+            ready: false, categories: [], corrects: 0, answers: 0, questions: [],
+            currentQuestion: false, seconds: defaultTime, skippedQuestions: [], timerVisibility: false,
+            avatarReady: false, currentIndex: 0, showSuccessNotification: false, showErrorNotification: false, 
+            feedback: "Retroalimentación por default", hits: 0, maxHits: 0, percentage: 0.5,
+            errors: 0, showFeedback: false, loadDataReady: false, showConfirmModal: false,
         }
     }
 
@@ -189,7 +175,7 @@ class Quizz extends Component {
                         <Left style={{ flex: 1 }}>
                             <HeaderDrawerButton navigation={navigation} />
                         </Left>
-                        <Body style={{ flex: 1, alignItems: 'center' }}>
+                        <Body style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}>
                             {
                                 this.state.timerVisibility &&
                                     <CountdownCircle
@@ -239,8 +225,12 @@ class Quizz extends Component {
                     </Header>
                     
                     <View style={headerStyles.titles.container}>
+                        <Progress.Bar
+                            style={{ margin: 10 }}
+                            progress={this.state.progress}
+                        />
                         <View style={headerStyles.titles.content}>
-                        <Text style={headerStyles.titles.text}>{ this.state.currentQuestion.name }o</Text>
+                        <Text style={headerStyles.titles.text}>{ this.state.currentQuestion.name }</Text>
                         </View>
                     </View>
                 </View>
