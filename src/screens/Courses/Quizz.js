@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, ImageBackground, Alert, View, ToastAndroid, Image, BackHandler, StyleSheet, TouchableOpacity, } from 'react-native';
 import { Asset, AppLoading, Font, Audio } from 'expo';
+import CountDown from 'react-native-countdown-component';
 import {
   Container, Content, Fab, Icon,  Text,  Spinner, Left, Right, Thumbnail, Body, Button, Header
 } from 'native-base';
@@ -55,7 +56,7 @@ class Quizz extends Component {
             currentQuestion: false,
             seconds: defaultTime,
             skippedQuestions: [],
-            timerVisibility: true,
+            timerVisibility: false,
             avatarReady: false,
             currentIndex: 0,
             showSuccessNotification: false,
@@ -65,7 +66,8 @@ class Quizz extends Component {
             hits: 0,
             maxHits: 0,
             errors: 0,
-            showFeedback: false
+            showFeedback: false,
+            loadDataReady: false,
         }
     }
 
@@ -191,8 +193,19 @@ class Quizz extends Component {
     render() {
         const navigation = this.props.navigation;
         console.log('exampleNotification', this.state.exampleNotification)
-        if(this.state.ready){
-            let notification, feedbackImage, buttons
+        // if(this.state.loadDataReady){
+        //     return (
+        //         <CountDown
+        //             until={3}
+        //             onFinish={() => this.setState({ready: true})}
+        //             onPress={() => alert('hello')}
+        //             size={20}
+        //             timeToShow={['S']}
+        //         />
+        //     )
+        // }
+        if(this.state.loadDataReady){
+            let notification, feedbackImage
             if(this.state.showSuccessNotification){    
                 feedbackImage = <Image style={ retroStyles.imageRetro } source={ correctFeedback } />
             }
@@ -262,66 +275,87 @@ class Quizz extends Component {
                     
                     <View style={headerStyles.titles.container}>
                         <View style={headerStyles.titles.content}>
-                        <Text style={headerStyles.titles.text}>{ this.state.currentQuestion.name }</Text>
+                        <Text style={headerStyles.titles.text}>{ this.state.currentQuestion.name }o</Text>
                         </View>
                     </View>
                 </View>
-                <Content
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ flex: 1 }}
-                    style={styles.content}>
-                    {!this.state.ready && (
-                    <View style={styles.emptyContainer}>
-                        <Spinner color={theme.brandPrimary} />
-                    </View>
-                    )}
-                    {this.state.ready &&
-                    this.state.questions.length > 0 && (
-                        <FlatList
-                        data={ this.state.currentQuestion.options }
-                        renderItem={ ({ ...props }) => {
-                            if(this.optionIndex == 4){
-                                this.optionIndex = 0;
-                            }else{
-                                this.optionIndex = this.optionIndex + 1
+                {
+                    this.state.loadDataReady && ! this.state.ready &&
+                    (
+                        <Content
+                          showsVerticalScrollIndicator={false}
+                          contentContainerStyle={{ flex: 1 }}
+                          style={styles.content}>
+                            <CountDown
+                                until={5}
+                                onFinish={() => this.setState({ready: true, timerVisibility: true, })}
+                                // onPress={() => alert('hello')}
+                                size={20}
+                                timeToShow={['S']}
+                            />
+                        </Content>
+                    )
+                }
+                {
+                    this.state.ready && this.state.loadDataReady &&
+                    (<Content
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ flex: 1 }}
+                        style={styles.content}>
+                        {!this.state.ready && (
+                        <View style={styles.emptyContainer}>
+                            <Spinner color={theme.brandPrimary} />
+                        </View>
+                        )}
+                        {this.state.ready &&
+                        this.state.questions.length > 0 && (
+                            <FlatList
+                            style={{justifyContent: 'center', alignItems: 'center',}}
+                            data={ this.state.currentQuestion.options }
+                            renderItem={ ({ ...props }) => {
+                                if(this.optionIndex == 4){
+                                    this.optionIndex = 0;
+                                }else{
+                                    this.optionIndex = this.optionIndex + 1
+                                }
+        
+                                return (<Option showAlert={this.showAlert}
+                                    itemIndex={this.optionIndex} gradeAnswer={this.gradeAnswer}
+                                    questionId={this.state.currentQuestion.id} navigation={navigation} {...props} />)
                             }
-    
-                            return (<Option showAlert={this.showAlert}
-                                 itemIndex={this.optionIndex} gradeAnswer={this.gradeAnswer}
-                                 questionId={this.state.currentQuestion.id} navigation={navigation} {...props} />)
                         }
-                    }
-                        keyExtractor={category => "question" + category.id}
-                        initialNumToRender={5}
-                        style={styles.flatList}
-                        ItemSeparatorComponent={this.itemSeparatorComponent}
-                        />
-                    )}
-                </Content>
-                <Fab
-                    direction="up"
-                    containerStyle={{}}
-                    style={{ backgroundColor: theme.brandPrimary }}
-                    position="bottomRight"
-                    onPress={ this.shouldGoToSessionScreen }>
-                    <Icon type="Ionicons" name="exit" />
-                </Fab>
-                {notification}
-                    {/* <Modal
+                            keyExtractor={category => "question" + category.id}
+                            initialNumToRender={5}
+                            style={styles.flatList}
+                            ItemSeparatorComponent={this.itemSeparatorComponent}
+                            />
+                        )}
+                    </Content>)
+                }
+                {
+                    this.state.ready && this.state.loadDataReady &&
+                    <Fab
+                        direction="up"
+                        containerStyle={{}}
+                        style={{ backgroundColor: theme.brandPrimary }}
+                        position="bottomRight"
+                        onPress={ this.shouldGoToSessionScreen }>
+                        <Icon type="Ionicons" name="exit" />
+                    </Fab>
+                }
+                    <Modal
+                        
                         isVisible={this.state.showFeedback}
                         animationIn="slideInLeft"
                         animationOut="slideOutRight"
-                    > */}
-                    <Modal
-                        isVisible={this.state.showFeedback}
-                        // backdropColor={"red"}
-                        // backdropOpacity={1}
-                        animationIn="zoomInDown"
-                        animationOut="zoomOutUp"
-                        animationInTiming={1000}
-                        animationOutTiming={1000}
-                        backdropTransitionInTiming={1000}
-                        backdropTransitionOutTiming={1000}
+
+                        // isVisible={this.state.showFeedback}
+                        // animationIn="zoomInDown"
+                        // animationOut="zoomOutUp"
+                        // animationInTiming={1000}
+                        // animationOutTiming={1000}
+                        // backdropTransitionInTiming={1000}
+                        // backdropTransitionOutTiming={1000}
                     >
                         <View
                         style={{
@@ -618,9 +652,10 @@ class Quizz extends Component {
                             }else{
                                 this.setState( {
                                     questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length, 
-                                    currentQuestion: response.data.questions[0], ready: true}, 
+                                    currentQuestion: response.data.questions[0], loadDataReady: true}, 
                                     ()=>{
-                                        this.showExampleNotification()
+                                        
+                                        // this.showExampleNotification()
                                         // console.log('Quizz.js session', this.state.session)
                                         // console.log('');
                                     }
@@ -632,6 +667,10 @@ class Quizz extends Component {
                 )
             }
         );
+    } // loadData ends
+
+    startCountdown = () => {
+
     }
 
 }
