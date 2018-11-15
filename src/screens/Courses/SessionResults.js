@@ -71,7 +71,7 @@ class CourseCharts extends Component {
     return (
       <Container>
         <ImageBackground
-          source={require("@assets/images/header-bg.png")}
+          source={require("@assets/images/header-bg-big.png")}
           style={chartStyles.container}
         >
           <AppHeader

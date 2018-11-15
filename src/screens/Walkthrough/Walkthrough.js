@@ -8,12 +8,13 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  AsyncStorage,
 } from 'react-native';
 
 import { Container, Content, Text, Button, Card, Footer } from 'native-base';
 import Carousel from 'react-native-snap-carousel';
 
-import {shouldShowTutorial, shouldRestart} from '../../../api/session'
+import {shouldShowTutorial, setTutorialShowed} from '../../../api/session'
 import AppIntroSlider from 'react-native-app-intro-slider';
 
 import {api, modalLevels} from './../../../api/playTimeApi'
@@ -25,7 +26,6 @@ import { entries } from './config';
 import styles from './styles';
 
 import {session, getUserData} from './../../../api/session'
-import { AsyncStorage } from "react-native"
 
 import ModalSelector from 'react-native-modal-selector'
 
@@ -166,28 +166,15 @@ class Walkthrough extends Component {
     );
   }
 
-  componentDidMount(){
-    // this.shouldShowTutorial()
-    // // if(this.props.navigation.state.params){
-    // try {
-    //   let shouldRedirect = this.props.navigation.state.params.reload
-    //   this.props.navigation.navigate('Profile')
-    //   // if(){
-    //   //   this.props.navigation.navigate('Profile')
-    //   // }else{
-    //   //   alert('Fuera del segundo if')
-    //   // }
-    //   // console.log('Terminó componentDidMount try')
-    // } catch (error) {
-    //   // console.log(error)
-    //   console.log('Ocurrió un error');
-    //   // alert('Ocurrió un error')
-    // }
-    // // }else{
-    // //   alert('Fuera del primer if')
-    // // }
+  async componentDidMount(){
     this.loadUserData();
-    // this.playBackgroundMusic()
+    showTuto = await shouldShowTutorial()
+    if(showTuto){
+      this.setState({
+        showTutorial: true,
+      })
+    }
+    this.playBackgroundMusic()
   }
   
   playBackgroundMusic = async () => {
@@ -204,13 +191,8 @@ class Walkthrough extends Component {
     }  
   }
 
-  redirectToApp = async () => {
-    if(shouldRestart()){
-      this.props.navigation.navigate('Profile')
-    }
-  }
-
   _onDone = () => {
+    setTutorialShowed()
     this.setState({
       showTutorial: false,
     })
@@ -259,7 +241,10 @@ class Walkthrough extends Component {
                 style={styles.skipBtn}
                 onPress={
                   () => {
-                    this.props.navigation.navigate('Profile')
+                    AsyncStorage.removeItem('tutorial_showed').then(() => {
+                      console.log('Se eliminó la sesión en la cual se mostraba el tutorial')
+                    })
+                    // this.props.navigation.navigate('Profile')
                   }
                 }
                 // onPress={() => this.props.navigation.navigate('Drawer', {

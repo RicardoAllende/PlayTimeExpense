@@ -131,63 +131,21 @@ export async function getUserData() {
     return userData
 }
 
-export function queueImageUpdate(){
-    AsyncStorage.setItem('update_image', true);
-}
-
-export function changeAvatar(){
-
-}
-
-export async function getQueueImageUpdate(){
-    avatar = getAvatar()
-    fetch(api.getCourses, {
-        method: 'GET',
-        headers: {
-            "Authorization": 'Bearer ' + this.state.bearerToken,
-            Accept: 'application/json',
-            "Content-Type": "application/json"
-        }
-    })
-        .then((response) => response.json())
-        .then((response) => {
-            this.setState({ courses: response.data.courses, coursesLength: response.data.courses.length - 1, ready: true }, () => {
-
-            })
-            session.setCourses(response.data.courses);
-        }
-        ).catch((error) => {
-            console.error(error);
-        })
-}
-
 const tutorialShowedDataName = 'tutorial_showed'
 
 export async function shouldShowTutorial(){
     response = await AsyncStorage.getItem(tutorialShowedDataName)
-    if(response !== null){
+    console.log('shouldShowTutorial', response)
+    if(response === null){
+        console.log('No xistía la variable en asyncstorage')
+        return true
+    }else{
         AsyncStorage.removeItem(tutorialShowedDataName)
-        return true;
+        console.log('No existía el tutorial')
+        return false
     }
-    return false;
 }
 
 export function setTutorialShowed(){
     AsyncStorage.setItem(tutorialShowedDataName, 'viewed')
-}
-
-export async function shouldRestart(){
-    // alert('entrando en la función')
-    // bearerToken = await AsyncStorage.getItem(session.bearerTokenName)
-    restart = await AsyncStorage.getItem('restart')
-    if(restart !== null){
-        AsyncStorage.removeItem('restart')
-        return true
-    }
-    // alert('Terminó la función')
-    return false
-}
-
-export function restartApp(){
-    AsyncStorage.setItem('restart', '00')
 }

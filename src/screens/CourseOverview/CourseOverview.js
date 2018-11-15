@@ -27,18 +27,6 @@ import headerStyles from '@components/AppHeader/styles'
 
 import ModalSelector from 'react-native-modal-selector'
 
-// import { modalLevels } from '@components/ModalSelector/modalLevels'
-// const modalLevels = [
-//   { key: 0, section: true, label: 'Escoja el nivel a jugar' },
-//   { key: 1, label: 'Fácil', value: 1 },
-//   { key: 2, label: 'Medio', value: 2 },
-//   { key: 3, label: 'Difícil', value: 3 },
-//   { key: 4, label: 'Todos los niveles', value: '' }
-// ];
-
-import PercentageCircle from 'react-native-percentage-circle';
-const brandSuccess = '#50D2C2';
-
 class CourseOverview extends Component {
   state = {
     currentPeriod: getFormattedCurrentWeek(),
@@ -98,7 +86,7 @@ class CourseOverview extends Component {
     return (
       <Container>
         <ImageBackground
-          source={require('@assets/images/header-bg.png')}
+          source={require('@assets/images/header-bg-big.png')}
           style={styles.container}>
           
           { /* Inicia Appheader */ }

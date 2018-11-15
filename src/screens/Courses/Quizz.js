@@ -7,7 +7,8 @@ import {
 } from 'native-base';
 
 import HeaderDrawerButton from '../../components/AppHeader/HeaderDrawerButton';
-const correctImage = "http://www.pngmart.com/files/7/Check-PNG-Transparent-Image.png"
+const correctFeedback = require('@assets/images/feedback/correct.gif') // "http://www.pngmart.com/files/7/Check-PNG-Transparent-Image.png"
+const wrongFeedback = require('@assets/images/feedback/wrong.png')
 import CountdownCircle from 'react-native-countdown-circle'
 
 import { connect } from 'react-redux';
@@ -63,6 +64,8 @@ class Quizz extends Component {
             exampleNotification: true,
             hits: 0,
             maxHits: 0,
+            errors: 0,
+            showFeedback: false
         }
     }
 
@@ -91,10 +94,21 @@ class Quizz extends Component {
         return true;
     }
 
-    showSuccessNotification = () => {
-        this.setState({ showSuccessNotification: false, showErrorNotification: false }, () => {
-            this.setState({ showSuccessNotification: true, showErrorNotification: false })
-        })
+    showFeedbackView = (is_correct) => {
+        if(is_correct){
+            this.setState({ showSuccessNotification: true, showErrorNotification: false, showFeedback: true })
+        }else{
+            this.setState({ showSuccessNotification: false, showErrorNotification: true, feedback: this.state.currentQuestion.feedback, hits: 0, showFeedback: true })
+        }
+
+        // this.setState({ showSuccessNotification: false, showErrorNotification: false, timerVisibility: false, }, () => {
+        //     if(is_correct){
+        //         this.setState({ showSuccessNotification: true, showErrorNotification: false })
+        //     }else{
+        //         // this.setState({feedback: this.state.currentQuestion.feedback, hits: 0}, () => {
+        //         this.setState({ showSuccessNotification: false, showErrorNotification: true, feedback: this.state.currentQuestion.feedback, hits: 0 })
+        //     }
+        // })
     }
 
     showExampleNotification = () => {
@@ -106,12 +120,6 @@ class Quizz extends Component {
             //         exampleNotification: false,
             //     })
             // }, defaultNotificationTime);
-        })
-    }
-
-    showErrorNotification = () => {
-        this.setState({ showErrorNotification: false, showSuccessNotification: false }, () => {
-            this.setState({ showErrorNotification: true, showSuccessNotification: false })
         })
     }
 
@@ -174,7 +182,7 @@ class Quizz extends Component {
     _updateText = (elapsedSecs, totalSecs) => {
         current = totalSecs-elapsedSecs
         if(current != totalSecs){
-            console.log('Segundos actuales', current)
+            // console.log('Segundos actuales', current)
             this.currentSecond = current
         }
         return (totalSecs - elapsedSecs).toString()
@@ -184,22 +192,12 @@ class Quizz extends Component {
         const navigation = this.props.navigation;
         console.log('exampleNotification', this.state.exampleNotification)
         if(this.state.ready){
-            let notification;
-            if(this.state.showSuccessNotification){
-                notification = <Notification
-                    message="¡Respuesta correcta!"
-                    duration={defaultNotificationTime}
-                    position="bottom"
-                    type="success"
-                  />
+            let notification, feedbackImage, buttons
+            if(this.state.showSuccessNotification){    
+                feedbackImage = <Image style={ retroStyles.imageRetro } source={ correctFeedback } />
             }
             if(this.state.showErrorNotification){
-                notification = <Notification
-                    message={this.state.feedback}
-                    duration={defaultNotificationTime}
-                    position="bottom"
-                    type="danger"
-                />
+                feedbackImage = <Image style={ retroStyles.imageRetro } source={ wrongFeedback } />
             }
             return (
             <Container>
@@ -309,10 +307,21 @@ class Quizz extends Component {
                     <Icon type="Ionicons" name="exit" />
                 </Fab>
                 {notification}
-                    <Modal
-                        isVisible={this.state.exampleNotification}
+                    {/* <Modal
+                        isVisible={this.state.showFeedback}
                         animationIn="slideInLeft"
                         animationOut="slideOutRight"
+                    > */}
+                    <Modal
+                        isVisible={this.state.showFeedback}
+                        // backdropColor={"red"}
+                        // backdropOpacity={1}
+                        animationIn="zoomInDown"
+                        animationOut="zoomOutUp"
+                        animationInTiming={1000}
+                        animationOutTiming={1000}
+                        backdropTransitionInTiming={1000}
+                        backdropTransitionOutTiming={1000}
                     >
                         <View
                         style={{
@@ -326,9 +335,11 @@ class Quizz extends Component {
                         }}
                         >
                         <Text>Acertaste en tu respuesta</Text>
-                            <Image style={ retroStyles.imageRetro } source={{ uri: correctImage }} />
+                            
                             <View style={{ flexDirection: 'row' }} >
-                                <TouchableOpacity>
+                                <TouchableOpacity
+                                onPress={this.handleNextAnswer}
+                                >
                                     <View 
                                     style={{
                                         backgroundColor: "lightblue",
@@ -343,7 +354,9 @@ class Quizz extends Component {
                                         <Text>Continuar</Text>
                                     </View>
                                 </TouchableOpacity>
-                                <TouchableOpacity>
+                                <TouchableOpacity
+                                onPress={this.goToSessionScreen}
+                                >
                                     <View 
                                     style={{
                                         backgroundColor: "lightblue",
@@ -440,15 +453,12 @@ class Quizz extends Component {
     }
 
     handleNextAnswer = () => {
-        // this.setState({ seconds: this.state.countdownSeconds }, () => {
-        //         console.log('Segundos establecidos', this.state.seconds)
-        currentIndex = this.state.index
-        currentIndex++
         this.setState({
-            timerVisibility: false,
-        }, () => {
+            showFeedback: false,
+        }, () => setTimeout(() => {
+            currentIndex = this.state.index
+            currentIndex++
             if(currentIndex == this.state.maxIndex){
-                // ToastAndroid.show("Ya no hay más preguntas", ToastAndroid.SHORT)
                 if(this.isSkippedQuestionAvailable()){
                     console.log('Quizz handleNextAnswer showing skipped question')
                     nextQuestion = this.getNextSkippedQuestion()
@@ -461,18 +471,15 @@ class Quizz extends Component {
                     this.goToSessionScreen()
                 }
             }else{
-                // ToastAndroid.show("Cambio a siguiente pregunta", ToastAndroid.SHORT)
                 newQuestion = this.state.questions[currentIndex]
                 this.setState({
                     index : currentIndex,
                     currentQuestion: newQuestion,
-                    // seconds: this.state.countdownSeconds,
                 })
             }
             this.restartTimer()
-        })
-            // }
-        // );
+        }, 500)
+        )
     }
 
     showingSkippedQuestions = false
@@ -531,7 +538,9 @@ class Quizz extends Component {
     }
 
     gradeAnswer = (questionId, optionId, is_correct) => {
+        this.setState({timerVisibility: false})
         this.playSound(is_correct)
+        this.showFeedbackView(is_correct)
         // console.warn(apiSendAnswers)
         currentAnswers = this.state.answers + 1
         this.setState({
@@ -577,25 +586,6 @@ class Quizz extends Component {
                     })
                     this.sendMaxHits(hits, this.props.navigation.state.params.courseId);
                 }
-            })
-            this.showSuccessNotification()
-            this.next = true;
-            setTimeout(() => {
-                if(this.next){
-                    this.handleNextAnswer()
-                    this.next = false;
-                }
-            }, defaultDelayToShowQuestion)
-        }else{
-            this.setState({feedback: this.state.currentQuestion.feedback, hits: 0}, () => {
-                this.showErrorNotification()
-                this.next = true
-                setTimeout(() => {
-                    if(this.next){
-                        this.handleNextAnswer()
-                        this.next = false;
-                    }
-                }, defaultDelayToShowQuestion)
             })
         }
     }
