@@ -14,6 +14,7 @@ import { AsyncStorage } from "react-native";
 import { api, getLevelName, getLevelIndex } from "./../../../api/playTimeApi";
 import { session, getBearerToken, getUserData } from "./../../../api/session";
 import RankingList from "../CourseOverview/RankingList";
+import GaugeChart from '@components/Charts/GaugeChart';
 
 import AchievementsList from "@components/Achievement/AchievementsList";
 
@@ -43,23 +44,6 @@ class CourseCharts extends Component {
   initialize = () => {
     this.props.getCategories();
   };
-
-  switchPeriod(i) {
-    let period = "";
-    switch (i) {
-      case 0:
-        period = getFormattedCurrentWeek();
-        break;
-      case 1:
-        period = getFormattedCurrentMonth();
-        break;
-      case 2:
-        period = moment().format("YYYY");
-        break;
-    }
-
-    this.setState({ currentPeriod: period });
-  }
 
   componentDidMount() {
     this.loadData();
@@ -97,8 +81,9 @@ class CourseCharts extends Component {
                 elevation: 0
               }}
               locked
-              onChangeTab={({ i, ref, from }) =>
-                this.switchPeriod(i, ref, from)
+              onChangeTab={({ i, ref, from }) => {
+                // this.switchPeriod(i, ref, from)
+              }
               }
             >
               <Tab heading="Resultados">
@@ -139,6 +124,7 @@ class CourseCharts extends Component {
                       percent={this.state.advance}
                       color={brandSuccess}
                     />
+                    <GaugeChart percent={this.state.advance} />
                     <View style = {{height: 10,width: '100%',}} />
                     <Button
                       style={{ padding: "5%" }}

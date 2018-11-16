@@ -37,8 +37,10 @@ import Notification from '@components/Notification';
 import Modal from 'react-native-modal'
 import ConfirmModal from '@components/Modals/ConfirmModal'
 
-const defaultNotificationTime = 1200 // 1000 equals a second
-const defaultDelayToShowQuestion = defaultNotificationTime + 0
+const defaultFeedbackTime = 1200 // 1000 equals a second
+const defaultDelayToShowQuestion = defaultFeedbackTime + 0
+const animationTime = defaultFeedbackTime - 100
+// const animationIn =
 
 const correctSoundPath = require('@assets/sounds/correct.mp3')
 const wrongSoundPath = require('@assets/sounds/wrong.mp3')
@@ -226,7 +228,8 @@ class Quizz extends Component {
                     
                     <View style={headerStyles.titles.container}>
                         <Progress.Bar
-                            style={{ margin: 10 }}
+                            width={null}
+                            color={theme.brandSecondary}
                             progress={this.state.progress}
                         />
                         <View style={headerStyles.titles.content}>
@@ -318,8 +321,8 @@ class Quizz extends Component {
                         // animationOut="slideOutRight"
                         animationIn="zoomInDown"
                         animationOut="zoomOutUp"
-                        animationInTiming={1000}
-                        animationOutTiming={1000}
+                        animationInTiming={animationTime}
+                        animationOutTiming={animationTime}
                         backdropTransitionInTiming={1000}
                         backdropTransitionOutTiming={1000}
                     >
@@ -475,7 +478,8 @@ class Quizz extends Component {
                 })
             }
             this.restartTimer()
-        }, 500)
+            this.calculateProgressInQuestions()
+        }, defaultFeedbackTime)
         )
     }
 
@@ -534,6 +538,15 @@ class Quizz extends Component {
 
     }
 
+    calculateProgressInQuestions = () => {
+        numAnswers = this.state.answers
+        numQuestions = this.state.maxIndex
+        progress = numAnswers / numQuestions
+        this.setState({
+            progress
+        })
+    }
+
     gradeAnswer = (questionId, optionId, is_correct) => {
         this.setState({timerVisibility: false})
         this.playSound(is_correct)
@@ -541,7 +554,7 @@ class Quizz extends Component {
         // console.warn(apiSendAnswers)
         currentAnswers = this.state.answers + 1
         this.setState({
-            answers: currentAnswers,
+            answers: currentAnswers, // número de preguntas contestadas
             // seconds: 0
         })
         var data = JSON.stringify({
