@@ -39,7 +39,7 @@ import ConfirmModal from '@components/Modals/ConfirmModal'
 
 const defaultFeedbackTime = 1200 // 1000 equals a second
 const defaultDelayToShowQuestion = defaultFeedbackTime + 0
-const animationTime = defaultFeedbackTime - 100
+const animationTime = defaultFeedbackTime - 30
 // const animationIn =
 
 const correctSoundPath = require('@assets/sounds/correct.mp3')
@@ -59,6 +59,7 @@ class Quizz extends Component {
             feedback: "Retroalimentación por default", hits: 0, maxHits: 0, percentage: 0.5,
             errors: 0, showFeedback: false, loadDataReady: false, showConfirmModal: false,
         }
+        console.log('Nivel del curso', this.props.navigation.state.params.level)
     }
 
     optionIndex = 0
@@ -99,19 +100,6 @@ class Quizz extends Component {
         return (<View style = {{height: 10,width: '100%',}} />)
     }
 
-    showAlert = () => {
-        Alert.alert(
-            '¿Desea terminar intento?',
-            '¿Desea terminar el intento actual?',
-            [
-                {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-                {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                {text: 'OK', onPress: () => console.log('OK Pressed')},
-            ],
-            { cancelable: false }
-        )
-    }
-
     playSound = async (correct) => {
         var sound = new Expo.Audio.Sound()
         var playStatus = { volume: mediumVolume, shouldPlay: true, }
@@ -120,20 +108,6 @@ class Quizz extends Component {
         }else{
             await sound.loadAsync(wrongSoundPath, playStatus)
         }
-    }
-
-    _goToResults = () => {
-        console.log("Yendo a los resultados del curso")
-        Alert.alert(
-            'Terminando el curso',
-            'Usted está terminando el curso',
-            [
-            {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-            {text: 'OK', onPress: () => console.log('OK Pressed')},
-            ],
-            { cancelable: false }
-        )
     }
 
     restartTimer = (restart) => {
@@ -158,7 +132,7 @@ class Quizz extends Component {
     render() {
         const navigation = this.props.navigation;
         if(this.state.loadDataReady){
-            let notification, feedbackImage
+            let feedbackImage
             if(this.state.showSuccessNotification){    
                 feedbackImage = <Image style={ retroStyles.imageRetro } source={ correctFeedback } />
             }
@@ -277,14 +251,12 @@ class Quizz extends Component {
                             style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column', justifyContent: 'space-between', flex: 1, backgroundColor: 'blue'}}
                             data={ this.state.currentQuestion.options }
                             renderItem={ ({ ...props }) => {
-                                if(this.optionIndex == 4){
+                                if(this.optionIndex == 5){
                                     this.optionIndex = 0;
                                 }else{
                                     this.optionIndex = this.optionIndex + 1
                                 }
-        
-                                return (<Option showAlert={this.showAlert}
-                                    itemIndex={this.optionIndex} gradeAnswer={this.gradeAnswer}
+                                return (<Option itemIndex={this.optionIndex} gradeAnswer={this.gradeAnswer}
                                     questionId={this.state.currentQuestion.id} navigation={navigation} {...props} />)
                             }
                         }
@@ -564,6 +536,7 @@ class Quizz extends Component {
                 session: this.state.session,
                 level: this.props.navigation.state.params.level,
             })
+        console.log('Quizz.js gradeAnswer Data', data)
         fetch(api.sendAnswers, {
             method: 'POST',
             headers: {
@@ -603,7 +576,6 @@ class Quizz extends Component {
     next = false;
 
     loadData = async () => {
-        console.log('Ingresando a Quizz.js')
         getBearerTokenCountdownSeconds().then(
             (data) => {this.setState({bearerToken: data.bearerToken, bearerReady: true, countdownSeconds: data.countdownSeconds, seconds: data.countdownSeconds}, 
                     ()=>{
@@ -642,10 +614,6 @@ class Quizz extends Component {
             }
         );
     } // loadData ends
-
-    startCountdown = () => {
-
-    }
 
 }
 

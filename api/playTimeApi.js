@@ -2,6 +2,7 @@ export const url = "http://192.168.0.106:8000/"
 const api_url = "http://192.168.0.106:8000/api/v1/"
 
 const app_url = api_url + "app/"
+import {modalLevels} from '@components/ModalSelector/levels'
 
 export const api = {
     url: url,
@@ -52,13 +53,13 @@ export const api = {
 }
 const levels = ['Aleatorio', 'Fácil', 'Medio', 'Difícil'];
 
-export const modalLevels = [
-    { key: 8, section: true, label: 'Escoja el nivel a jugar' },
-    { key: 1, label: getLevelName(1), value: 1 },
-    { key: 2, label: getLevelName(2), value: 2 },
-    { key: 3, label: getLevelName(3), value: 3 },
-    { key: 0, label: getLevelName(0), value: 0 },
-]
+// export const modalLevels = [
+//     { key: 8, section: true, label: 'Escoja el nivel a jugar' },
+//     { key: 1, label: getLevelName(1), value: 1 },
+//     { key: 2, label: getLevelName(2), value: 2 },
+//     { key: 3, label: getLevelName(3), value: 3 },
+//     { key: 0, label: getLevelName(0), value: 0 },
+// ]
 
 export function getLevelName(index){
     if(index > -1 && index < levels.length ){

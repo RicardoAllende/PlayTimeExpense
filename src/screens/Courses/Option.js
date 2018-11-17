@@ -53,7 +53,7 @@ export class Option extends React.Component {
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => this.props.gradeAnswer(option.question_id, option.id, option.is_correct) }>
-        <Animatable.View style={styles.categoryBox} animation={_animation} iterationCount={1} direction="alternate">
+        <Animatable.View style={styles.categoryBox} animation={_animation} iterationCount={1} direction="alternate" delay={ this.props.itemIndex * 25 }>
           {/* <Icon name={option.iconName} style={styles.categoryIcon} /> */}
           <Text style={styles.categoryTitle}>{option.content}</Text>
           {/* <Text style={styles.categoryAmount}>

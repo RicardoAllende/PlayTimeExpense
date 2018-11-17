@@ -2,14 +2,8 @@ import React, {Component} from 'react'
 import ModalSelector from 'react-native-modal-selector'
 import theme from '@theme/variables/myexpense'
 import {Text} from 'native-base'
+import {modalLevels} from './levels'
 
-const niveles = [
-    { key: 0, section: true, label: 'Escoja el nivel a jugar' },
-    { key: 1, label: 'Fácil', value: 1 },
-    { key: 2, label: 'Medio', value: 2 },
-    { key: 3, label: 'Difícil', value: 3 },
-    { key: 4, label: 'Todos los niveles', value: '' }
-  ];
 export default class LevelModalSelector extends Component {
 
     constructor(props){
@@ -23,7 +17,7 @@ export default class LevelModalSelector extends Component {
         return (
             <ModalSelector
                 // key={'mdlStr' + index}
-                data={niveles}
+                data={modalLevels}
                 initValue="Seleccionar Nivel"
                 supportedOrientations={['landscape']}
                 accessible={true}

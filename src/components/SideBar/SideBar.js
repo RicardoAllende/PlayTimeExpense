@@ -56,7 +56,6 @@ class SideBar extends Component {
   }
 
   render() {
-    console.log('Sidebar.js')
     const navigation = this.props.navigation;
     return (
       <Container style={{ backgroundColor: 'transparent' }}>

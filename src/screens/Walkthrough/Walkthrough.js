@@ -572,10 +572,10 @@ class Walkthrough extends Component {
                 style={styles.skipBtn}
                 onPress={
                   () => {
-                    AsyncStorage.removeItem('tutorial_showed').then(() => {
-                      console.log('Se eliminó la sesión en la cual se mostraba el tutorial')
-                    })
-                    // this.props.navigation.navigate('Profile')
+                    // AsyncStorage.removeItem('tutorial_showed').then(() => {
+                    //   console.log('Se eliminó la sesión en la cual se mostraba el tutorial')
+                    // })
+                    this.props.navigation.navigate('Profile')
                   }
                 }
                 // onPress={() => this.props.navigation.navigate('Drawer', {

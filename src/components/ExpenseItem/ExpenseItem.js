@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {TouchableOpacity} from 'react-native'
+import { TouchableOpacity, Button } from 'react-native'
 import { View, Grid, Col, Text, Icon, Item } from 'native-base';
 
 import ModalSelector from 'react-native-modal-selector'
 import { formatAmount } from '@utils/formatters';
 import styles from './styles';
-import { modalLevels } from '../../../api/playTimeApi'
+// import { modalLevels } from '../../../api/playTimeApi'
+import {modalLevels} from '@components/ModalSelector/levels'
 
 var index = 0;
 
@@ -25,6 +26,10 @@ const ExpenseItem = ({ item, style, color, _onPress }) => {
     }
     _onPress(courseId, level)
 
+  }
+
+  showModalSelector = () => {
+    this.selector.open()
   }
 
   if(item.finished){
@@ -62,7 +67,8 @@ const ExpenseItem = ({ item, style, color, _onPress }) => {
   }else{
     // console.log('No se ha terminado este curso')
     return (
-      <View style={[styles.item.content, { borderColor: borderColor }, style]}>
+      // <View style={[styles.item.content, { borderColor: borderColor }, style]}>
+      <TouchableOpacity style={[styles.item.content, { borderColor: borderColor }, style]} onPress={this.showModalSelector} >
         {/* <TouchableOpacity onPress={() => _onPressButton(item.id) }> */}
         {/* <TouchableOpacity onPress={() => _onPress(item.id, item.name) }> */}
         <Grid>
@@ -81,7 +87,7 @@ const ExpenseItem = ({ item, style, color, _onPress }) => {
             <ModalSelector
               key={ 'ms' + item.id }
               data={modalLevels}
-              // ref={ selector => this.selector = selector }
+              ref={ selector => this.selector = selector }
               // initValue="Select something yummy!"
               // onChange={(option)=>{ alert(`${option.label} (${option.key}) nom nom nom`) }} 
               onChange={(level)=>{
@@ -97,10 +103,15 @@ const ExpenseItem = ({ item, style, color, _onPress }) => {
                 }}
                 />
             </ModalSelector>
+            {/* <Button
+              onPress={ this.showModalSelector }
+              title="Mostrar elemento"
+            /> */}
           </Col>
         </Grid>
         {/* </TouchableOpacity> */}
-      </View>
+        </TouchableOpacity>
+      // </View>
     );
   }
 };
