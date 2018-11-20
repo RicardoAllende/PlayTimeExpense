@@ -536,12 +536,12 @@ class Walkthrough extends Component {
 
   async componentDidMount(){
     this.loadUserData();
-    showTuto = await shouldShowTutorial()
-    if(showTuto){
-      this.setState({
-        showTutorial: true,
-      })
-    }
+    // showTuto = await shouldShowTutorial()
+    // if(showTuto){
+    //   this.setState({
+    //     showTutorial: true,
+    //   })
+    // }
     this.registerForPushNotificationsAsync()
     // this.playBackgroundMusic()
   }
@@ -613,6 +613,7 @@ class Walkthrough extends Component {
                     // AsyncStorage.removeItem('tutorial_showed').then(() => {
                     //   console.log('Se eliminó la sesión en la cual se mostraba el tutorial')
                     // })
+                    // this.showNotificationWithDelay()
                     this.props.navigation.navigate('Profile')
                   }
                 }
@@ -628,6 +629,26 @@ class Walkthrough extends Component {
       );  
     }
   }
+
+  showNotificationWithDelay = () => {
+    delaySeconds = 3 
+    delaySeconds *= 1000
+    console.log('Se dio clic en mostrar notificación')
+    setTimeout(() => {
+      const localNotification = {
+        title: "Título de la notificación",
+        body: "Texto de la notificación",
+        data: "Data adjunta  a la notificación",
+        android: {
+          icon: "https://cdn4.iconfinder.com/data/icons/flat-shaded-2/512/Notification-512.png",
+        }
+      }
+      Notifications.presentLocalNotificationAsync(localNotification).then(() => {
+        console.log('Se mostró la notificación')
+      })
+    }, delaySeconds);
+  }
+
 }
 
 const tutorialStyles = StyleSheet.create({

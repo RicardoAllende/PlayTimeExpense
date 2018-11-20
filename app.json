@@ -1,4 +1,7 @@
 {
+  "android": {
+    "googleServicesFile": "./google-services.json",
+  },
   "expo": {
     "name": "Playtime",
     "description": "Un desarrollo de Subitus",

@@ -17,6 +17,8 @@ import { routes } from './config';
 
 import { session, getAvatar } from '../../../api/session'
 
+import AppStatus from '@components/AppHeader/AppStatus'
+
 class SideBar extends Component {
   state = {
     selected: '',
@@ -60,7 +62,8 @@ class SideBar extends Component {
     return (
       <Container style={{ backgroundColor: 'transparent' }}>
         <Header transparent style={styles.header.container}>
-          <Left style={{ flex: 1 }}>
+          <Left>
+          {/* <Left style={{ flex: 1 }}> */}
             <Button
               transparent
               onPress={() =>
@@ -73,8 +76,9 @@ class SideBar extends Component {
               />
             </Button>
           </Left>
-          <Right>
-            <TouchableOpacity
+          <Right style={{ flex: 1 }}>
+            <AppStatus navigation={navigation} />
+            {/* <TouchableOpacity
               style={{ alignSelf: 'flex-end' }}
               onPress={() => {
                 navigation.navigate('Profile');
@@ -92,7 +96,7 @@ class SideBar extends Component {
                   style={styles.avatar} />
                 )
               }
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </Right>
         </Header>
         <Content style={styles.content}>

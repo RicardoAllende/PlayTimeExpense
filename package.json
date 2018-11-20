@@ -78,6 +78,7 @@
     "color": "3.0.0",
     "exp": "^57.2.1",
     "expo": "28.0.0",
+    "expo-cli": "^2.4.0",
     "fast-deep-equal": "^2.0.1",
     "form-data": "^2.3.3",
     "lodash": "4.17.10",

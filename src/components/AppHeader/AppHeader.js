@@ -8,7 +8,10 @@ import {
 import HeaderDrawerButton from './HeaderDrawerButton';
 import SearchHeader from './SearchHeader';
 
-import {getAvatar} from '../../../api/session'
+import {getAvatar, session} from '../../../api/session'
+import theme from '@theme/variables/myexpense';
+import AppStatus from './AppStatus'
+
 import styles from './styles';
 import CountdownCircle from 'react-native-countdown-circle'
 
@@ -21,6 +24,7 @@ class AppHeader extends PureComponent {
       seconds: this.props.seconds,
       questionId: this.props.questionId,
       avatarReady: false,
+      creditsReady: false,
     };
   }
 
@@ -38,7 +42,15 @@ class AppHeader extends PureComponent {
   }
 
   componentDidMount = () => {
-    this.loadAvatar();
+    // this.loadCredits();
+    // this.loadAvatar();
+  }
+
+  loadCredits = () => {
+    session.getCredits().then((credits) => {
+      console.log('Se obtuvieron los siguientes créditos', credits)
+      alert(`Se obtuvieron los siguientes créditos ${credits}`)
+    })
   }
 
   loadAvatar = () => {
@@ -66,6 +78,7 @@ class AppHeader extends PureComponent {
                 <Image source={logo} style={styles.logo} />
               </TouchableOpacity>
             )} */}
+            <AppStatus navigation={this.props.navigation} />
           </Body>
           <Right style={{ flex: 1 }}>
             {/* {this.props.displayAvatar && (
