@@ -105,6 +105,7 @@ class Profile extends Component {
     // this.loadOverview();
     this.loadUserData();
     this.loadAvatar();
+    // console.log('Profile componentdidmount this.props', this.props)
   }
 
   loadAvatar = () => {
@@ -294,7 +295,8 @@ class Profile extends Component {
         }
         if (jsonResponse.response.status == "ok") {
           session.setAvatar(jsonResponse.data.avatar);
-          this.loadAvatar();
+          // this.forceUpdate()
+          this.props.navigation.navigate('Walkthrough', { restart: true })
         }
         console.log("Su imagen ha sido actualizada");
       })

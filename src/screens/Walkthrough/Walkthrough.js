@@ -46,6 +46,8 @@ const wrongSoundPath = require('@assets/sounds/wrong.mp3')
 const lowVolume = 0.25
 const mediumVolume  = 0.5
 
+const initialRoute = 'Profile'
+
 class Walkthrough extends Component {
   constructor(props) {
     super(props);
@@ -203,6 +205,7 @@ class Walkthrough extends Component {
   }
 
   async componentDidMount(){
+    console.log('Componentdidmount was called')
     this.loadUserData();
     // showTuto = await shouldShowTutorial()
     // if(showTuto){
@@ -235,7 +238,35 @@ class Walkthrough extends Component {
     })
   }
 
+  redirected = false
+  goToInitialScreen = () => {
+    // console.log('', this.redirected)
+    // if( ! this.redirected ){
+      console.log('Redirecting to ' + initialRoute)
+      this.props.navigation.navigate(initialRoute)
+      // this.redirected = true
+    // }else{
+    //   console.log('gotoinitialscreen else')
+    // }
+  }
+
+  componentWillMount() {
+
+  }
+
+  mustRedirect = false
   render() {
+    if(typeof(this.props.navigation) !== 'undefined'){
+      if(typeof(this.props.navigation.state) !== 'undefined'){
+        if(typeof(this.props.navigation.state.params) !== 'undefined'){
+          if(typeof(this.props.navigation.state.params.restart) !== 'undefined'){
+            this.mustRedirect = true
+            this.goToInitialScreen()
+            return (<Text>_</Text>)
+          }
+        }
+      }
+    }
     if(this.state.showTutorial){
       return <AppIntroSlider
        slides={slides} 
@@ -282,7 +313,7 @@ class Walkthrough extends Component {
                     //   console.log('Se eliminó la sesión en la cual se mostraba el tutorial')
                     // })
                     // this.showNotificationWithDelay()
-                    this.props.navigation.navigate('Settings')
+                    this.props.navigation.navigate('Profile')
                   }
                 }
                 // onPress={() => this.props.navigation.navigate('Drawer', {
