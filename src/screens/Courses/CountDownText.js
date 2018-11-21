@@ -59,7 +59,7 @@ export default class CountDownText extends Component {
         ref={c => (this.animateText = c)}
         animation="bounceInLeft"
         iterationCount={1}
-        style={{ backgroundColor: "blue" }}
+        style={ this.props.style }
         direction="alternate"
       >
         {this.state.countdown}

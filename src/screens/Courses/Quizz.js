@@ -221,29 +221,28 @@ class Quizz extends Component {
                 {
                     this.state.loadDataReady && ! this.state.ready &&
                     (
-                        <CountDownText
-                        seconds={3}
-                        callback={this.startQuizz}
-                        // callback={this.setState({})}
-                        />
-                        // <View
-                        //   showsVerticalScrollIndicator={false}
-                        //   contentContainerStyle={{ flex: 1 }}
-                        //   style={{
-                        //     justifyContent: 'center',
-                        //     alignItems: 'center',
-                        //     flex: 1,
-                        //   }}>
-                        //     <CountdownCircle
-                        //         seconds={3}
-                        //         radius={50}
-                        //         borderWidth={8}
-                        //         color={theme.brandPrimary}
-                        //         bgColor="#fff"
-                        //         textStyle={{ fontSize: 20 }}
-                        //         onTimeElapsed={() => this.setState({ready: true, timerVisibility: true,})}
-                        //     />
-                        // </View>
+                        <View
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ flex: 1 }}
+                        style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flex: 1,
+                            backgroundColor: '#e9e9e9',
+                        }}>
+                            <CountDownText
+                            style={{
+                                flex: 1,
+                                fontFamily: 'Roboto_light',
+                                fontSize: 30,
+                                color: theme.brandPrimary,
+                                padding: '5%',
+                                // backgroundColor: "blue" 
+                            }}
+                            seconds={3}
+                            callback={this.startQuizz}
+                            />
+                        </View>
                     )
                 }
                 {
