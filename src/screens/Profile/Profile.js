@@ -9,7 +9,7 @@ import {
   Image
 } from "react-native";
 import theme from '@theme/variables/myexpense';
-import { Container, Thumbnail, View, Text, Button, Fab, Icon } from "native-base";
+import { Container, Thumbnail, View, Text, Button, Fab, Icon, Avatar } from "native-base";
 import { connect } from "react-redux";
 import FormData from "form-data";
 
@@ -124,7 +124,8 @@ class Profile extends Component {
     const { navigation } = this.props;
     const { profile } = this.state;
     var backgroundSource;
-    if (this.state.avatarReady) {
+    if (this.state.avatarReady){
+      // console.log('Profile render avatar is ready this.state', this.state)
       backgroundSource = {
         uri: this.state.avatar,
         cache: "only-if-cached"
@@ -140,6 +141,7 @@ class Profile extends Component {
           style={styles.container}
         >
           <AppHeader
+            hideStatus={true}
             displayAvatar={false}
             displayLogo={false}
             navigation={navigation}
@@ -149,6 +151,13 @@ class Profile extends Component {
               {
                 this.state.avatarReady &&
                 (
+                  // <Avatar
+                  // size="small"
+                  // rounded
+                  // chevron
+                  // >
+
+                  // </Avatar>
                   <ImageBackground
                     // source={avatar} 
                     // source={require('@assets/images/default_avatar.png')}
@@ -156,7 +165,9 @@ class Profile extends Component {
                       uri: this.state.avatar,
                       cache: 'only-if-cached',
                     }}
-                    style={[styles.profile.avatar, { borderRadius: 100, }]} >
+                    style={[styles.profile.avatar, { borderRadius: 50, }]}
+                    imageStyle={{ borderRadius: 50, }}
+                  >
                     <Icon type="MaterialIcons" style={{alignSelf: 'flex-end', bottom: 0, color: 'white'}} name="edit" />
                     {/* <Image source={logo} /> */}
                   </ImageBackground>

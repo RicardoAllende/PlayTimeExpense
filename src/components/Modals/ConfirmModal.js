@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import {Text} from 'native-base'
 import Modal from 'react-native-modal'
+import theme from '@theme/variables/myexpense';
 
 export default class ConfirmModal extends Component {
   constructor(props) {
@@ -39,12 +40,12 @@ export default class ConfirmModal extends Component {
             { this.props.message }
           </Text>
           <View style={{ flexDirection: 'row' }} >
-              <TouchableOpacity
+              <TouchableOpacity // Cancel button
               onPress={this.props.onCancel}
               >
                   <View 
                     style={{
-                      backgroundColor: "lightblue",
+                      backgroundColor: theme.brandDanger,
                       padding: 12,
                       margin: 16,
                       justifyContent: "center",
@@ -56,12 +57,12 @@ export default class ConfirmModal extends Component {
                     <Text>{ this.props.cancelText }</Text>
                   </View>
               </TouchableOpacity>
-              <TouchableOpacity
+              <TouchableOpacity // Confirm button
               onPress={this.props.onConfirm}
               >
                   <View 
                   style={{
-                      backgroundColor: "lightblue",
+                      backgroundColor: theme.brandPrimary,
                       padding: 12,
                       margin: 16,
                       justifyContent: "center",

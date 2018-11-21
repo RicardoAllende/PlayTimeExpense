@@ -63,13 +63,18 @@ class AppHeader extends PureComponent {
   }
 
   render() {
+    if(typeof(this.props.hideStatus) !== 'undefined'){
+      status = null
+    }else{
+      status = <AppStatus navigation={this.props.navigation} />
+    }
     return (
       <View style={this.props.style}>
         <Header transparent hasTabs>
           <Left style={{ flex: 1 }}>
             <HeaderDrawerButton navigation={this.props.navigation} />
           </Left>
-          <Body style={{ flex: 1, alignItems: 'center' }}>
+          <Body style={{ flex: 1, alignItems: 'center', paddingTop: '3%' }}>
             {/* {this.props.displayLogo && (
               <TouchableOpacity
                 onPress={() => {
@@ -78,7 +83,8 @@ class AppHeader extends PureComponent {
                 <Image source={logo} style={styles.logo} />
               </TouchableOpacity>
             )} */}
-            <AppStatus navigation={this.props.navigation} />
+            { status }
+            {/* <AppStatus navigation={this.props.navigation} /> */}
           </Body>
           <Right style={{ flex: 1 }}>
             {/* {this.props.displayAvatar && (

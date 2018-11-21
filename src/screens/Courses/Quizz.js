@@ -203,7 +203,7 @@ class Quizz extends Component {
                     <View style={headerStyles.titles.container}>
                         <Progress.Bar
                             width={null}
-                            color={theme.brandSecondary}
+                            color={theme.brandPrimary}
                             progress={this.state.progress}
                         />
                         <View style={headerStyles.titles.content}>

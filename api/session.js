@@ -47,7 +47,7 @@ export const session = {
         AsyncStorage.removeItem(bearerTokenName);
     },
     setUserData: (userData) => {
-        console.log('setUserData userData', userData)
+        // console.log('setUserData userData', userData)
         // session.setAvatar(userData.avatar)
         AsyncStorage.setItem(avatarDataName, userData.avatar.original)
         AsyncStorage.setItem(avatarThumbnail, userData.avatar.thumbnail)
@@ -75,7 +75,7 @@ export const session = {
     },
     getCredits: async () => {
         credits = await AsyncStorage.getItem(creditsDataName)
-        console.log('getCredits credits', credits, 'Tipo de elemento:', typeof(credits))
+        // console.log('getCredits credits', credits, 'Tipo de elemento:', typeof(credits))
         return credits
     },
     getUserStats: () => {
@@ -127,7 +127,7 @@ export async function getAvatar(original){
             avatar = await AsyncStorage.getItem(avatarThumbnail);
         }
     }
-    console.log('valor retornado de la función getAvatar', url + avatar)
+    // console.log('valor retornado de la función getAvatar', url + avatar)
     return url + avatar;
 }
 
@@ -165,8 +165,8 @@ export async function getUserData() {
         username: username,
         bearerToken: bearerToken, 
         email: username,
-        mobile: '+33 345 678 901',
-        phone: '+33 123 456 789',
+        mobile: '5525731520',
+        phone: '5525731520',
         access,
     }
     // console.log("Recuperando User data", userData);
