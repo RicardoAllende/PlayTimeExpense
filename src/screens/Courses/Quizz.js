@@ -46,6 +46,7 @@ const correctSoundPath = require('@assets/sounds/correct.mp3')
 const wrongSoundPath = require('@assets/sounds/wrong.mp3')
 const lowVolume = 0.15
 import * as Progress from 'react-native-progress';
+import CountDownText from './CountDownText'
 const mediumVolume  = 0.5
 
 class Quizz extends Component {
@@ -128,6 +129,12 @@ class Quizz extends Component {
         }
         return (totalSecs - elapsedSecs).toString()
     } 
+
+    startQuizz = () => {
+        this.setState({
+            ready: true, timerVisibility: true
+        })
+    }
 
     render() {
         const navigation = this.props.navigation;
@@ -214,24 +221,29 @@ class Quizz extends Component {
                 {
                     this.state.loadDataReady && ! this.state.ready &&
                     (
-                        <View
-                          showsVerticalScrollIndicator={false}
-                          contentContainerStyle={{ flex: 1 }}
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            flex: 1,
-                          }}>
-                            <CountdownCircle
-                                seconds={3}
-                                radius={50}
-                                borderWidth={8}
-                                color={theme.brandPrimary}
-                                bgColor="#fff"
-                                textStyle={{ fontSize: 20 }}
-                                onTimeElapsed={() => this.setState({ready: true, timerVisibility: true,})}
-                            />
-                        </View>
+                        <CountDownText
+                        seconds={3}
+                        callback={this.startQuizz}
+                        // callback={this.setState({})}
+                        />
+                        // <View
+                        //   showsVerticalScrollIndicator={false}
+                        //   contentContainerStyle={{ flex: 1 }}
+                        //   style={{
+                        //     justifyContent: 'center',
+                        //     alignItems: 'center',
+                        //     flex: 1,
+                        //   }}>
+                        //     <CountdownCircle
+                        //         seconds={3}
+                        //         radius={50}
+                        //         borderWidth={8}
+                        //         color={theme.brandPrimary}
+                        //         bgColor="#fff"
+                        //         textStyle={{ fontSize: 20 }}
+                        //         onTimeElapsed={() => this.setState({ready: true, timerVisibility: true,})}
+                        //     />
+                        // </View>
                     )
                 }
                 {
