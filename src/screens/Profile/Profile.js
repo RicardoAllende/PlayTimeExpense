@@ -50,6 +50,7 @@ class Profile extends Component {
       overview: [],
       overviewReady: false,
       avatarReady: false,
+      userStatsReady: false,
       img: "http://www.safexone.com/images/old/default.gif"
     };
   }
@@ -102,10 +103,8 @@ class Profile extends Component {
   };
 
   componentDidMount() {
-    // this.loadOverview();
     this.loadUserData();
     this.loadAvatar();
-    // console.log('Profile componentdidmount this.props', this.props)
   }
 
   loadAvatar = () => {
@@ -139,6 +138,7 @@ class Profile extends Component {
         <ImageBackground
           // source={require('@assets/images/header-bg-big.png')}
           source={backgroundSource}
+          // imageStyle={{blurRadius: 1}}
           style={styles.container}
         >
           <AppHeader
@@ -166,8 +166,8 @@ class Profile extends Component {
                       uri: this.state.avatar,
                       cache: 'only-if-cached',
                     }}
-                    style={[styles.profile.avatar, { borderRadius: 50, }]}
-                    imageStyle={{ borderRadius: 50, }}
+                    style={[styles.profile.avatar, { borderRadius: 50, blurRadius: 5 }]}
+                    imageStyle={{ borderRadius: 50, blurRadius: 5 }}
                   >
                     <Icon type="MaterialIcons" style={{alignSelf: 'flex-end', bottom: 0, color: 'white'}} name="edit" />
                     {/* <Image source={logo} /> */}
@@ -180,7 +180,7 @@ class Profile extends Component {
                 ? profile.firstname + " " + profile.lastname
                 : "_"}
             </Text>
-            <Text style={styles.profile.subTitle}>
+            <Text style={[styles.profile.subTitle, { backgroundColor: 'rgba(0, 0, 0, 0.3)' }]}>
               {this.state.ready ? profile.username : "_"}
             </Text>
           </View>
@@ -295,8 +295,9 @@ class Profile extends Component {
         }
         if (jsonResponse.response.status == "ok") {
           session.setAvatar(jsonResponse.data.avatar);
+          this.loadAvatar()
           // this.forceUpdate()
-          this.props.navigation.navigate('Walkthrough', { restart: true })
+          // this.props.navigation.navigate('Walkthrough', { restart: true })
         }
         console.log("Su imagen ha sido actualizada");
       })

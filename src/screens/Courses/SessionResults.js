@@ -38,14 +38,6 @@ class CourseCharts extends Component {
   };
 
   componentDidMount() {
-    this.initialize();
-  }
-
-  initialize = () => {
-    this.props.getCategories();
-  };
-
-  componentDidMount() {
     this.loadData();
   }
 
@@ -229,8 +221,13 @@ class CourseCharts extends Component {
                 ready: true,
                 level,
                 numAvailableQuestions: jsonResponse.data.num_available_questions,
+                credits: jsonResponse.data.credits,
               },
               () => {
+                credits = this.state.credits
+                if(Number.isInteger(this.state.credits)){
+                  session.sumCredits(credits)
+                }
                 // console.log(this.state)
                 // console.log("Elementos cargados en el estado");
               }
@@ -268,16 +265,7 @@ const stylesTabView = StyleSheet.create({
   }
 });
 
-const mapStateToProps = state => ({
-  categories: categoriesSelectors.getCategories(state),
-  categoriesLoading: categoriesSelectors.getCategoriesLoadingState(state),
-  categoriesError: categoriesSelectors.getCategoriesErrorState(state)
-});
-
-export default connect(
-  mapStateToProps,
-  actions
-)(CourseCharts);
+export default CourseCharts
 
 function formatSeconds(seconds) {
   minutes = 0;

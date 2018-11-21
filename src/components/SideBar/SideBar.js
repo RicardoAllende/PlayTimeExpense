@@ -77,7 +77,7 @@ class SideBar extends Component {
             </Button>
           </Left>
           <Right style={{ flex: 1 }}>
-            <AppStatus navigation={navigation} />
+            {/* <AppStatus navigation={navigation} /> */}
             {/* <TouchableOpacity
               style={{ alignSelf: 'flex-end' }}
               onPress={() => {
