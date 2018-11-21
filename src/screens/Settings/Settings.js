@@ -31,12 +31,12 @@ export default class Settings extends Component {
         <ImageBackground
           source={require('@assets/images/header2-bg.png')}
           style={styles.background}>
-          <AppHeader navigation={this.props.navigation} title="Settings" />
+          <AppHeader navigation={this.props.navigation} title="Acerca de la aplicación" />
           <Content
             paddershowsVerticalScrollIndicator={false}
             style={styles.content}>
             <ListItem itemDivider>
-              <Text>General Settings</Text>
+              <Text>Ajustes de la aplicación</Text>
             </ListItem>
             <ListItem noIndent icon>
               <Left>
@@ -45,7 +45,7 @@ export default class Settings extends Component {
                 </Button>
               </Left>
               <Body>
-                <Text>Notifications</Text>
+                <Text>Notificaciones</Text>
               </Body>
               <Right>
                 <SwitchButton
@@ -63,7 +63,7 @@ export default class Settings extends Component {
                 </Button>
               </Left>
               <Body>
-                <Text>Currency</Text>
+                <Text>Sonido</Text>
               </Body>
               <Right>
                 <Text>USD($)</Text>
@@ -99,7 +99,7 @@ export default class Settings extends Component {
               </Right>
             </ListItem>
 
-            <ListItem itemDivider>
+            {/* <ListItem itemDivider>
               <Text>Accounts</Text>
             </ListItem>
             <ListItem icon>
@@ -123,10 +123,10 @@ export default class Settings extends Component {
               <Right>
                 <Icon active name="ios-arrow-forward" />
               </Right>
-            </ListItem>
+            </ListItem> */}
 
             <ListItem itemDivider>
-              <Text>More</Text>
+              <Text>Acerca de la aplicación</Text>
             </ListItem>
             <ListItem noIndent icon>
               <Left>
@@ -148,7 +148,7 @@ export default class Settings extends Component {
                 </Button>
               </Left>
               <Body>
-                <Text>Legal Agreements</Text>
+                <Text>Legal</Text>
               </Body>
               <Right>
                 <Icon active name="ios-arrow-forward" />

@@ -282,7 +282,7 @@ class Walkthrough extends Component {
                     //   console.log('Se eliminó la sesión en la cual se mostraba el tutorial')
                     // })
                     // this.showNotificationWithDelay()
-                    this.props.navigation.navigate('Profile')
+                    this.props.navigation.navigate('Settings')
                   }
                 }
                 // onPress={() => this.props.navigation.navigate('Drawer', {

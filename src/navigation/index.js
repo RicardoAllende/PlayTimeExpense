@@ -43,7 +43,7 @@ const Drawer = createDrawerNavigator(
   },
   {
     // initialRouteName: 'ModalPickerExample',
-    initialRouteName: 'Profile',
+    initialRouteName: 'Settings',
     drawerBackgroundColor: 'rgba(255, 255, 255, 0.3)',
     contentComponent: props => <SideBar {...props} />,
   }

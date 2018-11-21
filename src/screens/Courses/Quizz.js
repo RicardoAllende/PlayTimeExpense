@@ -436,6 +436,7 @@ class Quizz extends Component {
     }
 
     handleNextAnswer = () => {
+        this.calculateProgressInQuestions()
         this.setState({
             showFeedback: false,
         }, () => setTimeout(() => {
@@ -461,7 +462,6 @@ class Quizz extends Component {
                 })
             }
             this.restartTimer()
-            this.calculateProgressInQuestions()
         }, defaultFeedbackTime)
         )
     }
