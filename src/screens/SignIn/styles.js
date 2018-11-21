@@ -13,7 +13,7 @@ export default {
     },
     logo: {
       resizeMode: 'contain',
-      width: 150,
+      width: 100,
     },
   },
   resetPwdBtn: {

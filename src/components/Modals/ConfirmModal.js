@@ -45,7 +45,7 @@ export default class ConfirmModal extends Component {
               >
                   <View 
                     style={{
-                      backgroundColor: theme.brandDanger,
+                      backgroundColor: theme.brandInfo,
                       padding: 12,
                       margin: 16,
                       justifyContent: "center",
