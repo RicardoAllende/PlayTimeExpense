@@ -113,11 +113,18 @@ class Quizz extends Component {
 
     restartTimer = (restart) => {
         if(typeof(restart) === 'boolean'){ restart = this.currentSecond; } else { restart = this.state.countdownSeconds; }
-        this.setState({seconds: 0}, () => { this.setState({ timerVisibility: true, seconds: restart }) })
+        if(this.mounted){
+            this.setState({seconds: 0}, () => { this.setState({ timerVisibility: true, seconds: restart }) })
+        }
     }
 
     componentDidMount(){
+        this.mounted = true
         this.loadData();
+    }
+
+    componentWillUnmount(){
+        this.mounted = false
     }
 
     currentSecond = 0
@@ -459,10 +466,12 @@ class Quizz extends Component {
                 }
             }else{
                 newQuestion = this.state.questions[currentIndex]
-                this.setState({
-                    index : currentIndex,
-                    currentQuestion: newQuestion,
-                })
+                if(this.mounted){
+                    this.setState({
+                        index : currentIndex,
+                        currentQuestion: newQuestion,
+                    })
+                }
             }
             this.restartTimer()
         }, defaultFeedbackTime)
