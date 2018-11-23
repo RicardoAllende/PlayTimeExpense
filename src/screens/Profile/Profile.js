@@ -55,17 +55,23 @@ class Profile extends Component {
     };
   }
 
+  componentWillUnmount = () => {
+      this.mounted = false
+  }
+
   loadUserData = async () => {
     getUserData().then(userData => {
-      this.setState(
-        {
-          profile: userData,
-          ready: true
-        },
-        () => {
-          this.loadOverview();
+        if(this.mounted){
+            this.setState(
+              {
+                profile: userData,
+                ready: true
+              },
+              () => {
+                this.loadOverview();
+              }
+            );
         }
-      );
     });
   };
 
@@ -85,7 +91,9 @@ class Profile extends Component {
         // return
         // console.log(jsonResponse)
         // console.log('profile.js loadOverview', jsonResponse)
-
+        if( ! this.mounted){
+            return false
+        }
         this.setState(
           {
             overview: jsonResponse.data.overview,
@@ -105,10 +113,14 @@ class Profile extends Component {
   componentDidMount() {
     this.loadUserData();
     this.loadAvatar();
+    this.mounted = true
   }
 
   loadAvatar = () => {
     getAvatar().then(avatar => {
+        if(!this.mounted){
+            return false;
+        }
       this.setState({
         avatar,
         avatarReady: true

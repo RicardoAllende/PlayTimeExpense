@@ -88,6 +88,11 @@ const ExpenseItem = ({ item, style, color, _onPress }) => {
               key={ 'ms' + item.id }
               data={modalLevels}
               ref={ selector => this.selector = selector }
+            
+              optionTextStyle={{ color: 'black' }} // contenedor de opciones
+              overlayStyle={{ padding: "10%" }}
+              optionContainerStyle={{ backgroundColor: 'rgba(230,230,250,1)' }} // contenedor opciones
+              optionContainerStyle={{ backgroundColor: 'rgba(255,255,255,1)' }} // contenedor opciones
               // initValue="Select something yummy!"
               // onChange={(option)=>{ alert(`${option.label} (${option.key}) nom nom nom`) }} 
               onChange={(level)=>{
@@ -96,7 +101,7 @@ const ExpenseItem = ({ item, style, color, _onPress }) => {
                   // _onPress(item.id, level.value)
                 }} 
               >
-                <Icon active name="ios-play" style={{ fontSize: 35 }} 
+                <Icon active name="ios-add-circle" style={{ fontSize: 35 }} 
                 style={{
                   alignSelf: 'flex-end',
                   color,

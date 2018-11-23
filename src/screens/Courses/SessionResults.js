@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { ImageBackground, StyleSheet, ScrollView, Button } from "react-native";
-import { Container, Tabs, Tab, Spinner, View, Text } from "native-base";
+import { ImageBackground, StyleSheet, ScrollView } from "react-native";
+import { Container, Tabs, Tab, Spinner, View, Text, Button } from "native-base";
 import { connect } from "react-redux";
 import moment from "moment/moment";
 
@@ -110,23 +110,36 @@ class CourseCharts extends Component {
                     Porcentaje de avance del curso
                   </Text>
                   <View style={stylesTabView.percentageCircle}>
-                    <PercentageCircle
+                    {/* <PercentageCircle
                       style={stylesTabView.percentage}
                       radius={50}
                       percent={this.state.advance}
                       color={brandSuccess}
-                    />
+                    /> */}
                     <GaugeChart percent={this.state.advance} />
-                    <View style = {{height: 10,width: '100%',}} />
+                    <View style = {{height: 10,width: '100%', alignContent:'center', alignItems:'center',}} />
+                    {/* <Button
+                        small
+                        transparent
+                        style={{ alignSelf: 'flex-end' }}
+                        onPress={() => navigation.navigate("CourseOverview", {
+                            courseId: this.props.navigation.state.params.course_id
+                          })}
+                    // onPress={this.checkSession}
+                    >
+                        <Text style={styles.resetPwdBtn}>¿Olvidaste tu contraseña?</Text>
+                    </Button> */}
                     <Button
-                      style={{ padding: "5%" }}
+                      style={{ padding: "5%", alignSelf: 'center' }}
                       onPress={() => {
                         navigation.navigate("CourseOverview", {
                           courseId: this.props.navigation.state.params.course_id
                         });
                       }}
-                      title="Ver estadísticas del curso"
-                    />
+                      title=""
+                    >
+                    <Text>Ver estadísticas del curso</Text>
+                    </Button>
                     {/* <Button
                       style={{ textAlign: 'center', 'padding': '5%', backgroundColor: 'blue' }}
                         onPress={
@@ -224,6 +237,7 @@ class CourseCharts extends Component {
                 credits: jsonResponse.data.credits,
               },
               () => {
+                  console.log('sessionresults this.state', this.state)
                 credits = this.state.credits
                 if(Number.isInteger(this.state.credits)){
                   session.sumCredits(credits)
@@ -240,7 +254,7 @@ class CourseCharts extends Component {
 
 const stylesTabView = StyleSheet.create({
   container: {
-    padding: "5%",
+    // padding: "5%",
     // backgroundColor: "blue",
     flex: 1
   },
