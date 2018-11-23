@@ -26,6 +26,7 @@ export default {
       color: '#444',
       marginLeft: 15,
       fontFamily: 'Roboto',
+      fontFamily: platform === 'ios' ? 'System' : 'Roboto',
     },
     subtitle: {
       fontSize: 10,
