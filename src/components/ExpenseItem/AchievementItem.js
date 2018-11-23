@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {TouchableOpacity} from 'react-native'
-import { View, Grid, Col, Text, Icon, Item } from 'native-base';
+import { View, Grid, Col, Text, Icon, Item, Thumbnail } from 'native-base';
+const avatar2 = require('@assets/images/avatar2.png');
+import { session } from '../../../api/session'
 
 import { formatAmount } from '@utils/formatters';
 // import {formatSeconds} from '@api/helpers'
@@ -9,6 +11,7 @@ import styles from './styles';
 import { api } from '../../../api/playTimeApi';
 
 const AchievementItem = ({ item, style, color, _onPress }) => {
+    console.log('achievementItem item', item)
   const borderColor = color ? color : item.color;
 
   _onPressButton = (courseId) => {
@@ -31,9 +34,10 @@ const AchievementItem = ({ item, style, color, _onPress }) => {
       <TouchableOpacity onPress={() => console.log('') }>
       <Grid>
         <Col size={7} style={{ flexDirection: 'row' }}>
-          <Icon name="laptop" style={styles.item.icon} />
+          <Thumbnail small square source={{uri: session.addPath(item.image.original)}} />
+          {/* <Icon name="laptop" style={styles.item.icon} /> */}
           <View>
-            <Text numberOfLines={2} style={styles.item.title}>
+            <Text numberOfLines={2} style={[styles.item.title, { color: 'gray' }]}>
               {/* {item.rank + ' ' + item.firstname + ' ' + item.lastname } */}
               {item.name}
             </Text>
@@ -43,12 +47,22 @@ const AchievementItem = ({ item, style, color, _onPress }) => {
           </View>
         </Col>
         <Col size={3}>
-          <Text
-            numberOfLines={2}
-            style={ styles.item.incomeAmount }>
-            {/* .expenseAmount || .incomeAmount */}
-            { item.pivot.number }
-          </Text>
+            {
+                (item.pivot.number != null) ? 
+                (
+                    <Text
+                        numberOfLines={2}
+                        style={ styles.item.incomeAmount }>
+                        {/* .expenseAmount || .incomeAmount */}
+                        { item.pivot.number }
+                    </Text>
+
+                ) 
+                : 
+                (
+                    null
+                )
+            }
         </Col>
       </Grid>
       </TouchableOpacity>

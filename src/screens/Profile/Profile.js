@@ -138,7 +138,7 @@ class Profile extends Component {
         <ImageBackground
           // source={require('@assets/images/header-bg-big.png')}
           source={backgroundSource}
-          // imageStyle={{blurRadius: 1}}
+          blurRadius={5}
           style={styles.container}
         >
           <AppHeader
@@ -160,14 +160,12 @@ class Profile extends Component {
 
                   // </Avatar>
                   <ImageBackground
-                    // source={avatar} 
-                    // source={require('@assets/images/default_avatar.png')}
                     source={{
                       uri: this.state.avatar,
                       cache: 'only-if-cached',
                     }}
-                    style={[styles.profile.avatar, { borderRadius: 50, blurRadius: 5 }]}
-                    imageStyle={{ borderRadius: 50, blurRadius: 5 }}
+                    style={[styles.profile.avatar]}
+                    imageStyle={{ borderRadius: 50 }}
                   >
                     <Icon type="MaterialIcons" style={{alignSelf: 'flex-end', bottom: 0, color: 'white'}} name="edit" />
                     {/* <Image source={logo} /> */}

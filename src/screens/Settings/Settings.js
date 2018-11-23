@@ -15,8 +15,6 @@ import {
 
 import AppHeader from '@components/AppHeader';
 import SwitchButton from '@components/SwitchButton';
-const avatar1 = require('@assets/images/default_avatar.png');
-const avatar2 = require('@assets/images/avatar2.png');
 
 import styles from './styles';
 

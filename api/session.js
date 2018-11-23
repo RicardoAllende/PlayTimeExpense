@@ -111,6 +111,10 @@ export const session = {
         AsyncStorage.setItem(coursesDataName, JSON.stringify(courses));
         console.log('Agregando cursos en AsyncStorage');
     },
+
+    addPath: (src) => {
+        return url + src
+    },
 };
 
 export async function getRememberToken(){
