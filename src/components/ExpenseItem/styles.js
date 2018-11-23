@@ -1,3 +1,6 @@
+import { Platform } from 'react-native';
+const platform = Platform.OS;
+
 import theme from '@theme/variables/myexpense';
 
 export default {
