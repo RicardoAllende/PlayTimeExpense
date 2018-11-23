@@ -84,7 +84,7 @@ const ExpenseItem = ({ item, style, color, _onPress }) => {
             </View>
           </Col>
           <Col size={3} >
-            <ModalSelector
+            <ModalSelector supportedOrientations={['portrait']} 
               key={ 'ms' + item.id }
               data={modalLevels}
               ref={ selector => this.selector = selector }

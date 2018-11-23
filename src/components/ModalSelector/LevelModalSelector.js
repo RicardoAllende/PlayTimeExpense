@@ -15,7 +15,7 @@ export default class LevelModalSelector extends Component {
 
     render(){
         return (
-            <ModalSelector
+            <ModalSelector supportedOrientations={['portrait']} 
                 // key={'mdlStr' + index}
                 data={modalLevels}
                 initValue="Seleccionar Nivel"

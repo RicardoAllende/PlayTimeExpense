@@ -27,12 +27,12 @@ export default class ModalPickerExample extends Component {
         return (
             <View style={{flex:1, justifyContent:'space-around', padding:50}}>
 
-                {/* <ModalSelector
+                {/* <ModalSelector supportedOrientations={['portrait']} 
                     data={data}
                     initValue="Select something yummy!"
                     onChange={(option)=>{ alert(`${option.label} (${option.key}) nom nom nom`) }} /> */}
 
-                {/* <ModalSelector
+                {/* <ModalSelector supportedOrientations={['portrait']} 
                     data={data}
                     initValue="Select something yummy!"
                     supportedOrientations={['landscape']}
@@ -49,7 +49,7 @@ export default class ModalPickerExample extends Component {
 
                 </ModalSelector>*/}
 
-                <ModalSelector
+                <ModalSelector supportedOrientations={['portrait']} 
                     data={data}
                     ref={selector => { this.selector = selector; }}
                     customSelector={<Switch onValueChange={() => this.selector.open()} />}

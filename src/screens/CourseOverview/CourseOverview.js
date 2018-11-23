@@ -97,7 +97,7 @@ class CourseOverview extends Component {
                         </Left>
                         <Body style={{ flex: 1, alignItems: 'center' }}>
 
-                        <ModalSelector
+                        <ModalSelector supportedOrientations={['portrait']} 
                           // key={'mdlStr'}
                           data={modalLevels}
                           initValue="Select something yummy!"
