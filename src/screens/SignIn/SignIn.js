@@ -153,7 +153,13 @@ class SignIn extends Component {
             <View style={{ flex: 1 }}>
               <View style={styles.header.wrapper}>
                 <Image
-                  source={require('@assets/images/logo-subitus.png')}
+                //   source={require('@assets/images/logo-subitus.png')}
+                source={{uri: 'https://www.subitus.com/images/subitus-u2083.png'}}
+                  style={styles.header.logo}
+                />
+                <Image
+                //   source={require('@assets/images/logo-subitus.png')}
+                source={{uri: 'http://dev.playtime/storage/images/profile_1542936544.jpg'}}
                   style={styles.header.logo}
                 />
                 {loginError && (
