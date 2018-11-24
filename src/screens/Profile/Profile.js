@@ -258,7 +258,10 @@ class Profile extends Component {
     const { status, expires, permissions } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
     console.log('askForPermission', status)
     if (status !== 'granted') {
-      alert('No se condedió el permiso para acceder a la galería de fotos');
+    //   alert('No se condedió el permiso para acceder a la galería de fotos');
+        return false
+    }else{
+        return true
     }
   }
 
@@ -287,7 +290,10 @@ class Profile extends Component {
   };
 
   showImagePicker = async () => {
-      this.askForPermission()
+    let permission = await this.askForPermission()
+    if(!permission){
+        alert('No se tiene permiso para acceder a la galería de imágenes')
+    }
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3]
