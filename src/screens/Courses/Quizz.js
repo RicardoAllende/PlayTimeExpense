@@ -37,7 +37,7 @@ import Notification from '@components/Notification';
 import Modal from 'react-native-modal'
 import ConfirmModal from '@components/Modals/ConfirmModal'
 
-const defaultFeedbackTime = 1200 // 1000 equals a second
+const defaultFeedbackTime = 800 // 1000 equals a second
 const defaultDelayToShowQuestion = defaultFeedbackTime + 0
 const animationTime = defaultFeedbackTime - 30
 // const animationIn =
@@ -246,8 +246,8 @@ class Quizz extends Component {
                                 style={{
                                     flex: 1,
                                     fontFamily: 'Roboto_light',
-                                    fontWeight: 900,
-                                    fontSize: 30,
+                                    fontWeight: 'bold',
+                                    fontSize: 50,
                                     color: theme.brandPrimary,
                                     position: 'absolute',
                                     alignSelf: 'center',
@@ -321,8 +321,8 @@ class Quizz extends Component {
                         animationOut="zoomOutUp"
                         animationInTiming={animationTime}
                         animationOutTiming={animationTime}
-                        backdropTransitionInTiming={1000}
-                        backdropTransitionOutTiming={1000}
+                        backdropTransitionInTiming={animationTime}
+                        backdropTransitionOutTiming={animationTime}
                     >
                         <ImageBackground
                             source={yellowPostIt}
