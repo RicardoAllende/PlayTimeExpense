@@ -54,7 +54,7 @@ class Quizz extends Component {
     constructor(props){
         super(props)
         this.state = {
-            ready: false, categories: [], corrects: 0, answers: 0, questions: [],
+            ready: false, categories: [], corrects: 0, answers: 0, questions: [], showProgressBar: false,
             currentQuestion: false, seconds: defaultTime, skippedQuestions: [], timerVisibility: false,
             avatarReady: false, currentIndex: 0, showSuccessNotification: false, showErrorNotification: false, 
             feedback: "Retroalimentación por default", hits: 0, maxHits: 0, percentage: 0.5,
@@ -139,7 +139,7 @@ class Quizz extends Component {
 
     startQuizz = () => {
         this.setState({
-            ready: true, timerVisibility: true
+            ready: true, timerVisibility: true, showProgressBar: true,
         })
     }
 
@@ -215,11 +215,15 @@ class Quizz extends Component {
                     </Header>
                     
                     <View style={headerStyles.titles.container}>
-                        <Progress.Bar
-                            width={null}
-                            color={theme.brandPrimary}
-                            progress={this.state.progress}
-                        />
+                        {
+                            this.state.showProgressBar && (
+                                <Progress.Bar
+                                    width={null}
+                                    color={theme.brandPrimary}
+                                    progress={this.state.progress}
+                                />
+                            )
+                        }
                         <View style={headerStyles.titles.content}>
                         <Text style={headerStyles.titles.text}>{ this.state.currentQuestion.name }</Text>
                         </View>
@@ -242,6 +246,7 @@ class Quizz extends Component {
                                 style={{
                                     flex: 1,
                                     fontFamily: 'Roboto_light',
+                                    fontWeight: 900,
                                     fontSize: 30,
                                     color: theme.brandPrimary,
                                     position: 'absolute',
