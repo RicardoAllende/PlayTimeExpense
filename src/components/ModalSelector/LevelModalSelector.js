@@ -19,7 +19,6 @@ export default class LevelModalSelector extends Component {
                 // key={'mdlStr' + index}
                 data={modalLevels}
                 initValue="Seleccionar Nivel"
-                supportedOrientations={['landscape']}
                 accessible={true}
 
                 // touchableStyle={{ backgroundColor: 'black' }}
