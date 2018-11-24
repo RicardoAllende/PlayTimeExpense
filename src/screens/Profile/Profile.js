@@ -114,7 +114,7 @@ class Profile extends Component {
     this.loadUserData();
     this.loadAvatar();
     this.mounted = true
-    this.checkMultiPermissions()
+    this.checkPermission()
   }
 
   loadAvatar = () => {
@@ -245,20 +245,20 @@ class Profile extends Component {
     );
   }
 
-  alertIfRemoteNotificationsDisabledAsync = async () => {
+  checkPermission = async () => {
     const { Permissions } = Expo;
-    const { status } = await Permissions.getAsync(Expo.Permissions.CAMERA_ROLL);
+    const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
     if (status !== 'granted') {
       alert('No tiene permisos para mostrar imágenes');
     }
   }
   
-  checkMultiPermissions = async() => {
+  askForPermission = async() => {
     const { Permissions } = Expo;
-    const { status, expires, permissions } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
-    alert(status)
+    const { status, expires, permissions } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
+    console.log('askForPermission', status)
     if (status !== 'granted') {
-      alert('Hey! You heve not enabled selected permissions');
+      alert('No se condedió el permiso para acceder a la galería de fotos');
     }
   }
 
@@ -287,7 +287,7 @@ class Profile extends Component {
   };
 
   showImagePicker = async () => {
-      this.checkMultiPermissions()
+      this.askForPermission()
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3]
