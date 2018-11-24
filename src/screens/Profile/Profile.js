@@ -34,7 +34,7 @@ import {
 const avatar = require("@assets/images/default_avatar.png");
 const defaultBackground = require("@assets/images/header-bg-big.png");
 // import ImagePicker from 'react-native-image-picker';
-import { ImagePicker } from "expo";
+import Expo, { ImagePicker, Permissions } from "expo";
 
 const defaultOverview = {
   num_achievements: 0,
@@ -114,6 +114,7 @@ class Profile extends Component {
     this.loadUserData();
     this.loadAvatar();
     this.mounted = true
+    this.checkMultiPermissions()
   }
 
   loadAvatar = () => {
@@ -244,7 +245,25 @@ class Profile extends Component {
     );
   }
 
+  alertIfRemoteNotificationsDisabledAsync = async () => {
+    const { Permissions } = Expo;
+    const { status } = await Permissions.getAsync(Expo.Permissions.CAMERA_ROLL);
+    if (status !== 'granted') {
+      alert('No tiene permisos para mostrar imágenes');
+    }
+  }
+  
+  checkMultiPermissions = async() => {
+    const { Permissions } = Expo;
+    const { status, expires, permissions } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
+    alert(status)
+    if (status !== 'granted') {
+      alert('Hey! You heve not enabled selected permissions');
+    }
+  }
+
   onTapImage = () => {
+
     Alert.alert(
       "¿Desea Cambiar su imagen?",
       // '¿Desea cambiar su imagen?',
@@ -268,6 +287,7 @@ class Profile extends Component {
   };
 
   showImagePicker = async () => {
+      this.checkMultiPermissions()
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3]
