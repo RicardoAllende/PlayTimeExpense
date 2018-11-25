@@ -81,7 +81,7 @@ class SignIn extends Component {
           if(jsonResponse.message != 'Unauthenticated.'){
             session.setBearerToken(value);
             session.setUserData(jsonResponse.data)
-            console.log('Se recuperó la sesión');
+            // console.log('Se recuperó la sesión');
             this.props.navigation.dispatch(
               StackActions.reset({
                 index: 0,
@@ -152,14 +152,16 @@ class SignIn extends Component {
           <Content showsVerticalScrollIndicator={false}>
             <View style={{ flex: 1 }}>
               <View style={styles.header.wrapper}>
+                {/* <Image
+                  // source={require('@assets/images/logo-subitus.png')}
+                source={{uri: 'http://bizzcode.com/img/react.png', width: 100, height: 100}}
+                  // style={styles.header.logo}
+                  // style={{
+                  //   width: '100'
+                  // }}
+                /> */}
                 <Image
-                //   source={require('@assets/images/logo-subitus.png')}
-                source={{uri: 'https://www.subitus.com/images/subitus-u2083.png'}}
-                  style={styles.header.logo}
-                />
-                <Image
-                //   source={require('@assets/images/logo-subitus.png')}
-                source={{uri: 'http://dev.playtime/storage/images/profile_1542936544.jpg'}}
+                  source={require('@assets/images/logo-subitus.png')}
                   style={styles.header.logo}
                 />
                 {loginError && (

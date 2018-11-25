@@ -237,11 +237,9 @@ class CourseCharts extends Component {
                 credits: jsonResponse.data.credits,
               },
               () => {
-                  console.log('sessionresults this.state', this.state)
-                credits = this.state.credits
-                if(Number.isInteger(this.state.credits)){
-                  session.sumCredits(credits)
-                }
+                  // console.log('sessionresults this.state', this.state)
+                credits = parseInt(this.state.credits)
+                session.sumCredits(credits)
                 // console.log(this.state)
                 // console.log("Elementos cargados en el estado");
               }

@@ -69,9 +69,9 @@ export const session = {
     sumCredits: async (newCredits) => {
         newCredits = parseInt(newCredits)
         credits = await session.getCredits()
+        credits = parseInt(credits)
         credits += newCredits
         session.setCredits(credits)
-        console.log('Número nuevo de créditos')
     },
     getCredits: async () => {
         credits = await AsyncStorage.getItem(creditsDataName)
@@ -109,7 +109,7 @@ export const session = {
 
     setCourses: (courses) => {
         AsyncStorage.setItem(coursesDataName, JSON.stringify(courses));
-        console.log('Agregando cursos en AsyncStorage');
+        // console.log('Agregando cursos en AsyncStorage');
     },
 
     addPath: (src) => {

@@ -205,7 +205,7 @@ class Walkthrough extends Component {
   }
 
   async componentDidMount(){
-    console.log('Componentdidmount was called')
+    // console.log('Componentdidmount was called')
     this.loadUserData();
     // showTuto = await shouldShowTutorial()
     // if(showTuto){

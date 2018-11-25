@@ -246,7 +246,7 @@ class Quizz extends Component {
                                 style={{
                                     flex: 1,
                                     fontFamily: 'Roboto_light',
-                                    fontWeight: 'bold',
+                                    fontWeight: '600',
                                     fontSize: 50,
                                     color: theme.brandPrimary,
                                     position: 'absolute',
