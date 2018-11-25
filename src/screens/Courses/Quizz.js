@@ -66,7 +66,9 @@ class Quizz extends Component {
     optionIndex = 0
 
     componentDidMount() {
+        this.mounted = true
         BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+        this.loadData();
         this.loadAvatar();
     }
 
@@ -80,6 +82,7 @@ class Quizz extends Component {
     }
 
     componentWillUnmount() {
+        this.mounted = false
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
     }
 
@@ -90,6 +93,7 @@ class Quizz extends Component {
 
     showFeedbackView = (is_correct) => {
         feedback = "Respuesta contestada correctatemente"
+        if(! this.mounted ){ return false }
         if(is_correct){
             this.setState({ showSuccessNotification: true, showErrorNotification: false, showFeedback: true, feedback })
         }else{
@@ -112,19 +116,9 @@ class Quizz extends Component {
     }
 
     restartTimer = (restart) => {
+        if(! this.mounted ){ return false }
         if(typeof(restart) === 'boolean'){ restart = this.currentSecond; } else { restart = this.state.countdownSeconds; }
-        if(this.mounted){
-            this.setState({seconds: 0}, () => { this.setState({ timerVisibility: true, seconds: restart }) })
-        }
-    }
-
-    componentDidMount(){
-        this.mounted = true
-        this.loadData();
-    }
-
-    componentWillUnmount(){
-        this.mounted = false
+        this.setState({seconds: 0}, () => { this.setState({ timerVisibility: true, seconds: restart }) })
     }
 
     currentSecond = 0
@@ -138,6 +132,7 @@ class Quizz extends Component {
     } 
 
     startQuizz = () => {
+        if(! this.mounted ){ return false }
         this.setState({
             ready: true, timerVisibility: true, showProgressBar: true,
         })
@@ -388,6 +383,7 @@ class Quizz extends Component {
     }
 
     shouldGoToSessionScreen = () => {
+        if(! this.mounted ){ return false }
         this.setState({
             timerVisibility: false, showConfirmModal: true,
         }, 
@@ -395,19 +391,21 @@ class Quizz extends Component {
     }
 
     continueQuizz = () => {
+        if(! this.mounted ){ return false }
         this.setState({ showConfirmModal: false }, () => { this.restartTimer(true); })
     }
 
     goToSessionScreen = () => {
         this.setState({
             showConfirmModal: false,
+        }, () =>{
+            this.props.navigation.navigate('SessionResults', {
+                session: this.state.session,
+                num_questions_given: this.state.maxIndex,
+                course_id: this.props.navigation.state.params.courseId,
+                level: this.props.navigation.state.params.level,
+            });
         })
-        this.props.navigation.navigate('SessionResults', {
-            session: this.state.session,
-            num_questions_given: this.state.maxIndex,
-            course_id: this.props.navigation.state.params.courseId,
-            level: this.props.navigation.state.params.level,
-        });
     }
 
     goToCourseOverview = () =>{
@@ -451,6 +449,7 @@ class Quizz extends Component {
     }
 
     handleNextAnswer = () => {
+        if(! this.mounted ){ return false }
         this.calculateProgressInQuestions()
         this.setState({
             showFeedback: false,
@@ -464,10 +463,13 @@ class Quizz extends Component {
                     this.showingSkippedQuestions = true;
                     this.setState({
                         currentQuestion: nextQuestion
+                    }, () =>{
+                        this.restartTimer()
                     })
                 }else{
                     console.log('Yendo a la página de resultados de la sesión')
                     this.goToSessionScreen()
+                    return false
                 }
             }else{
                 newQuestion = this.state.questions[currentIndex]
@@ -475,10 +477,11 @@ class Quizz extends Component {
                     this.setState({
                         index : currentIndex,
                         currentQuestion: newQuestion,
-                    })
+                    }, () => {
+                        this.restartTimer()
+                    } )
                 }
             }
-            this.restartTimer()
         }, defaultFeedbackTime)
         )
     }
