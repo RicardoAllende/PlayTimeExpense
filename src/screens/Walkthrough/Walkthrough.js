@@ -46,7 +46,7 @@ const wrongSoundPath = require('@assets/sounds/wrong.mp3')
 const lowVolume = 0.25
 const mediumVolume  = 0.5
 
-const initialRoute = 'Profile'
+const initialRoute = 'Settings'
 
 class Walkthrough extends Component {
   constructor(props) {
@@ -250,10 +250,6 @@ class Walkthrough extends Component {
     // }
   }
 
-  componentWillMount() {
-
-  }
-
   mustRedirect = false
   render() {
     if(typeof(this.props.navigation) !== 'undefined'){
@@ -314,7 +310,7 @@ class Walkthrough extends Component {
                     //   console.log('Se eliminó la sesión en la cual se mostraba el tutorial')
                     // })
                     // this.showNotificationWithDelay()
-                    this.props.navigation.navigate('Profile')
+                    this.props.navigation.navigate(initialRoute)
                   }
                 }
                 // onPress={() => this.props.navigation.navigate('Drawer', {

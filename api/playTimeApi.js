@@ -1,5 +1,5 @@
-export const url = "http://192.168.0.117:8000/"
-const api_url = url + "/api/v1/"
+export const url = "http://192.168.0.106:8000/"
+const api_url = url + "api/v1/"
 
 const app_url = api_url + "app/"
 import {modalLevels} from '@components/ModalSelector/levels'
@@ -24,15 +24,6 @@ export const api = {
         return app_url + 'courses/' + course_id + '/questions?level=' + level
     },
     getCompletedAchievements: app_url + '/achievements',
-    getSettings: app_url + '/settings',
-    defaultSettings: {
-        feedback: true,
-        achievements: true,
-        random_mode: true,
-        num_questions: 30,
-        countdown: true,
-        countdown_seconds: 10
-    },
     getAvailableAchievements: (course_id) => {
         return app_url + 'courses/' + course_id + '/achievements/available'
     },
@@ -49,7 +40,8 @@ export const api = {
         return app_url + 'courses/' + course_id + '/achievements/set-hits'
     },
     setAvatar: app_url + 'users/avatar?app=1',
-    getOverview: app_url + 'overview'
+    getOverview: app_url + 'overview',
+    setSettings: app_url + 'settings',
 }
 const levels = ['Aleatorio', 'Fácil', 'Medio', 'Difícil'];
 

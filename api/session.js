@@ -12,6 +12,9 @@ const rememberTokenDataName = 'access'
 const avatarDataName = 'avatar'
 const avatarThumbnail = 'thumbnail_avatar'
 const creditsDataName = 'credits'
+const rememberMeDataName = 'rememberMe'
+const enableNotificationDataName = 'enableNotifications'
+const enableSoundDataName = 'enableSound'
 
 export const session = {
     bearerTokenName: bearerTokenName,
@@ -52,13 +55,49 @@ export const session = {
         AsyncStorage.setItem(avatarDataName, userData.avatar.original)
         AsyncStorage.setItem(avatarThumbnail, userData.avatar.thumbnail)
         session.setCredits(userData.credits)
+        session.setUserSettings(userData.user_settings)
+        // console.log('Información recibida desde api', userData.user_settings)
         // AsyncStorage.setItem(avatarDataName, userData.avatar);
         AsyncStorage.setItem(bearerTokenName, userData.access_token);
         AsyncStorage.setItem(firstnameDataName, userData.firstname)
         AsyncStorage.setItem(lastnameDataName, userData.lastname)
         AsyncStorage.setItem(usernameDataName, userData.username)
-        AsyncStorage.setItem(countdownSecondsDataName, "" + userData.settings.countdown_seconds);
+        AsyncStorage.setItem(countdownSecondsDataName, "" + userData.client_settings.countdown_seconds);
         AsyncStorage.setItem(rememberTokenDataName, userData.access);
+    },
+    setUserSettings: async (settings) => {
+        session.setRememberMe(settings.remember_me)
+        session.setEnableNotification(settings.enable_notification)
+        session.setEnableSound(settings.enable_sound)
+    },
+    setRememberMe: (value) => {
+        value = "" + parseInt(value)
+        AsyncStorage.setItem(rememberMeDataName, value)
+    },
+    setEnableNotification: (value) => {
+        value = "" + parseInt(value)
+        AsyncStorage.setItem(enableNotificationDataName, value)
+    },
+    setEnableSound: (value) => {
+        value = "" + parseInt(value)
+        AsyncStorage.setItem(enableSoundDataName, value)
+    },
+    getUserSettings: async () => {
+        rememberMe = await AsyncStorage.getItem(rememberMeDataName)
+        enableNotification = await AsyncStorage.getItem(enableNotificationDataName)
+        enableSound = await AsyncStorage.getItem(enableSoundDataName)
+        // console.log('Antes de tratamiento de la información', {
+        //     rememberMe, enableNotification, enableSound
+        // })
+        rememberMe = parseInt(rememberMe)
+        rememberMe = !! rememberMe
+        enableNotification = parseInt(enableNotification)
+        enableNotification = !! enableNotification
+        enableSound = parseInt(enableSound)
+        enableSound = !! enableSound
+        return {
+            rememberMe, enableNotification, enableSound
+        }
     },
     setCredits: (credits) => {
         // console.log('Agregando créditos al usuario', credits, typeof(credits))
