@@ -286,7 +286,8 @@ class Walkthrough extends Component {
             backgroundColor={'transparent'}
           />
           <ImageBackground
-            source={require('@assets/images/background2.png')}
+            source={{ uri: 'https://koenig-media.raywenderlich.com/uploads/2014/01/sunny-background.png', cache: 'only-if-cached', }}
+            // source={require('@assets/images/background2.png')}
             style={styles.background}>
             <Content>
               { this.state.ready &&

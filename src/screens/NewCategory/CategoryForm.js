@@ -86,7 +86,8 @@ class CategoryForm extends React.Component {
     return (
       <Container>
         <ImageBackground
-          source={require('@assets/images/header-bg-small.png')}
+          source={{ uri: 'https://koenig-media.raywenderlich.com/uploads/2014/01/sunny-background.png', cache: 'only-if-cached', }}
+          // source={require('@assets/images/header-bg-small.png')}
           style={styles.background}>
           <AppHeader navigation={navigation} title="Add Category" />
           <Content showsVerticalScrollIndicator={false} style={styles.content}>

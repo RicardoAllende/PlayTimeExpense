@@ -27,7 +27,8 @@ export default class Settings extends Component {
     return (
       <Container>
         <ImageBackground
-          source={require('@assets/images/header2-bg.png')}
+          source={{ uri: 'https://koenig-media.raywenderlich.com/uploads/2014/01/sunny-background.png', cache: 'only-if-cached', }}
+          // source={require('@assets/images/header2-bg.png')}
           style={styles.background}>
           <AppHeader navigation={this.props.navigation} title="Acerca de la aplicación" />
           <Content

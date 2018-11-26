@@ -86,7 +86,8 @@ class CourseOverview extends Component {
     return (
       <Container>
         <ImageBackground
-          source={require('@assets/images/header-bg-big.png')}
+          // source={require('@assets/images/header-bg-big.png')}
+          source={{ uri: 'https://koenig-media.raywenderlich.com/uploads/2014/01/sunny-background.png', cache: 'only-if-cached', }}
           style={styles.container}>
           
           { /* Inicia Appheader */ }

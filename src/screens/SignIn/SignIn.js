@@ -147,7 +147,8 @@ class SignIn extends Component {
           backgroundColor={'transparent'}
         />
         <ImageBackground
-          source={require('@assets/images/background1.png')}
+          source={{ uri: 'https://koenig-media.raywenderlich.com/uploads/2014/01/sunny-background.png', cache: 'only-if-cached', }}
+          // source={require('@assets/images/background1.png')}
           style={styles.background}>
           <Content showsVerticalScrollIndicator={false}>
             <View style={{ flex: 1 }}>
@@ -161,8 +162,9 @@ class SignIn extends Component {
                   // }}
                 /> */}
                 <Image
-                  source={require('@assets/images/logo-subitus.png')}
-                  style={styles.header.logo}
+                  // source={require('@assets/images/logo-subitus.png')}
+                  source={{uri: 'http://bizzcode.com/img/react.png'}}
+                  style={[styles.header.logo,{width: 200, height: 200}]}
                 />
                 {loginError && (
                   <Notification
