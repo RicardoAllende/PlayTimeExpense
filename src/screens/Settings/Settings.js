@@ -14,9 +14,8 @@ import {
 } from "native-base";
 
 import { session, getBearerToken } from "./../../../api/session";
-import { api, } from "./../../../api/playTimeApi";
-
-
+import { api } from "./../../../api/playTimeApi";
+import Spinner from 'react-native-loading-spinner-overlay'
 import AppHeader from "@components/AppHeader";
 import SwitchButton from "@components/SwitchButton";
 
@@ -24,103 +23,118 @@ import styles from "./styles";
 // import { runInThisContext } from "vm";
 
 export default class Settings extends Component {
-
-    constructor(props){
-        super(props)
+    constructor(props) {
+        super(props);
         this.state = {
             enableNotification: false,
             enableSound: false,
             rememberMe: false,
             bearerTokenReady: false,
-        }
+            spinner: true,
+        };
     }
 
     loadSettings = () => {
-        getBearerToken().then((bearerToken) => {
+        getBearerToken().then(bearerToken => {
             this.setState({
                 bearerToken,
-                bearerTokenReady: true,
+                bearerTokenReady: true
+            }, () => {
+                session.getUserSettings().then(settings => {
+                    // console.log('Settings from asyncstorage', settings)
+                    this.setState(
+                        {
+                            rememberMe: settings.rememberMe,
+                            enableSound: settings.enableSound,
+                            enableNotification: settings.enableNotification,
+                            spinner: false
+                        }
+                        // ,
+                        // () => {
+                        //     console.log("settings state", this.state);
+                        // }
+                    );
+                });
             })
-        })
-        session.getUserSettings().then(settings => {
-            // console.log('Settings from asyncstorage', settings)
-            this.setState({
-                rememberMe: settings.rememberMe,
-                enableSound: settings.enableSound,
-                enableNotification: settings.enableNotification,
-            }, () => { console.log('settings state', this.state) } )
         })
     }
 
     componentDidMount() {
-        this.loadSettings()
+        this.loadSettings();
     }
 
     changeSetting = (key, value) => {
-        console.log('')
-        console.log('')
-        console.log('')
-        uri = api.setSettings
+        console.log("");
+        console.log("");
+        console.log("");
+        uri = api.setSettings;
         switch (key) {
-            case 'enable_sound':
+            case "enable_sound":
                 settings = {
-                    enable_sound: value,
-                }
+                    enable_sound: value
+                };
                 this.setState({
                     enableSound: value
-                })
-                session.setEnableSound(value)
+                });
+                session.setEnableSound(value);
                 break;
-            case 'enable_notification':
+            case "enable_notification":
                 settings = {
-                    enable_notification: value,
-                }
+                    enable_notification: value
+                };
                 this.setState({
                     enableNotification: value
-                })
-                session.setEnableNotification(value)
+                });
+                session.setEnableNotification(value);
                 break;
-            case 'remember_me':
+            case "remember_me":
                 settings = {
-                    remember_me: value,
-                }
+                    remember_me: value
+                };
                 this.setState({
                     rememberMe: value
-                })
-                session.setRememberMe(value)
+                });
+                session.setRememberMe(value);
                 break;
         }
-        settings = JSON.stringify(settings)
+        settings = JSON.stringify(settings);
         const headers = {
-            "Authorization": 'Bearer ' + this.state.bearerToken,
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-        }
-        console.log('uri', uri)
-        console.log('headers', headers)
-        console.log('Body', settings)
+            Authorization: "Bearer " + this.state.bearerToken,
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        };
+        console.log("uri", uri);
+        console.log("headers", headers);
+        console.log("Body", settings);
         // return;
         fetch(api.setSettings, {
-            method: 'POST',
+            method: "POST",
             headers,
             body: settings
-        }).then(
-            response => {
+        })
+            .then(response => {
                 return response.json();
-            }
-        ).then(
-            jsonResponse => {
-                console.log('La respuesta desde el servidor es la siguiente', jsonResponse)
-            }
-        ).catch(error => {
-            console.log("error", error)
-        });
+            })
+            .then(jsonResponse => {
+                console.log(
+                    "La respuesta desde el servidor es la siguiente",
+                    jsonResponse
+                );
+            })
+            .catch(error => {
+                console.log("error", error);
+            });
         // console.log(settings);
     };
 
     render() {
         return (
             <Container>
+                <Spinner
+                    visible={this.state.spinner}
+                    textContent={"Loading..."}
+                    textStyle={styles.spinnerTextStyle}
+                />
                 <ImageBackground
                     source={{
                         uri:
@@ -156,7 +170,10 @@ export default class Settings extends Component {
                             <Right>
                                 <SwitchButton
                                     onValueChange={value =>
-                                        this.changeSetting('enable_notification', value)
+                                        this.changeSetting(
+                                            "enable_notification",
+                                            value
+                                        )
                                     }
                                     value={this.state.enableNotification}
                                 />
@@ -174,7 +191,10 @@ export default class Settings extends Component {
                             <Right>
                                 <SwitchButton
                                     onValueChange={value =>
-                                        this.changeSetting('enable_sound', value)
+                                        this.changeSetting(
+                                            "enable_sound",
+                                            value
+                                        )
                                     }
                                     value={this.state.enableSound}
                                 />
@@ -192,7 +212,7 @@ export default class Settings extends Component {
                             <Right>
                                 <SwitchButton
                                     onValueChange={value =>
-                                        this.changeSetting('remember_me', value)
+                                        this.changeSetting("remember_me", value)
                                     }
                                     value={this.state.rememberMe}
                                 />
