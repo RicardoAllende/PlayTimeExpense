@@ -1,5 +1,7 @@
 import { AsyncStorage } from "react-native"
 import {url} from './playTimeApi'
+import { exponentPushTokenUri } from './playTimeApi' 
+import { Permissions, Notifications } from 'expo';
 
 const bearerTokenName= "bearerToken";
 const userDataName= "userData";
@@ -212,4 +214,89 @@ export async function shouldShowTutorial(){
 
 export function setTutorialShowed(){
     AsyncStorage.setItem(tutorialShowedDataName, 'viewed')
+}
+
+export async function setExpoPushToken(){
+    console.log('setExpoPushToken called')
+    getBearerToken().then(bearerToken => {
+        console.log('BearerToken received', bearerToken, exponentPushTokenUri)
+        fetch(exponentPushTokenUri, {
+            method: 'GET',
+            headers: {
+                "Authorization": 'Bearer ' + bearerToken,
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }).then(response => {
+                // console.log(respo)
+                return response.json()
+                // console.log("Response", response)
+        })
+        .then(jsonResponse => {
+                console.log('typeof has_push_token ', typeof(jsonResponse.has_push_token))
+                if(jsonResponse.has_push_token){
+                    // console.log('has_push_token true') // No special action
+                }else{
+                    // console.log('has_push_token false')
+                    registerForPushNotificationsAsync(bearerToken).then(() => {
+                        console.log('registerForPushNotificationsAsync finished')
+                    })
+                }
+        }).catch(error => {
+            console.log("error get exponentpushtokenuri", error)
+        });
+    })
+}
+
+registerForPushNotificationsAsync = async (bearerToken) => {
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    ).catch(error => {
+      console.log('permissions getasync', error)
+    });
+    let finalStatus = existingStatus;
+    console.log('Final status', finalStatus)
+  
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt the user a second time.
+    if (existingStatus !== 'granted') {
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS).catch(error => {
+        console.log('permissions askasync', error)
+      });
+      finalStatus = status;
+    }
+  
+    console.log('Después de la función finalStatus', finalStatus)
+    // Stop here if the user did not grant permissions
+    if (finalStatus !== 'granted') {
+      return;
+    }
+  
+    // Get the token that uniquely identifies this device
+    let token = await Notifications.getExpoPushTokenAsync().catch(error => {
+      console.log('getExpoPushTokenAsync', error)
+      return false;
+    });
+
+    fetch(exponentPushTokenUri, {
+        method: 'POST',
+        headers: {
+            "Authorization": 'Bearer ' + bearerToken,
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            expo_push_token: token,
+        }),
+    }).then(response => response.json() )
+    .then(jsonResponse => {
+        console.log('registerForPushNotificationsAsync jsonResponse', jsonResponse)
+        console.log('exponent push token', token)
+    }).catch(error => {
+        console.log("error setting exponentpushtokenuri", error)
+    });
+  
+    // console.log('El token recibido es', token);
 }

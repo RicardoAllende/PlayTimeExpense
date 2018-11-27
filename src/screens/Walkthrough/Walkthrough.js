@@ -1,5 +1,3 @@
-import { Permissions, Notifications } from 'expo';
-
 import React, { Component } from 'react';
 import {
   Dimensions,
@@ -27,7 +25,7 @@ import { entries } from './config';
 
 import styles from './styles';
 
-import {session, getUserData} from './../../../api/session'
+import {session, getUserData, setExpoPushToken} from './../../../api/session'
 
 import ModalSelector from 'react-native-modal-selector'
 
@@ -58,40 +56,6 @@ class Walkthrough extends Component {
       exampleNotification: false,
     }
     this.renderSlide = this.renderSlide.bind(this);
-  }
-
-  registerForPushNotificationsAsync = async () => {
-    const { status: existingStatus } = await Permissions.getAsync(
-      Permissions.NOTIFICATIONS
-    ).catch(error => {
-      console.log('permissions getasync', error)
-    });
-    let finalStatus = existingStatus;
-    console.log('Final status', finalStatus)
-  
-    // only ask if permissions have not already been determined, because
-    // iOS won't necessarily prompt the user a second time.
-    if (existingStatus !== 'granted') {
-      // Android remote notification permissions are granted during the app
-      // install, so this will only ask on iOS
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS).catch(error => {
-        console.log('permissions askasync', error)
-      });
-      finalStatus = status;
-    }
-  
-    console.log('Después de la función finalStatus', finalStatus)
-    // Stop here if the user did not grant permissions
-    if (finalStatus !== 'granted') {
-      return;
-    }
-  
-    // Get the token that uniquely identifies this device
-    let token = await Notifications.getExpoPushTokenAsync().catch(error => {
-      console.log('getExpoPushTokenAsync', error)
-    });
-  
-    console.log('El token recibido es', token);
   }
 
   shouldShowTutorial = async () => {
@@ -214,6 +178,9 @@ class Walkthrough extends Component {
     //   })
     // }
     // this.registerForPushNotificationsAsync()
+    setExpoPushToken().then(() => {
+        console.log('Término de la función setExpoPushToken en componentDidMount')
+    })
     // this.playBackgroundMusic()
   }
   

@@ -248,7 +248,7 @@ class Profile extends Component {
   checkPermission = async () => {
     const { Permissions } = Expo;
     const permission = await Permissions.getAsync(Permissions.CAMERA_ROLL);
-    console.log('CAMERA_ROLL permission: ', permission)
+    // console.log('CAMERA_ROLL permission: ', permission)
     // if (status !== 'granted') {
     //   alert('No tiene permisos para mostrar imágenes');
     // }

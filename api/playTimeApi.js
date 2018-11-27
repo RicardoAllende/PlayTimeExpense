@@ -1,8 +1,10 @@
-export const url = "http://192.168.0.106:8000/"
+export const url = "http://192.168.0.112:8000/"
 const api_url = url + "api/v1/"
 
 const app_url = api_url + "app/"
 import {modalLevels} from '@components/ModalSelector/levels'
+
+export const exponentPushTokenUri = app_url + 'expo-push-token'
 
 export const api = {
     url: url,

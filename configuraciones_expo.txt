@@ -1,0 +1,6 @@
+Expo push notification token:
+
+emulador android 7.1: ExponentPushToken[Qp0DT4FFcrgqBJG8gKZDEf]
+
+
+expo push:android:upload --api-key AAAAt1NnVhA:APA91bF4eexZV5sq85s6QiRGJzocqbAPgplVBl-hFFsrgB6gyNJwbsuqWYhLW9RFy5Yur4l81Bg962GRLJtpTZbOl6MM0z0oSa1xhX-Ft47wjaJu-srqKb533mitIZ7Z7rt1oaM2XZx3
