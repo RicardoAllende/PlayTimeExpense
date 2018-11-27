@@ -50,14 +50,10 @@ export const session = {
         AsyncStorage.removeItem(bearerTokenName);
     },
     setUserData: (userData) => {
-        // console.log('setUserData userData', userData)
-        // session.setAvatar(userData.avatar)
         AsyncStorage.setItem(avatarDataName, userData.avatar.original)
         AsyncStorage.setItem(avatarThumbnail, userData.avatar.thumbnail)
         session.setCredits(userData.credits)
         session.setUserSettings(userData.user_settings)
-        // console.log('Información recibida desde api', userData.user_settings)
-        // AsyncStorage.setItem(avatarDataName, userData.avatar);
         AsyncStorage.setItem(bearerTokenName, userData.access_token);
         AsyncStorage.setItem(firstnameDataName, userData.firstname)
         AsyncStorage.setItem(lastnameDataName, userData.lastname)
@@ -86,9 +82,6 @@ export const session = {
         rememberMe = await AsyncStorage.getItem(rememberMeDataName)
         enableNotification = await AsyncStorage.getItem(enableNotificationDataName)
         enableSound = await AsyncStorage.getItem(enableSoundDataName)
-        // console.log('Antes de tratamiento de la información', {
-        //     rememberMe, enableNotification, enableSound
-        // })
         rememberMe = parseInt(rememberMe)
         rememberMe = !! rememberMe
         enableNotification = parseInt(enableNotification)
@@ -100,9 +93,7 @@ export const session = {
         }
     },
     setCredits: (credits) => {
-        // console.log('Agregando créditos al usuario', credits, typeof(credits))
         credits = "" + credits
-        // console.log('Creditos convertidos', credits, typeof(credits))
         AsyncStorage.setItem(creditsDataName, credits)
     },
     sumCredits: async (newCredits) => {
@@ -114,16 +105,8 @@ export const session = {
     },
     getCredits: async () => {
         credits = await AsyncStorage.getItem(creditsDataName)
-        // console.log('getCredits credits', credits, 'Tipo de elemento:', typeof(credits))
         return credits
     },
-    getUserStats: () => {
-        return "123 puntos"
-    },
-    getUserName: async() => {
-        return AsyncStorage.getItem(use)
-    },
-
     getUserStats: async() => {
         // return name, credits
         name = await session.getCompleteName()
@@ -138,7 +121,6 @@ export const session = {
     },
 
     setAvatar: async (avatar) => {
-        // console.log('setting avatar', avatar)
         AsyncStorage.setItem(avatarDataName, avatar.original)
         AsyncStorage.setItem(avatarThumbnail, avatar.thumbnail)
     },
@@ -148,7 +130,6 @@ export const session = {
 
     setCourses: (courses) => {
         AsyncStorage.setItem(coursesDataName, JSON.stringify(courses));
-        // console.log('Agregando cursos en AsyncStorage');
     },
 
     addPath: (src) => {
@@ -170,7 +151,6 @@ export async function getAvatar(original){
             avatar = await AsyncStorage.getItem(avatarThumbnail);
         }
     }
-    // console.log('valor retornado de la función getAvatar', url + avatar)
     return url + avatar;
 }
 
@@ -212,7 +192,6 @@ export async function getUserData() {
         phone: '5525731520',
         access,
     }
-    // console.log("Recuperando User data", userData);
     return userData
 }
 

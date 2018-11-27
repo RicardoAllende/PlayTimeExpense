@@ -1,46 +1,25 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { FlatList, ImageBackground, Alert, View, ToastAndroid, Image, BackHandler, StyleSheet, TouchableOpacity, } from 'react-native';
-import { Asset, AppLoading, Font, Audio } from 'expo';
-import CountDown from 'react-native-countdown-component';
-import {
-    Container, Content, Fab, Icon, Text, Spinner, Left, Right, Thumbnail, Body, Button, Header
-} from 'native-base';
-
+import { AppLoading, Audio } from 'expo';
+import { Container, Content, Fab, Icon, Text, Spinner, Left, Right, Thumbnail, Body, Header } from 'native-base';
 import HeaderDrawerButton from '../../components/AppHeader/HeaderDrawerButton';
 const correctFeedback = require('@assets/images/feedback/correct.gif') // "http://www.pngmart.com/files/7/Check-PNG-Transparent-Image.png"
 const wrongFeedback = require('@assets/images/feedback/wrong.png')
 const yellowPostIt = require('@assets/images/feedback/yellow-post-it-medium.png')
 import CountdownCircle from 'react-native-countdown-circle'
-
-import { connect } from 'react-redux';
-import { formatAmount } from '@utils/formatters';
-
-import AppHeader from '@components/AppHeader';
 import Option from './Option';
-import categoryColors from '@theme/categoryColors';
-
-import * as actions from './behaviors';
-import * as categoriesSelectors from './selectors';
-
 import styles from './styles';
 import headerStyles from '@components/AppHeader/styles'
 import theme from '@theme/variables/myexpense';
-
 const defaultTime = 10;
-const num_questions_per_medal = 12
-
 import { api } from './../../../api/playTimeApi'
-import { session, getBearerTokenCountdownSeconds, getAvatar } from './../../../api/session'
-import { AsyncStorage } from "react-native"
-import Notification from '@components/Notification';
+import { getBearerTokenCountdownSeconds, getAvatar } from './../../../api/session'
 import Modal from 'react-native-modal'
 import ConfirmModal from '@components/Modals/ConfirmModal'
 
 const defaultFeedbackTime = 800 // 1000 equals a second
 const defaultDelayToShowQuestion = defaultFeedbackTime + 0
 const animationTime = defaultFeedbackTime - 30
-// const animationIn =
 
 const correctSoundPath = require('@assets/sounds/correct.mp3')
 const wrongSoundPath = require('@assets/sounds/wrong.mp3')
@@ -125,7 +104,6 @@ class Quizz extends Component {
     _updateText = (elapsedSecs, totalSecs) => {
         current = totalSecs - elapsedSecs
         if (current != totalSecs) {
-            // console.log('Segundos actuales', current)
             this.currentSecond = current
         }
         return (totalSecs - elapsedSecs).toString()
@@ -137,6 +115,8 @@ class Quizz extends Component {
             ready: true, timerVisibility: true, showProgressBar: true,
         })
     }
+
+    goToProfile = () =>  this.props.navigation.navigate('Profile') 
 
     render() {
         const navigation = this.props.navigation;
@@ -152,8 +132,6 @@ class Quizz extends Component {
                 <Container>
                     <ImageBackground
                         source={{ uri: 'https://koenig-media.raywenderlich.com/uploads/2014/01/sunny-background.png', cache: 'only-if-cached', }}
-                        // source={require('@assets/images/header-bg.png')}
-                        // source={{ uri: 'http://192.168.0.106:8000/storage/default_images/default_background.png' }}
                         style={styles.background}>
                         { /* Inicia Appheader */}
                         <View>
@@ -179,9 +157,7 @@ class Quizz extends Component {
                                 <Right style={{ flex: 1 }}>
                                     {this.props.displayAvatar && (
                                         <TouchableOpacity
-                                            onPress={() => {
-                                                this.props.navigation.navigate('Profile');
-                                            }}>
+                                            onPress={ this.goToProfile }>
                                             {
                                                 this.state.avatarReady &&
                                                 (
@@ -190,22 +166,10 @@ class Quizz extends Component {
                                                             uri: this.state.avatar,
                                                             cache: 'only-if-cached',
                                                         }}
-                                                    // style={styles.avatar} 
                                                     />
                                                 )
                                             }
                                         </TouchableOpacity>
-                                    )}
-                                    {this.props.displaySearch && (
-                                        <Button
-                                            transparent
-                                            onPress={() => {
-                                                this.setState(() => ({
-                                                    displaySearchBar: !this.state.displaySearchBar,
-                                                }));
-                                            }}>
-                                            <Icon active name="ios-search" style={{ fontSize: 34 }} />
-                                        </Button>
                                     )}
                                 </Right>
                             </Header>
@@ -248,7 +212,6 @@ class Quizz extends Component {
                                             position: 'absolute',
                                             alignSelf: 'center',
                                             padding: '5%',
-                                            // backgroundColor: "blue" 
                                         }}
                                         seconds={3}
                                         callback={this.startQuizz}
@@ -311,8 +274,6 @@ class Quizz extends Component {
                         />
                         <Modal
                             isVisible={this.state.showFeedback}
-                            // animationIn="slideInLeft"
-                            // animationOut="slideOutRight"
                             animationIn="zoomInDown"
                             animationOut="zoomOutUp"
                             animationInTiming={animationTime}
@@ -522,24 +483,13 @@ class Quizz extends Component {
             },
             body: data
         }).then(
-            // Enviando retroalimentación
             response => {
-                // return response.json();
                 console.log("Retro")
             }
         ).then(
-            // jsonResponse => console.log(jsonResponse)
         ).catch(error => {
             console.log("error")
         });
-    }
-
-    showFinalRetro = () => {
-
-    }
-
-    showCorrectRetro = () => {
-
     }
 
     calculateProgressInQuestions = () => {
@@ -555,11 +505,9 @@ class Quizz extends Component {
         this.setState({ timerVisibility: false })
         this.playSound(is_correct)
         this.showFeedbackView(is_correct)
-        // console.warn(apiSendAnswers)
         currentAnswers = this.state.answers + 1
         this.setState({
             answers: currentAnswers, // número de preguntas contestadas
-            // seconds: 0
         })
         var data = JSON.stringify({
             question_id: questionId,
@@ -578,13 +526,9 @@ class Quizz extends Component {
             },
             body: data
         }).then(
-            // Enviando retroalimentación
             response => {
-                // return response.json();
-                // console.log("Retro")
             }
         ).then(
-            // jsonResponse => console.log(jsonResponse)
         ).catch(error => {
             console.log("error grade Answer")
         });
@@ -618,28 +562,19 @@ class Quizz extends Component {
                             Accept: 'application/json',
                             "Content-Type": "application/json"
                         }
-                        // console.log('Uri headers', uriHeaders)
                         fetch(url, {
                             method: 'GET',
                             headers: uriHeaders
                         })
                             .then((response) => response.json())
                             .then((response) => {
-                                // console.log('Quizz response', response)
-                                // console.log('Quizz response lenght', response.data.questions.length)
                                 if (response.data.questions.length == 0) {
-                                    // alert('No existen Preguntas')
                                     this.goToCourseOverview()
                                 } else {
                                     this.setState({
                                         questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length,
                                         currentQuestion: response.data.questions[0], loadDataReady: true
-                                    },
-                                        () => {
-                                            // console.log('Quizz.js session', this.state.session)
-                                            // console.log('');
-                                        }
-                                    )
+                                    }, () => {})
                                 }
                             }
                             ).catch((error) => { console.error(error); })
