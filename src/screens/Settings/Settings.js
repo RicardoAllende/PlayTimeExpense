@@ -155,7 +155,7 @@ export default class Settings extends Component {
                         <ListItem itemDivider>
                             <Text>Ajustes de la aplicación</Text>
                         </ListItem>
-                        <ListItem noIndent icon>
+                        {/* <ListItem noIndent icon>
                             <Left>
                                 <Button style={styles.settingBtn}>
                                     <Icon
@@ -178,7 +178,7 @@ export default class Settings extends Component {
                                     value={this.state.enableNotification}
                                 />
                             </Right>
-                        </ListItem>
+                        </ListItem> */}
                         <ListItem noIndent icon>
                             <Left>
                                 <Button style={styles.settingBtn}>
