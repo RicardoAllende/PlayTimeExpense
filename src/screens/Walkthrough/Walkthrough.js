@@ -178,9 +178,7 @@ class Walkthrough extends Component {
     //   })
     // }
     // this.registerForPushNotificationsAsync()
-    setExpoPushToken().then(() => {
-        console.log('Término de la función setExpoPushToken en componentDidMount')
-    })
+    setExpoPushToken()
     // this.playBackgroundMusic()
   }
   

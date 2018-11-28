@@ -17,7 +17,16 @@ const creditsDataName = 'credits'
 const rememberMeDataName = 'rememberMe'
 const enableNotificationDataName = 'enableNotifications'
 const enableSoundDataName = 'enableSound'
-
+const iconUrlDataName = 'iconUrl'
+const backgroundUrlDataname = 'backgroundUrl'
+    /*
+    'default_client_settings' => [
+        'countdown_seconds' => 10,
+        'client_url' => null,
+        'background_url' => null
+    ]
+    */
+    
 export const session = {
     bearerTokenName: bearerTokenName,
     userDataName: userDataName,
@@ -56,12 +65,30 @@ export const session = {
         AsyncStorage.setItem(avatarThumbnail, userData.avatar.thumbnail)
         session.setCredits(userData.credits)
         session.setUserSettings(userData.user_settings)
+        session.setClientSettings(userData.client_settings)
         AsyncStorage.setItem(bearerTokenName, userData.access_token);
         AsyncStorage.setItem(firstnameDataName, userData.firstname)
         AsyncStorage.setItem(lastnameDataName, userData.lastname)
         AsyncStorage.setItem(usernameDataName, userData.username)
-        AsyncStorage.setItem(countdownSecondsDataName, "" + userData.client_settings.countdown_seconds);
         AsyncStorage.setItem(rememberTokenDataName, userData.access);
+    },
+    setClientSettings: (settings) => {
+        if(settings.icon_url != null){
+            session.setIconUrl(settings.icon_url)
+        }
+        if(settings.background_url != null){
+            session.setBackgroundUrl(settings.background_url)
+        }
+        session.setCountdownSeconds(settings.countdownSeconds)
+    },
+    setIconUrl: (url) => {
+        AsyncStorage.setItem(iconUrlDataName, url)
+    },
+    setBackgroundUrl: (url) => {
+        AsyncStorage.setItem(backgroundUrlDataname, url)
+    },
+    setCountdownSeconds: (seconds) => {
+        AsyncStorage.setItem(countdownSecondsDataName, '' + seconds)
     },
     setUserSettings: async (settings) => {
         session.setRememberMe(settings.remember_me)
@@ -217,9 +244,7 @@ export function setTutorialShowed(){
 }
 
 export async function setExpoPushToken(){
-    console.log('setExpoPushToken called')
     getBearerToken().then(bearerToken => {
-        console.log('BearerToken received', bearerToken, exponentPushTokenUri)
         fetch(exponentPushTokenUri, {
             method: 'GET',
             headers: {
@@ -228,18 +253,12 @@ export async function setExpoPushToken(){
                 'Content-Type': 'application/json'
             },
         }).then(response => {
-                // console.log(respo)
                 return response.json()
-                // console.log("Response", response)
         })
         .then(jsonResponse => {
-                console.log('typeof has_push_token ', typeof(jsonResponse.has_push_token))
                 if(jsonResponse.has_push_token){
-                    // console.log('has_push_token true') // No special action
                 }else{
-                    // console.log('has_push_token false')
                     registerForPushNotificationsAsync(bearerToken).then(() => {
-                        console.log('registerForPushNotificationsAsync finished')
                     })
                 }
         }).catch(error => {
