@@ -84,6 +84,12 @@ export const session = {
     setIconUrl: (url) => {
         AsyncStorage.setItem(iconUrlDataName, url)
     },
+    getIconUrl: async() => {
+        return await AsyncStorage.getItem(iconUrlDataName)
+    },
+    getBackgroundUrl: async () => {
+        return await AsyncStorage.getItem(backgroundUrlDataname)
+    },
     setBackgroundUrl: (url) => {
         AsyncStorage.setItem(backgroundUrlDataname, url)
     },
