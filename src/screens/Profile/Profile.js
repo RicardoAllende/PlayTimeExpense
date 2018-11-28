@@ -165,13 +165,6 @@ class Profile extends Component {
               {
                 this.state.avatarReady &&
                 (
-                  // <Avatar
-                  // size="small"
-                  // rounded
-                  // chevron
-                  // >
-
-                  // </Avatar>
                   <ImageBackground
                     source={{
                       uri: this.state.avatar,
@@ -195,20 +188,6 @@ class Profile extends Component {
               {this.state.ready ? profile.username : "_"}
             </Text>
           </View>
-
-          {/* <Fab
-            direction="up"
-            containerStyle={{}}
-            // style={{ backgroundColor: theme.brandPrimary }}
-            style={{ backgroundColor:theme.brandInfo }}
-            // style={{ backgroundColor: 'blue' }}
-            position="topRight"
-            onPress={
-              this.editImageIcon
-            }
-          >
-            <Icon type="MaterialIcons" name="edit" />
-          </Fab> */}
 
           <ScrollView style={styles.content}>
             <View style={styles.container}>

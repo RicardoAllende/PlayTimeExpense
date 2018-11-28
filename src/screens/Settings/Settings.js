@@ -132,7 +132,7 @@ export default class Settings extends Component {
             <Container>
                 <Spinner
                     visible={this.state.spinner}
-                    textContent={"Loading..."}
+                    textContent={"Cargando..."}
                     textStyle={styles.spinnerTextStyle}
                 />
                 <ImageBackground
