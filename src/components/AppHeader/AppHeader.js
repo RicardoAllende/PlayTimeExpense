@@ -9,6 +9,7 @@ import SearchHeader from "./SearchHeader";
 import { getAvatar, session } from "../../../api/session";
 import theme from "@theme/variables/myexpense";
 import AppStatus from "./AppStatus";
+import ClientIcon from './ClientIcon'
 
 import styles from "./styles";
 import CountdownCircle from "react-native-countdown-circle";
@@ -20,7 +21,7 @@ class AppHeader extends PureComponent {
             displaySearchBar: false,
             seconds: this.props.seconds,
             questionId: this.props.questionId,
-            avatarReady: false,
+            clienInconReady: false,
             creditsReady: false
         };
         this.clientIcon = null
@@ -41,7 +42,7 @@ class AppHeader extends PureComponent {
 
     componentDidMount = () => {
         // this.loadCredits();
-        // this.loadClientIcon();
+        this.loadClientIcon();
     };
 
     loadCredits = () => {
@@ -54,23 +55,23 @@ class AppHeader extends PureComponent {
     loadClientIcon = () => {
         session.getClientIconUrl().then(icon => {
             this.clientIcon = icon
+            console.log('ClientIcon loaded', icon)
             this.setState({
-                avatarReady: true,
+                clienInconReady: true,
             })
         })
-        // getAvatar().then((avatar) => {
-        //   this.setState({
-        //     avatar,
-        //     avatarReady: true,
-        //   })
-        // });
-    };
+    }
 
     render() {
         if (typeof this.props.hideStatus !== "undefined") {
             status = null;
         } else {
             status = <AppStatus navigation={this.props.navigation} />;
+        }
+        if(this.state.clienInconReady){
+            const imageUrl = this.clientIcon
+        }else{
+            const imageUrl = null
         }
         return (
             <View style={this.props.style}>
@@ -92,21 +93,26 @@ class AppHeader extends PureComponent {
                     </Body>
                     <Right style={{ flex: 1 }}>
                         {this.props.displayAvatar && (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    this.props.navigation.navigate('Profile');
-                                }}>
-                                {
-                                    this.state.avatarReady &&
-                                    (
-                                        <Thumbnail
-                                            // source={avatar} 
-                                            // source={require('@assets/images/default_avatar.png')}
-                                            source={this.clientIcon}
-                                            style={styles.avatar} />
-                                    )
-                                }
-                            </TouchableOpacity>
+                            <ClientIcon />
+                            // <TouchableOpacity
+                            //     onPress={() => {
+                            //         this.props.navigation.navigate('Profile');
+                            //     }}>
+                            //     {
+                            //         this.state.clienInconReady &&
+                            //         (
+                            //             <Thumbnail
+                            //                 square
+                            //                 resizeMode='contain'
+                            //                 // circle={false}
+                            //                 // source={avatar} 
+                            //                 // source={require('@assets/images/default_avatar.png')}
+                            //                 source={Image}
+                            //                 // style={styles.avatar} 
+                            //                 />
+                            //         )
+                            //     }
+                            // </TouchableOpacity>
                         )}
                         {this.props.displaySearch && (
                             <Button

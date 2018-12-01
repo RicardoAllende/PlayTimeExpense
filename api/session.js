@@ -94,7 +94,7 @@ export const session = {
             return defaultBackground
         }else{
             uri = session.addPath(uri)
-            console.log(uri)
+            console.log('session getClientIconUrl', uri)
             return {
                 uri, width: 100, height: 100
             }
@@ -106,7 +106,7 @@ export const session = {
             return defaultBackground
         }else{
             uri = session.addPath(uri)
-            console.log('Url de elemento', uri)
+            // console.log('Url de elemento', uri)
             return {
                 uri
             }

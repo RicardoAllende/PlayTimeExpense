@@ -226,7 +226,7 @@ class Walkthrough extends Component {
     goToInitialScreen = () => {
         // console.log('', this.redirected)
         // if( ! this.redirected ){
-        console.log("Redirecting to " + initialRoute);
+        // console.log("Redirecting to " + initialRoute);
         this.props.navigation.navigate(initialRoute);
         // this.redirected = true
         // }else{
@@ -241,7 +241,7 @@ class Walkthrough extends Component {
         }else{
             background = null
         }
-        console.log('Background', background)
+        // console.log('Background', background)
         if (this.state.showTutorial) {
             return (
                 <AppIntroSlider
