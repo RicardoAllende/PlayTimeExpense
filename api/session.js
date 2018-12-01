@@ -3,6 +3,9 @@ import {url} from './playTimeApi'
 import { exponentPushTokenUri } from './playTimeApi' 
 import { Permissions, Notifications } from 'expo';
 
+const defaultBackground = require('../assets/images/sunny-background.png')
+// const defaultBackground = require('@assets/images/sunny_background.png')
+
 const bearerTokenName= "bearerToken";
 const userDataName= "userData";
 const firstnameDataName = "firstname";
@@ -17,7 +20,7 @@ const creditsDataName = 'credits'
 const rememberMeDataName = 'rememberMe'
 const enableNotificationDataName = 'enableNotifications'
 const enableSoundDataName = 'enableSound'
-const iconUrlDataName = 'iconUrl'
+const clientIconUrlDataName = 'iconUrl'
 const backgroundUrlDataname = 'backgroundUrl'
     /*
     'default_client_settings' => [
@@ -74,21 +77,40 @@ export const session = {
     },
     setClientSettings: (settings) => {
         if(settings.icon_url != null){
-            session.setIconUrl(settings.icon_url)
+            session.setClientIconUrl(settings.icon_url)
         }
         if(settings.background_url != null){
             session.setBackgroundUrl(settings.background_url)
         }
         session.setCountdownSeconds(settings.countdownSeconds)
     },
-    setIconUrl: (url) => {
-        AsyncStorage.setItem(iconUrlDataName, url)
+    setClientIconUrl: (url) => {
+        AsyncStorage.setItem(clientIconUrlDataName, url)
+        
     },
-    getIconUrl: async() => {
-        return await AsyncStorage.getItem(iconUrlDataName)
+    getClientIconUrl: async() => {
+        uri = await AsyncStorage.getItem(clientIconUrlDataName)
+        if(uri === null){
+            return defaultBackground
+        }else{
+            uri = session.addPath(uri)
+            console.log(uri)
+            return {
+                uri, width: 100, height: 100
+            }
+        }
     },
-    getBackgroundUrl: async () => {
-        return await AsyncStorage.getItem(backgroundUrlDataname)
+    getBackground: async () => {
+        uri = await AsyncStorage.getItem(backgroundUrlDataname)
+        if(uri === null){
+            return defaultBackground
+        }else{
+            uri = session.addPath(uri)
+            console.log('Url de elemento', uri)
+            return {
+                uri
+            }
+        }
     },
     setBackgroundUrl: (url) => {
         AsyncStorage.setItem(backgroundUrlDataname, url)

@@ -52,9 +52,11 @@ class Walkthrough extends Component {
             bearerReady: false,
             ready: false,
             showTutorial: false,
-            exampleNotification: false
+            exampleNotification: false,
+            backgroundReady: false,
         };
         this.renderSlide = this.renderSlide.bind(this);
+        this.background = null
     }
 
     shouldShowTutorial = async () => {
@@ -141,43 +143,47 @@ class Walkthrough extends Component {
     };
 
     loadUserData = async () => {
-        getUserData().then(userData => {
-            this.setState(
-                {
-                    bearerToken: userData.bearerToken,
-                    bearerReady: true,
-                    userData: userData
-                },
-                () => {
-                    // bearerToken is setted
-                    // console.log("Waklthrough.js, imprimiendo bearerToken", this.state.bearerToken)
-                    fetch(api.getCourses, {
-                        method: "GET",
-                        headers: {
-                            Authorization: "Bearer " + this.state.bearerToken,
-                            Accept: "application/json",
-                            "Content-Type": "application/json"
-                        }
-                    })
-                        .then(response => response.json())
-                        .then(response => {
-                            this.setState(
-                                {
-                                    courses: response.data.courses,
-                                    coursesLength:
-                                        response.data.courses.length - 1,
-                                    ready: true
-                                },
-                                () => {}
-                            );
-                            session.setCourses(response.data.courses);
+        session.getBackground().then((background) => {
+            this.background = background
+            this.setState({ backgroundReady: true })
+            getUserData().then(userData => {
+                this.setState(
+                    {
+                        bearerToken: userData.bearerToken,
+                        bearerReady: true,
+                        userData: userData
+                    },
+                    () => {
+                        // bearerToken is setted
+                        // console.log("Waklthrough.js, imprimiendo bearerToken", this.state.bearerToken)
+                        fetch(api.getCourses, {
+                            method: "GET",
+                            headers: {
+                                Authorization: "Bearer " + this.state.bearerToken,
+                                Accept: "application/json",
+                                "Content-Type": "application/json"
+                            }
                         })
-                        .catch(error => {
-                            console.error(error);
-                        });
-                }
-            );
-        });
+                            .then(response => response.json())
+                            .then(response => {
+                                this.setState(
+                                    {
+                                        courses: response.data.courses,
+                                        coursesLength:
+                                            response.data.courses.length - 1,
+                                        ready: true
+                                    },
+                                    () => {}
+                                );
+                                session.setCourses(response.data.courses);
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
+                    }
+                );
+            });
+        })
     };
 
     async componentDidMount() {
@@ -230,6 +236,12 @@ class Walkthrough extends Component {
 
     mustRedirect = false;
     render() {
+        if(this.state.backgroundReady){
+            background = this.background
+        }else{
+            background = null
+        }
+        console.log('Background', background)
         if (this.state.showTutorial) {
             return (
                 <AppIntroSlider
@@ -256,10 +268,8 @@ class Walkthrough extends Component {
                         backgroundColor={"transparent"}
                     />
                     <ImageBackground
-                        source={{
-                            uri:
-                                "https://koenig-media.raywenderlich.com/uploads/2014/01/sunny-background.png",
-                            cache: "only-if-cached"
+                        source={{ 
+                            uri: "http://192.168.0.102:8000/storage/images/default_background_1543624252.png", width: 600, height: 800,
                         }}
                         // source={require('@assets/images/background2.png')}
                         style={styles.background}

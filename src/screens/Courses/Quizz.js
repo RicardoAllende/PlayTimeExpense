@@ -13,7 +13,7 @@ import headerStyles from '@components/AppHeader/styles'
 import theme from '@theme/variables/myexpense';
 const defaultTime = 10;
 import { api } from './../../../api/playTimeApi'
-import { getBearerTokenCountdownSeconds, getAvatar } from './../../../api/session'
+import { session, getBearerTokenCountdownSeconds, getAvatar } from './../../../api/session'
 import Modal from 'react-native-modal'
 import ConfirmModal from '@components/Modals/ConfirmModal'
 
@@ -40,6 +40,7 @@ class Quizz extends Component {
             errors: 0, showFeedback: false, loadDataReady: false, showConfirmModal: false,
         }
         console.log('Nivel del curso', this.props.navigation.state.params.level)
+        this.background = null
     }
 
     optionIndex = 0
@@ -552,36 +553,41 @@ class Quizz extends Component {
     next = false;
 
     loadData = async () => {
-        getBearerTokenCountdownSeconds().then(
-            (data) => {
-                this.setState({ bearerToken: data.bearerToken, bearerReady: true, countdownSeconds: data.countdownSeconds, seconds: data.countdownSeconds },
-                    () => {
-                        url = api.getQuestions(this.props.navigation.state.params.courseId, this.props.navigation.state.params.level);
-                        uriHeaders = {
-                            "Authorization": 'Bearer ' + this.state.bearerToken,
-                            Accept: 'application/json',
-                            "Content-Type": "application/json"
-                        }
-                        fetch(url, {
-                            method: 'GET',
-                            headers: uriHeaders
-                        })
-                            .then((response) => response.json())
-                            .then((response) => {
-                                if (response.data.questions.length == 0) {
-                                    this.goToCourseOverview()
-                                } else {
-                                    this.setState({
-                                        questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length,
-                                        currentQuestion: response.data.questions[0], loadDataReady: true
-                                    }, () => {})
+        session.getBackground().then(
+            background => {
+                this.background = background
+                getBearerTokenCountdownSeconds().then(
+                    (data) => {
+                        this.setState({ bearerToken: data.bearerToken, bearerReady: true, countdownSeconds: data.countdownSeconds, seconds: data.countdownSeconds },
+                            () => {
+                                url = api.getQuestions(this.props.navigation.state.params.courseId, this.props.navigation.state.params.level);
+                                uriHeaders = {
+                                    "Authorization": 'Bearer ' + this.state.bearerToken,
+                                    Accept: 'application/json',
+                                    "Content-Type": "application/json"
                                 }
+                                fetch(url, {
+                                    method: 'GET',
+                                    headers: uriHeaders
+                                })
+                                    .then((response) => response.json())
+                                    .then((response) => {
+                                        if (response.data.questions.length == 0) {
+                                            this.goToCourseOverview()
+                                        } else {
+                                            this.setState({
+                                                questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length,
+                                                currentQuestion: response.data.questions[0], loadDataReady: true
+                                            }, () => {})
+                                        }
+                                    }
+                                    ).catch((error) => { console.error(error); })
                             }
-                            ).catch((error) => { console.error(error); })
+                        )
                     }
-                )
+                ) // ends getbearertokencountdownseconds then
             }
-        );
+        )
     } // loadData ends
 
 }
