@@ -6,10 +6,9 @@ import {
     ImageBackground,
     StatusBar,
     StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    AsyncStorage
 } from "react-native";
+
+import CustomSpinner from '../CustomSpinner'
 
 import { Container, Content, Text, Button, Card, Footer } from "native-base";
 import Carousel from "react-native-snap-carousel";
@@ -19,24 +18,16 @@ import AppIntroSlider from "react-native-app-intro-slider";
 
 import { api, modalLevels } from "./../../../api/playTimeApi";
 
-import Modal from "react-native-modal";
-
-import { entries } from "./config";
-
 import styles from "./styles";
 
 import { session, getUserData, setExpoPushToken } from "./../../../api/session";
 
-import ModalSelector from "react-native-modal-selector";
-
 import LevelModalSelector from "../../components/ModalSelector/LevelModalSelector";
-import Spinner from "react-native-loading-spinner-overlay";
 
 const deviceWidth = Dimensions.get("window").width;
 
 const illustration = require("@assets/images/walkthrough3.png");
 
-import { Asset, AppLoading, Font, Audio, Video } from "expo";
 const introSoundPath = require("@assets/sounds/intro.mp3");
 const correctSoundPath = require("@assets/sounds/correct.mp3");
 const wrongSoundPath = require("@assets/sounds/wrong.mp3");
@@ -53,10 +44,10 @@ class Walkthrough extends Component {
             ready: false,
             showTutorial: false,
             exampleNotification: false,
-            backgroundReady: false,
+            backgroundReady: false
         };
         this.renderSlide = this.renderSlide.bind(this);
-        this.background = null
+        this.background = null;
     }
 
     shouldShowTutorial = async () => {
@@ -71,11 +62,7 @@ class Walkthrough extends Component {
     };
 
     showImageDialog = () => {
-        openCameraDialog(
-            [],
-            () => console.log("success"),
-            () => console.log("error")
-        );
+        openCameraDialog([], () => console.log("success"), () => console.log("error"));
         console.log("showImageDialog");
     };
 
@@ -86,19 +73,14 @@ class Walkthrough extends Component {
         return (
             <Card style={styles.slide.container}>
                 <View>
-                    <Image
-                        source={illustration}
-                        style={styles.slide.illustration}
-                    />
+                    <Image source={illustration} style={styles.slide.illustration} />
                     <Text style={styles.slide.title}>{item.name}</Text>
                     <Text numberOfLines={4} style={styles.slide.subtitle}>
                         {item.description}
                     </Text>
                     <LevelModalSelector
                         childrenContainerStyle={styles.slide.btnWrapper}
-                        content={
-                            <Text style={styles.slide.btnText}>Jugar</Text>
-                        }
+                        content={<Text style={styles.slide.btnText}>Jugar</Text>}
                         courseId={item.id}
                         onPress={this._goToCourse}
                         key={"mdl" + index}
@@ -109,9 +91,7 @@ class Walkthrough extends Component {
                             onPress={() => this._goToCourseOverview(item.id)}
                             style={styles.slide.btnWrapper}
                         >
-                            <Text style={styles.slide.btnText}>
-                                Información del curso
-                            </Text>
+                            <Text style={styles.slide.btnText}>Información del curso</Text>
                         </Button>
                     )}
                     {/* <Button
@@ -143,9 +123,9 @@ class Walkthrough extends Component {
     };
 
     loadUserData = async () => {
-        session.getBackground().then((background) => {
-            this.background = background
-            this.setState({ backgroundReady: true })
+        session.getBackground().then(background => {
+            this.background = background;
+            this.setState({ backgroundReady: true });
             getUserData().then(userData => {
                 this.setState(
                     {
@@ -169,8 +149,7 @@ class Walkthrough extends Component {
                                 this.setState(
                                     {
                                         courses: response.data.courses,
-                                        coursesLength:
-                                            response.data.courses.length - 1,
+                                        coursesLength: response.data.courses.length - 1,
                                         ready: true
                                     },
                                     () => {}
@@ -183,7 +162,7 @@ class Walkthrough extends Component {
                     }
                 );
             });
-        })
+        });
     };
 
     async componentDidMount() {
@@ -236,10 +215,10 @@ class Walkthrough extends Component {
 
     mustRedirect = false;
     render() {
-        if(this.state.backgroundReady){
-            background = this.background
-        }else{
-            background = null
+        if (this.state.backgroundReady) {
+            background = this.background;
+        } else {
+            background = null;
         }
         // console.log('Background', background)
         if (this.state.showTutorial) {
@@ -257,19 +236,13 @@ class Walkthrough extends Component {
         } else {
             return (
                 <Container>
-                    <Spinner
-                        visible={ ! this.state.ready}
-                        textContent={"Cargando..."}
-                        textStyle={{ color: 'white' }}
-                    />
-                    <StatusBar
-                        barStyle="light-content"
-                        translucent={true}
-                        backgroundColor={"transparent"}
-                    />
+                    <CustomSpinner visible={!this.state.ready}/>
+                    <StatusBar barStyle="light-content" translucent={true} backgroundColor={"transparent"} />
                     <ImageBackground
-                        source={{ 
-                            uri: "http://192.168.0.102:8000/storage/images/default_background_1543624252.png", width: 600, height: 800,
+                        source={{
+                            uri: "http://192.168.0.102:8000/storage/images/default_background_1543624252.png",
+                            width: 600,
+                            height: 800
                         }}
                         // source={require('@assets/images/background2.png')}
                         style={styles.background}
@@ -288,13 +261,7 @@ class Walkthrough extends Component {
                             )}
                         </Content>
                         <Footer>
-                            <Button
-                                large
-                                primary
-                                block
-                                style={styles.skipBtn}
-                                onPress={this.goToInitialScreen}
-                            >
+                            <Button large primary block style={styles.skipBtn} onPress={this.goToInitialScreen}>
                                 <Text> Saltar </Text>
                             </Button>
                         </Footer>
@@ -314,15 +281,12 @@ class Walkthrough extends Component {
                 body: "Texto de la notificación",
                 data: "Data adjunta  a la notificación",
                 android: {
-                    icon:
-                        "https://cdn4.iconfinder.com/data/icons/flat-shaded-2/512/Notification-512.png"
+                    icon: "https://cdn4.iconfinder.com/data/icons/flat-shaded-2/512/Notification-512.png"
                 }
             };
-            Notifications.presentLocalNotificationAsync(localNotification).then(
-                () => {
-                    console.log("Se mostró la notificación");
-                }
-            );
+            Notifications.presentLocalNotificationAsync(localNotification).then(() => {
+                console.log("Se mostró la notificación");
+            });
         }, delaySeconds);
     };
 }
@@ -338,8 +302,7 @@ const slides = [
     {
         key: "tut_1",
         title: "¿Qué es Playtime?",
-        text:
-            "Playtime es una aplicación que le ayudará a reforzar los conocimientos adquiridos en su capacitación...",
+        text: "Playtime es una aplicación que le ayudará a reforzar los conocimientos adquiridos en su capacitación...",
         image: require("@assets/images/Tutorial/1.jpg"),
         imageStyle: tutorialStyles.image,
         backgroundColor: "#59b2ab"
@@ -356,8 +319,7 @@ const slides = [
     {
         key: "tut_3",
         title: "¿Cómo jugar?",
-        text:
-            "Una vez comenzado el curso, usted debe seleccionar la respuesta correcta",
+        text: "Una vez comenzado el curso, usted debe seleccionar la respuesta correcta",
         image: require("@assets/images/Tutorial/3.jpg"),
         imageStyle: tutorialStyles.image,
         backgroundColor: "#22bcb5"
