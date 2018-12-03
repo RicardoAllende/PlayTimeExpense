@@ -17,8 +17,10 @@ export default {
     },
   },
   content: {
-    paddingTop: Platform.OS === 'android' ? 20 : 30,
+    // paddingTop: Platform.OS === 'android' ? 20 : 30,
     backgroundColor: '#fff',
+    // paddingBottom: Platform.OS === 'android' ? 20 : 30,
+    flex: 1,
   },
   menuItem: {
     container: {

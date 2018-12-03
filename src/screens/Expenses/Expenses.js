@@ -47,7 +47,6 @@ class Expenses extends Component {
 
   loadData = async () => {
     getCourses().then((courses) => {
-      courses = JSON.parse(courses)
       this.setState({
         courses: courses, coursesLoading: false
       })

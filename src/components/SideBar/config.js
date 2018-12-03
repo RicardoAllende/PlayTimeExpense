@@ -1,5 +1,7 @@
 // Menú
 
+index = -1
+
 export const routes = [
   // {
   //   title: 'My Expenses',
@@ -7,14 +9,22 @@ export const routes = [
   //   icon: 'ios-cash-outline',
   // },
   {
+    id: 'id' + index--, courseId: '',
     title: 'Mis cursos',
-    route: 'Expenses',
-    icon: 'ios-cash-outline',
+    route: 'CourseList',
+    icon: 'ios-book',
   },
   {
+    id: 'id' + index--, courseId: '',
     title: 'Cursos completos',
     route: 'CompletedCourses',
     icon: 'ios-cash-outline',
+  },
+  {
+    id: 'id' + index--, courseId: '',
+      title: 'Curso',
+      route: 'Expenses_',
+      icon: 'ios-book',
   },
   // {
   //   title: 'Categorías',
@@ -37,11 +47,13 @@ export const routes = [
   //   icon: 'ios-search-outline',
   // },
   {
+    id: 'id' + index--, courseId: '',
     title: 'Mi perfil',
     route: 'Profile',
     icon: 'ios-person-outline',
   },
   {
+    id: 'id' + index--, courseId: '',
     title: 'Ajustes',
     route: 'Settings',
     icon: 'ios-options-outline',
@@ -52,6 +64,7 @@ export const routes = [
   //   icon: 'ios-options-outline',
   // },
   {
+    id: 'id' + index--, courseId: '',
     title: 'Salir',
     route: 'SignIn',
     icon: 'ios-power',

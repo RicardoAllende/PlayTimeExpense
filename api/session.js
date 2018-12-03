@@ -213,6 +213,7 @@ export async function getAvatar(original){
 
 export async function getCourses() {
     courses = await AsyncStorage.getItem(coursesDataName)
+    courses = JSON.parse(courses)
     return courses;
 }
 

@@ -20,7 +20,8 @@ class MenuItem extends React.PureComponent {
   }
 }
 MenuItem.propTypes = {
-  id: PropTypes.string.isRequired,
+//   id: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.number.isRequired]),
   onPressItem: PropTypes.func,
   selected: PropTypes.bool,
   title: PropTypes.string,
