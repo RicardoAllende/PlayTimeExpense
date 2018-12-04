@@ -105,32 +105,11 @@ class SideBar extends Component {
                 <Container style={{ backgroundColor: "transparent" }}>
                     <Header transparent style={styles.header.container}>
                         <Left>
-                            {/* <Left style={{ flex: 1 }}> */}
                             <Button transparent onPress={() => navigation.dispatch(DrawerActions.toggleDrawer({}))}>
                                 <Icon type="SimpleLineIcons" name="arrow-left" style={styles.header.icon} />
                             </Button>
                         </Left>
                         <Right style={{ flex: 1 }}>
-                            {/* <AppStatus navigation={navigation} /> */}
-                            {/* <TouchableOpacity
-                                style={{ alignSelf: 'flex-end' }}
-                                onPress={() => {
-                                    navigation.navigate('Profile');
-                                }}>
-                                {
-                                    this.state.avatarReady &&
-                                    (
-                                    <Thumbnail 
-                                    // source={avatar} 
-                                    // source={require('@assets/images/default_avatar.png')}
-                                    source={{
-                                        uri: this.state.avatar,
-                                        cache: 'only-if-cached',
-                                    }}
-                                    style={styles.avatar} />
-                                    )
-                                }
-                            </TouchableOpacity> */}
                         </Right>
                     </Header>
                     <Content style={styles.content}>
@@ -147,7 +126,6 @@ class SideBar extends Component {
             return (
                 <Container style={{ backgroundColor: "transparent" }}>
                     <Header transparent style={styles.header.container}>
-                        {/* <Icon name="ios-arrow-back" size={25} style={styles.menuItem.icon} color="#666666" /> */}
                         <Left>
                             <Button transparent onPress={this.toggleMainMenu}>
                                 <Icon type="SimpleLineIcons" name="arrow-left" style={styles.header.icon} />
