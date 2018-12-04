@@ -23,29 +23,20 @@ export const routes = [
   {
     id: 'id' + index--, courseId: '',
       title: 'Curso',
-      route: 'Expenses_',
+      route: 'Expenses',
       icon: 'ios-book',
   },
-  // {
-  //   title: 'Categorías',
-  //   route: 'Categories',
-  //   icon: 'ios-apps-outline',
-  // },
-  // {
-  //   title: 'Calendario',
-  //   route: 'ExpensesCalendar',
-  //   icon: 'ios-calendar-outline',
-  // },
-  // {
-  //   title: 'Gráficas',
-  //   route: 'ExpensesCharts',
-  //   icon: 'ios-stats-outline',
-  // },
-  // {
-  //   title: 'Búsqueda y exportación',
-  //   route: 'Search',
-  //   icon: 'ios-search-outline',
-  // },
+  {
+      id: 'id' +  index--, courseId: '',
+      title: 'Ranking de usuarios',
+      route: 'CompleteRanking',
+      icon: 'ios-school',
+  },
+//   {
+//     title: '',
+//     route: '',
+//     icon: '',
+//   },
   {
     id: 'id' + index--, courseId: '',
     title: 'Mi perfil',

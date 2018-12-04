@@ -16,7 +16,6 @@ class RankingList extends Component {
   }
 
   render() {
-    // console.log('RankingList gaugeData', this.props.expensesList)
     const { expensesList } = this.props;
 
     return (

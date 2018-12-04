@@ -39,7 +39,7 @@ export default class ClientIcon extends Component {
                              "uri": "http://192.168.0.102:8000/storage/images/thumbnail/logo-subitus_1543624456.png",
                              "width": 100,
                         }}
-                        style={styles.avatar}
+                        // style={styles.avatar}
                     />
                 </TouchableOpacity>
                 <Modal

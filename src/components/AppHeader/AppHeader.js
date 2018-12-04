@@ -55,7 +55,6 @@ class AppHeader extends PureComponent {
     loadClientIcon = () => {
         session.getClientIconUrl().then(icon => {
             this.clientIcon = icon
-            console.log('ClientIcon loaded', icon)
             this.setState({
                 clienInconReady: true,
             })

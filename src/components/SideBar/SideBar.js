@@ -66,7 +66,7 @@ class SideBar extends Component {
     }
 
     componentDidMount = () => {
-        console.log("Imprimiendo rutas desde el archivo: ", routes);
+        // console.log("Imprimiendo rutas desde el archivo: ", routes);
         this.loadCourses();
         // this.loadAvatar();
     };

@@ -75,36 +75,6 @@ class CourseRanking extends Component {
   };
 
   componentDidMount() {
-    this.initialize();
-  }
-
-  initialize = () => {
-    // this.props.getExpenses();
-  };
-
-  switchPeriod(i) {
-    var m = moment();
-    let title = '';
-    let period = '';
-    switch (i) {
-      case 0:
-        title = m.format('dddd,');
-        period = m.format('MMM DD');
-        break;
-      case 1:
-        title =
-          m.startOf('week').format('DD') +
-          ' - ' +
-          m.endOf('week').format('DD,');
-        period = m.format('MMM, YYYY');
-        break;
-      case 2:
-        title = m.format('MMMM, ');
-        period = m.format('YYYY');
-        break;
-    }
-
-    this.setState({ headerTitle: title, headerTitleSuffix: period });
   }
 
   render() {
@@ -140,7 +110,7 @@ class CourseRanking extends Component {
                   }}
                   locked
                   onChangeTab={({ i, ref, from }) =>
-                    this.switchPeriod(i, ref, from)
+                    console.log('tab changed')
                   }>
                   <Tab heading="Avances del curso">
                     <RankingList
