@@ -17,6 +17,8 @@ import { getExtension } from "@utils/helpers";
 import { api } from "./../../../api/playTimeApi";
 import { session, getBearerToken, getUserData, getAvatar, restartApp, setAvatar } from "./../../../api/session";
 
+import ConfirmModal from '@components/Modals/ConfirmModal'
+
 const avatar = require("@assets/images/default_avatar.png");
 const defaultBackground = require("@assets/images/header-bg-big.png");
 // import ImagePicker from 'react-native-image-picker';
@@ -39,7 +41,7 @@ class Profile extends Component {
             overviewReady: false,
             avatarReady: false,
             userStatsReady: false,
-            img: "http://www.safexone.com/images/old/default.gif"
+            confirmModalVisibility: false,
         };
     }
 
@@ -206,14 +208,27 @@ class Profile extends Component {
                             <View style={styles.separator} />
                             <Contact type="email" name={"Personal"} number={this.state.ready ? profile.email : "_"} />
                             <View style={styles.separator} />
-                            {/* <Thumbnail source={{ uri: this.state.img }} /> */}
                             <Social />
                         </View>
                     </ScrollView>
+                    <ConfirmModal
+                        confirmText="Cambiar imagen"
+                        message="¿Desea cambiar su imagen?"
+                        onConfirm={this.showImagePicker}
+                        cancelText="No ahora"
+                        onCancel={this.hideConfirmModal}
+                        isVisible={this.state.confirmModalVisibility}
+                    />
                     <FlashMessage ref="myLocalFlashMessage" />
                 </ImageBackground>
             </Container>
         );
+    }
+
+    hideConfirmModal = () => {
+        this.setState({
+            confirmModalVisibility: false,
+        })
     }
 
     checkPermission = async () => {
@@ -238,6 +253,10 @@ class Profile extends Component {
     };
 
     onTapImage = () => {
+        this.setState({
+            confirmModalVisibility: true,
+        })
+        return
         // this.showSimpleMessage('Imagen actualizada', 'La imagen de su perfil ha sido actualizada', 'success', 'bottom')
         // return
         Alert.alert(
