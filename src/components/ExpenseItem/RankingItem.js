@@ -28,7 +28,7 @@ const RankingItem = ({ item, style, color, _onPress }) => {
     }
 
     // console.log('ExpenseItem.js', item);
-    console.log(item);
+    // console.log(item);
     return (
         <View style={[styles.item.content, { borderColor: borderColor }, style]}>
             <TouchableOpacity onPress={() => console.log("")}>

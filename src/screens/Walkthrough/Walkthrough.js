@@ -1,14 +1,8 @@
+import FlashMessage, { showMessage, hideMessage } from "react-native-flash-message";
 import React, { Component } from "react";
-import {
-    Dimensions,
-    View,
-    Image,
-    ImageBackground,
-    StatusBar,
-    StyleSheet,
-} from "react-native";
+import { Dimensions, View, Image, ImageBackground, StatusBar, StyleSheet } from "react-native";
 
-import CustomSpinner from '../CustomSpinner'
+import CustomSpinner from "../CustomSpinner";
 
 import { Container, Content, Text, Button, Card, Footer } from "native-base";
 import Carousel from "react-native-snap-carousel";
@@ -201,16 +195,20 @@ class Walkthrough extends Component {
         });
     };
 
-    redirected = false;
+    showSimpleMessage(message = "", description = "", type = "default", position = "top", props = {}) {
+        showMessage({
+            message,
+            description,
+            position,
+            type,
+            ...props
+        });
+    }
+
     goToInitialScreen = () => {
-        // console.log('', this.redirected)
-        // if( ! this.redirected ){
-        // console.log("Redirecting to " + initialRoute);
+        // this.showSimpleMessage('Imagen actualizada', 'La imagen de su perfil ha sido actualizada', 'success', 'top')
+        // return
         this.props.navigation.navigate(initialRoute);
-        // this.redirected = true
-        // }else{
-        //   console.log('gotoinitialscreen else')
-        // }
     };
 
     mustRedirect = false;
@@ -236,7 +234,7 @@ class Walkthrough extends Component {
         } else {
             return (
                 <Container>
-                    <CustomSpinner visible={!this.state.ready}/>
+                    <CustomSpinner visible={!this.state.ready} />
                     <StatusBar barStyle="light-content" translucent={true} backgroundColor={"transparent"} />
                     <ImageBackground
                         source={{
@@ -265,6 +263,7 @@ class Walkthrough extends Component {
                                 <Text> Saltar </Text>
                             </Button>
                         </Footer>
+                        <FlashMessage ref="myLocalFlashMessage" />
                     </ImageBackground>
                 </Container>
             );
