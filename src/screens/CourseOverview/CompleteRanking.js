@@ -119,7 +119,7 @@ class CompleteRanking extends Component {
                     }}
                     style={styles.container}
                 >
-                    <AppHeader navigation={navigation} title="Ranking de usuarios" />
+                    <AppHeader navigation={navigation} onlySubTitle="Ranking de usuarios" />
                     {!this.state.ready && (
                         <View style={styles.emptyContainer}>
                             <Spinner color={theme.brandPrimary} />

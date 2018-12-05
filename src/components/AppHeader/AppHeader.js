@@ -144,6 +144,13 @@ class AppHeader extends PureComponent {
                         )}
                     </View>
                 )}
+                {this.props.onlySubTitle && (
+                    <View style={styles.titles.container}>
+                        <Text note style={[styles.titles.subTitle, { fontSize: 13, textAlign: 'center' }]}>
+                            {this.props.onlySubTitle}
+                        </Text>
+                    </View>
+                )}
                 {this.state.displaySearchBar && (
                     <SearchHeader onSearch={this.props.onSearch} onExport={this.props.onExport} />
                 )}

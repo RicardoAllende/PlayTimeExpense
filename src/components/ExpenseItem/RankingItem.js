@@ -26,7 +26,7 @@ const RankingItem = ({ item, style, color, _onPress }) => {
         avatar = <Thumbnail circle={false} source={{
             uri: item.avatar,
             cache: 'only-if-cached',
-        }} style={{ borderRadius: 8, }} />
+        }} style={{ borderRadius: 8, width: 40, height: 40,}} />
     }
 
     return (

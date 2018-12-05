@@ -3,11 +3,6 @@
 index = -1
 
 export const routes = [
-  // {
-  //   title: 'My Expenses',
-  //   route: 'Expenses',
-  //   icon: 'ios-cash-outline',
-  // },
   {
     id: 'id' + index--, courseId: '',
     title: 'Mis cursos',
@@ -20,23 +15,18 @@ export const routes = [
     route: 'CompletedCourses',
     icon: 'ios-cash-outline',
   },
-  {
-    id: 'id' + index--, courseId: '',
-      title: 'Curso',
-      route: 'Expenses',
-      icon: 'ios-book',
-  },
+//   {
+//     id: 'id' + index--, courseId: '',
+//       title: 'Curso',
+//       route: 'Expenses',
+//       icon: 'ios-book',
+//   },
   {
       id: 'id' +  index--, courseId: '',
       title: 'Ranking de usuarios',
       route: 'CompleteRanking',
       icon: 'ios-school',
   },
-//   {
-//     title: '',
-//     route: '',
-//     icon: '',
-//   },
   {
     id: 'id' + index--, courseId: '',
     title: 'Mi perfil',
@@ -49,11 +39,6 @@ export const routes = [
     route: 'Settings',
     icon: 'ios-options-outline',
   },
-  // {
-  //   title: 'Ranking del curso',
-  //   route: 'Ranking',
-  //   icon: 'ios-options-outline',
-  // },
   {
     id: 'id' + index--, courseId: '',
     title: 'Salir',
