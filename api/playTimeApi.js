@@ -47,9 +47,9 @@ export const api = {
     setAvatar: app_url + 'users/avatar?app=1',
     getOverview: app_url + 'overview',
     setSettings: app_url + 'settings',
-    setShareInFacebookAchievement: app_url + 'achievements/facebook',
-    setShareInTwitterAchievement: app_url + 'achievements/twitter',
-    setShareInLinkedInAchievement: app_url + 'achievements/linkedin',
+    setShareInFacebookAchievement: app_url + 'achievements/social/facebook',
+    setShareInTwitterAchievement: app_url + 'achievements/social/twitter',
+    setShareInLinkedInAchievement: app_url + 'achievements/social/linkedin',
 }
 const levels = ['Aleatorio', 'Fácil', 'Medio', 'Difícil'];
 

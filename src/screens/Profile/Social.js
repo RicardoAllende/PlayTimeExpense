@@ -9,8 +9,6 @@ const twitterLink = makeTwitterLink('Descarga la aplicación en ' + api.invitati
 const linkedInLink = makeLinkedInLink(api.invitation_url, 'Descarga la aplicación', 'Playtime es una aplicación ...')
 
 function openInBrowser(link){
-    // console.log('Social.js link', link)
-    // return
     Linking.openURL(link)
 }
 
