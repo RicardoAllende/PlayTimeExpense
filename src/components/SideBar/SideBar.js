@@ -194,7 +194,7 @@ class SideBar extends Component {
                                     {this.state.nameReady ? this.state.name : "."}
                                 </Text>
                             </TouchableOpacity>
-                            <Modal
+                            {/* <Modal
                                 isVisible={this.state.modal}
                                 animationIn="slideInLeft"
                                 animationOut="slideOutLeft"
@@ -223,7 +223,7 @@ class SideBar extends Component {
                                         <Text>Cerrar información</Text>
                                     </Button>
                                 </View>
-                            </Modal>
+                            </Modal> */}
                             {/* <ClientIcon /> */}
                             {/* <AppStatus navigation={this.props.navigation} /> */}
                         </Body>
