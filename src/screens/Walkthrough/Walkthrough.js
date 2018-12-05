@@ -344,7 +344,7 @@ const slides = [
 export default Walkthrough;
 
 // import React, { Component } from 'react'
-// import { StyleSheet, View } from "react-native";
+// import { StyleSheet, View, Share } from "react-native";
 // import ActionButton from "react-native-circular-action-menu";
 // // import Icon from "react-native-vector-icons/Ionicons";
 // import { Icon } from 'native-base'
@@ -354,6 +354,22 @@ export default Walkthrough;
 // export default class Walkthrough extends Component {
 //     constructor(props) {
 //         super(props);
+//     }
+
+//     componentDidMount() {
+//         // Share.share
+//         Share.share({
+//             message: 'BAM: we\'re helping your business with awesome React Native apps',
+//             url: 'http://bam.tech',
+//             title: 'Wow, did you see that?'
+//           }, {
+//             // Android only:
+//             dialogTitle: 'Share BAM goodness',
+//             // iOS only:
+//             // excludedActivityTypes: [
+//             //   'com.apple.UIKit.activity.PostToTwitter'
+//             // ]
+//           })
 //     }
 
 //     render() {

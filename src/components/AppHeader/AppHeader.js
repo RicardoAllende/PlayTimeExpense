@@ -42,7 +42,7 @@ class AppHeader extends PureComponent {
 
     componentDidMount = () => {
         // this.loadCredits();
-        this.loadClientIcon();
+        // this.loadClientIcon();
     };
 
     loadCredits = () => {
@@ -52,14 +52,14 @@ class AppHeader extends PureComponent {
         });
     };
 
-    loadClientIcon = () => {
-        session.getClientIconUrl().then(icon => {
-            this.clientIcon = icon
-            this.setState({
-                clienInconReady: true,
-            })
-        })
-    }
+    // loadClientIcon = () => {
+    //     session.getClientIconUrl().then(icon => {
+    //         this.clientIcon = icon
+    //         this.setState({
+    //             clienInconReady: true,
+    //         })
+    //     })
+    // }
 
     render() {
         if (typeof this.props.hideStatus !== "undefined") {
@@ -67,11 +67,11 @@ class AppHeader extends PureComponent {
         } else {
             status = <AppStatus navigation={this.props.navigation} />;
         }
-        if(this.state.clienInconReady){
-            const imageUrl = this.clientIcon
-        }else{
-            const imageUrl = null
-        }
+        // if(this.state.clienInconReady){
+        //     const imageUrl = this.clientIcon
+        // }else{
+        //     const imageUrl = null
+        // }
         return (
             <View style={this.props.style}>
                 <Header transparent hasTabs>
@@ -91,7 +91,7 @@ class AppHeader extends PureComponent {
                         {/* <AppStatus navigation={this.props.navigation} /> */}
                     </Body>
                     <Right style={{ flex: 1 }}>
-                        {this.props.displayAvatar && (
+                        {/* {this.props.displayAvatar && (
                             <ClientIcon />
                             // <TouchableOpacity
                             //     onPress={() => {
@@ -112,7 +112,7 @@ class AppHeader extends PureComponent {
                             //         )
                             //     }
                             // </TouchableOpacity>
-                        )}
+                        )} */}
                         {this.props.displaySearch && (
                             <Button
                                 transparent

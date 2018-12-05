@@ -12,7 +12,7 @@ import Overview from "./Overview";
 import Social from "./Social";
 import * as profileSelectors from "./selectors";
 import styles from "./styles";
-import { getExtension } from "@utils/helpers";
+import { getExtension, makeFBLink } from "@utils/helpers";
 
 import { api } from "./../../../api/playTimeApi";
 import { session, getBearerToken, getUserData, getAvatar, restartApp, setAvatar } from "./../../../api/session";

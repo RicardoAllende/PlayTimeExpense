@@ -25,3 +25,17 @@ export function getExtension(fileName){
     }
     return ""
 }
+
+function amperoctoplus(s) {
+	s = s.replace(/&/g, '%26');
+	s = s.replace(/#/g, '%23');
+	s = s.replace(/\+/g, '%2B');
+	s = s.replace(/@/g, '%40');
+	s = s.replace(/:/g, '%3A');
+	return s;
+}
+
+export function makeFBLink(uri) {
+	uri = amperoctoplus(encodeURI(uri));
+    return "https://www.facebook.com/sharer/sharer.php?u=" + uri;
+}

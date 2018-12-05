@@ -6,11 +6,15 @@ import MenuItem from "./MenuItem";
 import styles from "./styles";
 import { routes } from "./config";
 
+import ClientIcon from "../AppHeader/ClientIcon";
+
+import Modal from "react-native-modal";
+
 import { session, getAvatar, getCourses } from "../../../api/session";
 
 import AppStatus from "@components/AppHeader/AppStatus";
 
-const courseOverviewRoute = 'CourseOverview'
+const courseOverviewRoute = "CourseOverview";
 
 class SideBar extends Component {
     state = {
@@ -18,9 +22,13 @@ class SideBar extends Component {
         ready: false,
         avatarReady: false,
         mainDrawer: true,
-        courses: []
+        courses: [],
+        iconReady: false,
+        descriptionReady: false,
+        nameReady: false,
+        modal: false,
     };
-    onPressItem = (route) => {
+    onPressItem = route => {
         if (route == "CourseList") {
             this.toggleMainMenu();
             return;
@@ -31,11 +39,11 @@ class SideBar extends Component {
         this.setState(() => ({
             selected: route
         }));
-        if(Number.isInteger(parseInt(route))){
+        if (Number.isInteger(parseInt(route))) {
             this.props.navigation.navigate(courseOverviewRoute, {
                 courseId: parseInt(route)
             });
-        }else{
+        } else {
             this.props.navigation.navigate(route);
         }
     };
@@ -47,28 +55,58 @@ class SideBar extends Component {
     };
 
     renderMenuItem = ({ item }) => {
-        if(item.courseId != ''){
-            return  <MenuItem
-                        id={item.courseId}
-                        onPressItem={this.onPressItem}
-                        selected={this.state.selected === item.route}
-                        title={item.title}
-                        icon={item.icon}
-                    />
-        }
-        return  <MenuItem
-                    id={item.route}
+        if (item.courseId != "") {
+            return (
+                <MenuItem
+                    id={item.courseId}
                     onPressItem={this.onPressItem}
                     selected={this.state.selected === item.route}
                     title={item.title}
                     icon={item.icon}
                 />
-    }
+            );
+        }
+        return (
+            <MenuItem
+                id={item.route}
+                onPressItem={this.onPressItem}
+                selected={this.state.selected === item.route}
+                title={item.title}
+                icon={item.icon}
+            />
+        );
+    };
 
     componentDidMount = () => {
         // console.log("Imprimiendo rutas desde el archivo: ", routes);
         this.loadCourses();
+
+        session.getClientIconUrl().then(icon => {
+            this.setState({
+                iconReady: true,
+                icon
+            });
+        });
+        session.getClientDescription().then(description => {
+            this.setState({
+                descriptionReady: true,
+                description
+            });
+        });
+        session.getClientName().then(name => {
+            this.setState({
+                nameReady: true,
+                name
+            });
+        });
+
         // this.loadAvatar();
+    };
+
+    changeModalVisibility = () => {
+        this.setState({
+            modal: !this.state.modal
+        });
     };
 
     loadCourses = () => {
@@ -109,8 +147,81 @@ class SideBar extends Component {
                                 <Icon type="SimpleLineIcons" name="arrow-left" style={styles.header.icon} />
                             </Button>
                         </Left>
-                        <Right style={{ flex: 1 }}>
-                        </Right>
+                        <Body
+                            style={{
+                                backgroundColor: "rgba(0, 0, 0, 0.3)",
+                                // backgroundColor: "green",
+                                flex: 1
+                            }}
+                        >
+                            <TouchableOpacity
+                                style={{
+                                    // paddingTop: "3%",
+                                    flex: 1,
+                                    // backgroundColor: "black",
+                                    flexDirection: "row",
+                                    // backgroundColor: "rgba(0, 0, 0, 0.3)",
+                                    borderRadius: 10,
+                                    flexWrap: "wrap",
+                                    padding: 2,
+                                    // padding: "3%"
+                                }}
+                                onPress={this.changeModalVisibility}
+                            >
+                                {this.state.iconReady && (
+                                    <Thumbnail
+                                        source={this.state.icon}
+                                        square
+                                        style={{
+                                            width: 45,
+                                            height: 45,
+                                            resizeMode: "stretch",
+                                            // borderRadius: 8
+                                        }}
+                                    />
+                                )}
+                                <Text
+                                    style={{
+                                        fontSize: 16,
+                                        textAlign: "center",
+                                        flex: 1,
+                                        fontFamily: "Roboto_light",
+                                        // fontSize: 22,
+                                        color: "#FFF",
+                                    }}
+                                >
+                                    {this.state.nameReady ? this.state.name : "."}
+                                </Text>
+                            </TouchableOpacity>
+                            <Modal
+                                isVisible={this.state.modal}
+                                animationIn="slideInLeft"
+                                animationOut="slideOutLeft"
+                                animationInTiming={300}
+                                animationOutTiming={300}
+                                swipeDirection="down"
+                                // style={styles.bottomModal}
+                            >
+                                <View
+                                    style={{
+                                        backgroundColor: "white",
+                                        padding: 22,
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        borderRadius: 4,
+                                        borderColor: "rgba(0, 0, 0, 0.1)",
+                                        flexDirection: "column"
+                                    }}
+                                >
+                                    <Text>{this.state.descriptionReady ? this.state.description : "."}</Text>
+                                </View>
+                            </Modal>
+                            {/* <ClientIcon /> */}
+                            {/* <AppStatus navigation={this.props.navigation} /> */}
+                        </Body>
+                        {/* <Right style={{
+                            backgroundColor: 'green',
+                        }}></Right> */}
                     </Header>
                     <Content style={styles.content}>
                         <FlatList
@@ -133,7 +244,9 @@ class SideBar extends Component {
                         </Left>
                         <Body>
                             <Button transparent onPress={this.toggleMainMenu}>
-                                <Text style={styles.menuItem.title}>Volver Atrás</Text>
+                                <Text numberOfLines={1} style={styles.menuItem.title}>
+                                    Volver Atrás
+                                </Text>
                             </Button>
                         </Body>
                     </Header>

@@ -22,14 +22,9 @@ const enableNotificationDataName = 'enableNotifications'
 const enableSoundDataName = 'enableSound'
 const clientIconUrlDataName = 'iconUrl'
 const backgroundUrlDataname = 'backgroundUrl'
-    /*
-    'default_client_settings' => [
-        'countdown_seconds' => 10,
-        'client_url' => null,
-        'background_url' => null
-    ]
-    */
-    
+const clientDescriptionDataName = 'clientDescription'
+const clientNameDataname = 'clientName'
+
 export const session = {
     bearerTokenName: bearerTokenName,
     userDataName: userDataName,
@@ -83,10 +78,23 @@ export const session = {
             session.setBackgroundUrl(settings.background_url)
         }
         session.setCountdownSeconds(settings.countdownSeconds)
+        session.setClientDescription(settings.description)
+        session.setClientName(settings.name)
+    },
+    setClientDescription: (description) => {
+        AsyncStorage.setItem(clientDescriptionDataName, description)
+    },
+    getClientDescription: async() => {
+        return await AsyncStorage.getItem(clientDescriptionDataName)
+    },
+    setClientName: (name) => {
+        AsyncStorage.setItem(clientNameDataname, name)
+    },
+    getClientName: async() => {
+        return await AsyncStorage.getItem(clientNameDataname)
     },
     setClientIconUrl: (url) => {
         AsyncStorage.setItem(clientIconUrlDataName, url)
-        
     },
     getClientIconUrl: async() => {
         uri = await AsyncStorage.getItem(clientIconUrlDataName)
