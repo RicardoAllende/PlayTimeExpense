@@ -1,18 +1,14 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { ImageBackground, ScrollView, TouchableOpacity, Linking, Alert, Image } from "react-native";
-import theme from "@theme/variables/myexpense";
 import { Container, Thumbnail, View, Text, Button, Fab, Icon, Avatar } from "native-base";
-import { connect } from "react-redux";
 import FormData from "form-data";
 
 import AppHeader from "@components/AppHeader";
 import Contact from "./Contact";
 import Overview from "./Overview";
 import Social from "./Social";
-import * as profileSelectors from "./selectors";
 import styles from "./styles";
-import { getExtension, makeFBLink } from "@utils/helpers";
+import { getExtension } from "@utils/helpers";
 
 import { api } from "./../../../api/playTimeApi";
 import { session, getBearerToken, getUserData, getAvatar, restartApp, setAvatar } from "./../../../api/session";

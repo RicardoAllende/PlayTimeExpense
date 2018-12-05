@@ -2,11 +2,14 @@ export const url = "http://192.168.0.102:8000/"
 const api_url = url + "api/v1/"
 
 const app_url = api_url + "app/"
-import {modalLevels} from '@components/ModalSelector/levels'
 
 export const exponentPushTokenUri = app_url + 'expo-push-token'
 
 export const api = {
+    invitation_url: url + 'download',
+    show_achievement: (name, id) => {
+        return app_url + name + '/' + id
+    },
     url: url,
     loginWithRememberToken: (token) => {
         return url + "login?remember_token=" + token
@@ -44,16 +47,11 @@ export const api = {
     setAvatar: app_url + 'users/avatar?app=1',
     getOverview: app_url + 'overview',
     setSettings: app_url + 'settings',
+    setShareInFacebookAchievement: app_url + 'achievements/facebook',
+    setShareInTwitterAchievement: app_url + 'achievements/twitter',
+    setShareInLinkedInAchievement: app_url + 'achievements/linkedin',
 }
 const levels = ['Aleatorio', 'Fácil', 'Medio', 'Difícil'];
-
-// export const modalLevels = [
-//     { key: 8, section: true, label: 'Escoja el nivel a jugar' },
-//     { key: 1, label: getLevelName(1), value: 1 },
-//     { key: 2, label: getLevelName(2), value: 2 },
-//     { key: 3, label: getLevelName(3), value: 3 },
-//     { key: 0, label: getLevelName(0), value: 0 },
-// ]
 
 export function getLevelName(index){
     if(index > -1 && index < levels.length ){
