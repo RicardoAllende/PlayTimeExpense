@@ -77,7 +77,7 @@ export const session = {
         if(settings.background_url != null){
             session.setBackgroundUrl(settings.background_url)
         }
-        session.setCountdownSeconds(settings.countdownSeconds)
+        session.setCountdownSeconds(settings.countdown_seconds)
         session.setClientDescription(settings.description)
         session.setClientName(settings.name)
     },
@@ -231,13 +231,13 @@ export async function getBearerToken() {
 }
 
 export async function getCountdownSeconds() {
-    countdownSeconds = await AsyncStorage.getItem(session.countdownSecondsDataName)
+    countdownSeconds = await AsyncStorage.getItem(countdownSecondsDataName)
     return parseInt(countdownSeconds);
 }
 
 export async function getBearerTokenCountdownSeconds() {
-    countdownSeconds = await AsyncStorage.getItem(session.countdownSecondsDataName)
-    bearerToken = await AsyncStorage.getItem(session.bearerTokenName)
+    countdownSeconds = await AsyncStorage.getItem(countdownSecondsDataName)
+    bearerToken = await AsyncStorage.getItem(bearerTokenName)
     countdownSeconds = parseInt(countdownSeconds)
     return { countdownSeconds, bearerToken }
 }
