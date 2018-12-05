@@ -280,6 +280,7 @@ class Profile extends Component {
     };
 
     showImagePicker = async () => {
+        this.hideConfirmModal()
         let permission = await this.askForPermission();
         if (!permission) {
             alert("No se tiene permiso para acceder a la galería de imágenes");

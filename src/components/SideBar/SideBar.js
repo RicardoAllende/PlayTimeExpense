@@ -151,7 +151,8 @@ class SideBar extends Component {
                             style={{
                                 backgroundColor: "rgba(0, 0, 0, 0.3)",
                                 // backgroundColor: "green",
-                                flex: 1
+                                flex: 1,
+                                borderRadius: 10,
                             }}
                         >
                             <TouchableOpacity
@@ -161,7 +162,7 @@ class SideBar extends Component {
                                     // backgroundColor: "black",
                                     flexDirection: "row",
                                     // backgroundColor: "rgba(0, 0, 0, 0.3)",
-                                    borderRadius: 10,
+                                    // borderRadius: 10,
                                     flexWrap: "wrap",
                                     padding: 2,
                                     // padding: "3%"
@@ -176,7 +177,7 @@ class SideBar extends Component {
                                             width: 45,
                                             height: 45,
                                             resizeMode: "stretch",
-                                            // borderRadius: 8
+                                            borderRadius: 8
                                         }}
                                     />
                                 )}
@@ -214,6 +215,13 @@ class SideBar extends Component {
                                     }}
                                 >
                                     <Text>{this.state.descriptionReady ? this.state.description : "."}</Text>
+                                    <Button
+                                        onPress={
+                                            this.changeModalVisibility
+                                        }
+                                    >
+                                        <Text>Cerrar información</Text>
+                                    </Button>
                                 </View>
                             </Modal>
                             {/* <ClientIcon /> */}

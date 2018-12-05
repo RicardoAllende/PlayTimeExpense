@@ -139,7 +139,7 @@ export default class ClientIcon extends Component {
 //                     // source={require('@assets/images/default_avatar.png')}
 //                     source={{
 //                         height: 100,
-//                         uri: "http://192.168.0.102:8000/storage/default_images/logo-subitus.png",
+//                         uri: "http://192.168.0.117:8000/storage/default_images/logo-subitus.png",
 //                         width: 100
 //                     }}
 //                     style={

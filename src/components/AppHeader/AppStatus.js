@@ -70,8 +70,8 @@ export default class AppStatus extends Component {
             // source={require("@assets/images/default_avatar.png")}
             displayLogo={false}
             source={{
-            //   uri: this.state.avatar,
-                uri: 'http://192.168.0.102:8000/storage/default_images/logo-subitus.png',
+              uri: this.state.avatar,
+                // uri: 'http://192.168.0.117:8000/storage/default_images/logo-subitus.png',
               cache: 'only-if-cached',
             }}
             style={styles.avatar}

@@ -237,11 +237,12 @@ class Walkthrough extends Component {
                     <CustomSpinner visible={!this.state.ready} />
                     <StatusBar barStyle="light-content" translucent={true} backgroundColor={"transparent"} />
                     <ImageBackground
-                        source={{
-                            uri: "http://192.168.0.102:8000/storage/images/default_background_1543624252.png",
-                            width: 600,
-                            height: 800
-                        }}
+                        source={background}
+                        // source={{
+                        //     uri: "http://192.168.0.117:8000/storage/images/default_background_1543624252.png",
+                        //     width: 600,
+                        //     height: 800
+                        // }}
                         // source={require('@assets/images/background2.png')}
                         style={styles.background}
                     >

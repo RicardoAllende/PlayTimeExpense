@@ -51,30 +51,45 @@ class CompleteRanking extends Component {
                 .then(jsonResponse => {
                     // return
                     completedCoursesRanking = jsonResponse.data.completed_courses_ranking.map((item, index) => {
+                        if(item.avatar != null){
+                            avatar = session.addPath(item.avatar)
+                        }else{
+                            avatar = null
+                        }
                         return {
                             rank: index + 1,
                             firstname: item.firstname,
                             lastname: item.lastname,
                             hits: item.completed_courses,
-                            avatar: session.addPath(item.avatar)
+                            avatar,
                         };
                     });
                     creditsRanking = jsonResponse.data.credits_ranking.map((item, index) => {
+                        if(item.avatar != null){
+                            avatar = session.addPath(item.avatar)
+                        }else{
+                            avatar = null
+                        }
                         return {
                             rank: index + 1,
                             firstname: item.firstname,
                             lastname: item.lastname,
                             hits: item.credits,
-                            avatar: session.addPath(item.avatar)
+                            avatar,
                         };
                     });
                     achievementsRanking = jsonResponse.data.achievements_ranking.map((item, index) => {
+                        if(item.avatar != null){
+                            avatar = session.addPath(item.avatar)
+                        }else{
+                            avatar = null
+                        }
                         return {
                             rank: index + 1,
                             firstname: item.firstname,
                             lastname: item.lastname,
                             hits: item.achievements,
-                            avatar: session.addPath(item.avatar)
+                            avatar,
                         };
                     });
                     this.setState({

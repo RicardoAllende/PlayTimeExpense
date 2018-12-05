@@ -18,23 +18,23 @@ const RankingItem = ({ item, style, color, _onPress }) => {
         });
     };
 
+    // avatar = <Thumbnail circle={false} source={ defaultAvatar } style={{ borderRadius: 8, width: 40, height: 40 }} />
+    // console.log(item.avatar)
     if (item.avatar == null) {
-        avatar = defaultAvatar;
+        avatar = <Thumbnail circle={false} source={ defaultAvatar } style={{ borderRadius: 8, width: 40, height: 40 }} />
     } else {
-        avatar = {
+        avatar = <Thumbnail circle={false} source={{
             uri: item.avatar,
             cache: 'only-if-cached',
-        };
+        }} style={{ borderRadius: 8, }} />
     }
 
-    // console.log('ExpenseItem.js', item);
-    // console.log(item);
     return (
         <View style={[styles.item.content, { borderColor: borderColor }, style]}>
             <TouchableOpacity onPress={() => console.log("")}>
                 <Grid>
                     <Col size={7} style={{ flexDirection: "row" }}>
-                        <Thumbnail circle={false} source={ avatar } style={{ borderRadius: 8, }} />
+                        {avatar}
                         {/* <Icon name="person" style={styles.item.icon} /> */}
                         <View>
                             <Text numberOfLines={2} style={styles.item.title}>
