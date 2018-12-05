@@ -378,20 +378,20 @@ export default Walkthrough;
 //             <View style={{ flex: 1, backgroundColor: "#f3f3f3" }}>
 //                 {/*Rest of App come ABOVE the action button component!*/}
 //                 <ActionButton buttonColor="rgba(231,76,60,1)"
-//                 icon={ icon }
+//                 icon={ <Icon name='ios-add-circle'/> }
 //                 >
 //                     <ActionButton.Item
 //                         buttonColor="#9b59b6"
 //                         title="New Task"
 //                         onPress={() => console.log("notes tapped!")}
 //                     >
-//                         <Icon family="FontAwesome" name="ios-exit" style={styles.actionButtonIcon} />
+//                         <Icon family="FontAwesome" name="ios-exit" style={actionButtonStyles.actionButtonIcon} />
 //                     </ActionButton.Item>
 //                     <ActionButton.Item buttonColor="#3498db" title="Notifications" onPress={() => {}}>
-//                         <Icon name="ios-film" family="FontAwesome" style={styles.actionButtonIcon} />
+//                         <Icon name="ios-film" family="FontAwesome" style={actionButtonStyles.actionButtonIcon} />
 //                     </ActionButton.Item>
 //                     <ActionButton.Item buttonColor="#1abc9c" title="All Tasks" onPress={() => {}}>
-//                         <Icon name="ios-infinite" family="FontAwesome" style={styles.actionButtonIcon} />
+//                         <Icon name="ios-infinite" family="FontAwesome" style={actionButtonStyles.actionButtonIcon} />
 //                     </ActionButton.Item>
 //                 </ActionButton>
 //             </View>
@@ -399,7 +399,7 @@ export default Walkthrough;
 //     }
 // }
 
-// const styles = StyleSheet.create({
+// const actionButtonStyles = StyleSheet.create({
 //     actionButtonIcon: {
 //         fontSize: 20,
 //         height: 22,

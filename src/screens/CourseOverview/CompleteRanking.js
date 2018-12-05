@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { ImageBackground, TouchableOpacity, AsyncStorage } from "react-native";
+import { ImageBackground, TouchableOpacity, AsyncStorage, StyleSheet } from "react-native";
 import HeaderDrawerButton from "../../components/AppHeader/HeaderDrawerButton";
 import { Container, Tabs, Tab, Spinner, View, Text, Header, Body, Right, Left, Icon } from "native-base";
 import { connect } from "react-redux";
@@ -23,6 +23,7 @@ import AchievementsList from "@components/Achievement/AchievementsList";
 import headerStyles from "@components/AppHeader/styles";
 
 import ModalSelector from "react-native-modal-selector";
+import ActionButton from "react-native-circular-action-menu";
 
 class CompleteRanking extends Component {
     state = {
@@ -45,51 +46,50 @@ class CompleteRanking extends Component {
                 .then(response => {
                     // console.log('Terminó respuesta', response)
                     // return
-                    return response.json()
-                }
-                )
+                    return response.json();
+                })
                 .then(jsonResponse => {
                     // return
                     completedCoursesRanking = jsonResponse.data.completed_courses_ranking.map((item, index) => {
-                        if(item.avatar != null){
-                            avatar = session.addPath(item.avatar)
-                        }else{
-                            avatar = null
+                        if (item.avatar != null) {
+                            avatar = session.addPath(item.avatar);
+                        } else {
+                            avatar = null;
                         }
                         return {
                             rank: index + 1,
                             firstname: item.firstname,
                             lastname: item.lastname,
                             hits: item.completed_courses,
-                            avatar,
+                            avatar
                         };
                     });
                     creditsRanking = jsonResponse.data.credits_ranking.map((item, index) => {
-                        if(item.avatar != null){
-                            avatar = session.addPath(item.avatar)
-                        }else{
-                            avatar = null
+                        if (item.avatar != null) {
+                            avatar = session.addPath(item.avatar);
+                        } else {
+                            avatar = null;
                         }
                         return {
                             rank: index + 1,
                             firstname: item.firstname,
                             lastname: item.lastname,
                             hits: item.credits,
-                            avatar,
+                            avatar
                         };
                     });
                     achievementsRanking = jsonResponse.data.achievements_ranking.map((item, index) => {
-                        if(item.avatar != null){
-                            avatar = session.addPath(item.avatar)
-                        }else{
-                            avatar = null
+                        if (item.avatar != null) {
+                            avatar = session.addPath(item.avatar);
+                        } else {
+                            avatar = null;
                         }
                         return {
                             rank: index + 1,
                             firstname: item.firstname,
                             lastname: item.lastname,
                             hits: item.achievements,
-                            avatar,
+                            avatar
                         };
                     });
                     this.setState({
@@ -165,10 +165,40 @@ class CompleteRanking extends Component {
                             </Tab>
                         </Tabs>
                     )}
+                    <ActionButton buttonColor="rgba(0, 0, 0, 0.5)" position="right" icon={<Icon name="ios-share-alt" style={{ color: 'white' }} />}>
+                        <ActionButton.Item
+                            buttonColor="#4AB3F4"
+                            title="New Task"
+                            onPress={() => {}}
+                        >
+                            {/* <Icon family="FontAwesome" name="logo-twitter" style={actionButtonStyles.actionButtonIcon} /> */}
+                            <Icon name="logo-twitter" style={actionButtonStyles.actionButtonIcon} />
+                        </ActionButton.Item>
+                        <ActionButton.Item buttonColor="#4267B2" title="Notifications" onPress={() => {}}>
+                            <Icon name="logo-facebook" style={actionButtonStyles.actionButtonIcon} />
+                            {/* <Icon name="ios-film" family="FontAwesome" style={actionButtonStyles.actionButtonIcon} /> */}
+                        </ActionButton.Item>
+                        <ActionButton.Item buttonColor="#283E4A" title="All Tasks" onPress={() => {}}>
+                            <Icon name="logo-linkedin" style={actionButtonStyles.actionButtonIcon} />
+                            {/* <Icon
+                                name="ios-infinite"
+                                family="FontAwesome"
+                                style={actionButtonStyles.actionButtonIcon}
+                            /> */}
+                        </ActionButton.Item>
+                    </ActionButton>
                 </ImageBackground>
             </Container>
         );
     }
 }
+
+const actionButtonStyles = StyleSheet.create({
+    actionButtonIcon: {
+        fontSize: 20,
+        height: 22,
+        color: "white"
+    }
+});
 
 export default CompleteRanking;
