@@ -149,7 +149,7 @@ class SideBar extends Component {
                         </Left>
                         <Body
                             style={{
-                                backgroundColor: "rgba(0, 0, 0, 0.3)",
+                                backgroundColor: "rgba(0, 0, 0, 0.1)",
                                 // backgroundColor: "green",
                                 flex: 1,
                                 borderRadius: 10,
@@ -164,7 +164,7 @@ class SideBar extends Component {
                                     // backgroundColor: "rgba(0, 0, 0, 0.3)",
                                     // borderRadius: 10,
                                     flexWrap: "wrap",
-                                    padding: 2,
+                                    padding: 5,
                                     // padding: "3%"
                                 }}
                                 onPress={this.changeModalVisibility}
@@ -177,7 +177,7 @@ class SideBar extends Component {
                                             width: 45,
                                             height: 45,
                                             resizeMode: "stretch",
-                                            borderRadius: 8
+                                            borderRadius: 10,
                                         }}
                                     />
                                 )}

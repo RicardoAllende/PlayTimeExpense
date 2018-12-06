@@ -33,10 +33,10 @@ class Quizz extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            ready: false, categories: [], corrects: 0, answers: 0, questions: [], showProgressBar: false,
+            ready: false, corrects: 0, answers: 0, questions: [], showProgressBar: false,
             currentQuestion: false, seconds: defaultTime, skippedQuestions: [], timerVisibility: false,
             avatarReady: false, currentIndex: 0, showSuccessNotification: false, showErrorNotification: false,
-            feedback: "Retroalimentación por default", hits: 0, maxHits: 0, percentage: 0.5,
+            feedback: "Retroalimentación por default", hits: 0, maxHits: 0,
             errors: 0, showFeedback: false, loadDataReady: false, showConfirmModal: false,
         }
         console.log('Nivel del curso', this.props.navigation.state.params.level)
@@ -180,7 +180,7 @@ class Quizz extends Component {
                                     this.state.showProgressBar && (
                                         <Progress.Bar
                                             width={null}
-                                            color={theme.brandPrimary}
+                                            color={theme.brandSuccess}
                                             progress={this.state.progress}
                                         />
                                     )
@@ -347,10 +347,7 @@ class Quizz extends Component {
 
     shouldGoToSessionScreen = () => {
         if (!this.mounted) { return false }
-        this.setState({
-            timerVisibility: false, showConfirmModal: true,
-        },
-        )
+        this.setState({ timerVisibility: false, showConfirmModal: true })
     }
 
     continueQuizz = () => {
@@ -431,6 +428,8 @@ class Quizz extends Component {
                     })
                 } else {
                     console.log('Yendo a la página de resultados de la sesión')
+                    this.checkIfCourseIsFinished()
+                    return
                     this.goToSessionScreen()
                     return false
                 }
@@ -447,6 +446,14 @@ class Quizz extends Component {
             }
         }, defaultFeedbackTime)
         )
+    }
+
+    checkIfCourseIsFinished = () => {
+        if(this.state.errors > 0){
+            alert('No se ha terminado el curso')
+        }else{
+            alert('El curso está terminado')
+        }
     }
 
     showingSkippedQuestions = false
@@ -531,7 +538,7 @@ class Quizz extends Component {
             }
         ).then(
         ).catch(error => {
-            console.log("error grade Answer")
+            console.log("error grade Answer", error)
         });
 
         if (is_correct) {
@@ -546,6 +553,10 @@ class Quizz extends Component {
                     })
                     this.sendMaxHits(hits, this.props.navigation.state.params.courseId);
                 }
+            })
+        } else {
+            this.setState({
+                errors: this.state.errors + 1
             })
         }
     }
@@ -577,7 +588,7 @@ class Quizz extends Component {
                                         } else {
                                             this.setState({
                                                 questions: response.data.questions, session: response.data.session, index: 0, maxIndex: response.data.questions.length,
-                                                currentQuestion: response.data.questions[0], loadDataReady: true
+                                                currentQuestion: response.data.questions[0], loadDataReady: true, courseName: response.data.course_name
                                             }, () => {})
                                         }
                                     }

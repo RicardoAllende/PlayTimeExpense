@@ -45,7 +45,7 @@ export default class ConfirmModal extends Component {
               >
                   <View 
                     style={{
-                      backgroundColor: '#FF3366',
+                      backgroundColor: theme.brandLight,
                       padding: 12,
                       margin: 16,
                       justifyContent: "center",
@@ -62,7 +62,7 @@ export default class ConfirmModal extends Component {
               >
                   <View 
                   style={{
-                      backgroundColor: theme.brandPrimary,
+                      backgroundColor: theme.brandSuccess,
                       padding: 12,
                       margin: 16,
                       justifyContent: "center",

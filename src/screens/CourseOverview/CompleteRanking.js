@@ -131,7 +131,7 @@ class CompleteRanking extends Component {
                             tabContainerStyle={{
                                 elevation: 0
                             }}
-                            locked
+                            // locked
                         >
                             <Tab heading="Puntaje">
                                 <Ranking

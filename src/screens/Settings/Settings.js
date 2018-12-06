@@ -182,7 +182,12 @@ export default class Settings extends Component {
                         <ListItem noIndent icon>
                             <Left>
                                 <Button style={styles.settingBtn}>
-                                    <Icon active name="logo-usd" />
+                                    {
+                                        this.state.enableNotification ?
+                                        <Icon active family="Entypo" name="sound" />
+                                        :
+                                        <Icon active family="Entypo" name="sound-mute" />
+                                    }
                                 </Button>
                             </Left>
                             <Body>
